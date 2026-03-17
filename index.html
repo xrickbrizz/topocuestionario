@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz de Planimetría Sencilla</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #2563eb;
+      --border: #dbe3f0;
+      --ok-bg: #eafaf0;
+      --ok-border: #22c55e;
+      --bad-bg: #fff1f2;
+      --bad-border: #ef4444;
+      --shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #eef4ff 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 2rem;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+      align-items: center;
+    }
+
+    .badge {
+      background: #eef2ff;
+      color: #1e40af;
+      border: 1px solid #c7d2fe;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 18px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.2s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .question {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .question h3 {
+      margin: 0 0 14px;
+      font-size: 1.06rem;
+      line-height: 1.4;
+    }
+
+    .options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .option {
+      display: block;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      cursor: pointer;
+      background: #fbfdff;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .option:hover {
+      border-color: #93c5fd;
+      background: #f8fbff;
+    }
+
+    .option input {
+      margin-right: 10px;
+      transform: translateY(1px);
+    }
+
+    .feedback {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 2px solid transparent;
+      display: none;
+      font-weight: 700;
+    }
+
+    .feedback.ok {
+      display: block;
+      background: var(--ok-bg);
+      border-color: var(--ok-border);
+      color: #166534;
+    }
+
+    .feedback.bad {
+      display: block;
+      background: var(--bad-bg);
+      border-color: var(--bad-border);
+      color: #991b1b;
+    }
+
+    .result {
+      position: sticky;
+      bottom: 16px;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      margin-top: 22px;
+    }
+
+    .result h2 {
+      margin: 0 0 8px;
+      font-size: 1.3rem;
+    }
+
+    .result p {
+      margin: 6px 0;
+      color: var(--muted);
+    }
+
+    .score {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #111827;
+    }
+
+    .legend {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    @media (max-width: 700px) {
+      .wrap { padding: 14px; }
+      h1 { font-size: 1.55rem; }
+      .hero, .question, .result { border-radius: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Quiz de Planimetría Sencilla</h1>
+      <p class="subtitle">
+        Evaluación de práctica con 30 preguntas de opción múltiple sobre pasos, alineaciones,
+        medición con cinta, decametría, avalizamiento y nociones básicas de símbolos topográficos.
+      </p>
+      <div class="toolbar">
+        <div class="badge">30 preguntas</div>
+        <div class="badge">Múltiple opción</div>
+        <div class="badge">Corrección automática</div>
+        <button class="btn btn-primary" id="gradeBtn">Enviar y calificar</button>
+        <button class="btn btn-secondary" id="resetBtn">Reiniciar</button>
+      </div>
+      <p class="legend">Al calificar, cada respuesta correcta se marcará en verde y cada incorrecta en rojo.</p>
+    </section>
+
+    <main id="quiz" class="grid"></main>
+
+    <section class="result" id="resultBox">
+      <h2>Resultado</h2>
+      <div class="score" id="scoreText">Todavía no calificaste.</div>
+      <p id="extraText">Completá las preguntas y presioná <strong>Enviar y calificar</strong>.</p>
+    </section>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        q: "1) En planimetría, una alineación es:",
+        options: [
+          "La diferencia de altura entre dos puntos",
+          "La dirección recta definida entre dos puntos",
+          "La inclinación de un terreno",
+          "Una medición angular únicamente"
+        ],
+        answer: 1,
+        explanation: "Correcta: una alineación representa una recta o dirección definida entre dos puntos."
+      },
+      {
+        q: "2) La medición a pasos se usa principalmente para:",
+        options: [
+          "Obtener distancias aproximadas en un reconocimiento inicial",
+          "Reemplazar siempre a la cinta con mayor precisión",
+          "Medir ángulos verticales",
+          "Determinar coordenadas exactas"
+        ],
+        answer: 0,
+        explanation: "Correcta: la medición a pasos sirve para estimaciones rápidas o croquis preliminares."
+      },
+      {
+        q: "3) Si una escala es 1:100, significa que:",
+        options: [
+          "1 cm en el terreno equivale a 100 cm en el plano",
+          "1 cm en el plano equivale a 100 cm en el terreno",
+          "100 cm en el plano equivale a 1 m en el terreno",
+          "No existe relación de reducción"
+        ],
+        answer: 1,
+        explanation: "Correcta: 1 unidad en el plano representa 100 de esas mismas unidades en el terreno."
+      },
+      {
+        q: "4) Una cinta métrica se emplea para:",
+        options: [
+          "Medir distancias lineales con mayor exactitud que a pasos",
+          "Medir solamente pendientes",
+          "Señalar puntos visibles",
+          "Medir rumbos magnéticos"
+        ],
+        answer: 0,
+        explanation: "Correcta: la cinta se usa para medir distancias lineales."
+      },
+      {
+        q: "5) El avalizamiento consiste en:",
+        options: [
+          "Promediar varias distancias",
+          "Marcar o referenciar puntos para poder ubicarlos nuevamente",
+          "Pasar medidas a escala",
+          "Corregir errores de cinta"
+        ],
+        answer: 1,
+        explanation: "Correcta: avalizar es dejar referencias para recuperar un punto."
+      },
+      {
+        q: "6) Cuando una persona cuenta sus pasos para medir, primero conviene:",
+        options: [
+          "Elegir cualquier longitud de paso",
+          "Calibrar su paso promedio en una distancia conocida",
+          "Usar solo medio paso",
+          "No anotar nada"
+        ],
+        answer: 1,
+        explanation: "Correcta: hay que conocer la longitud promedio del paso."
+      },
+      {
+        q: "7) En un croquis, la función principal es:",
+        options: [
+          "Representar con exactitud instrumental absoluta",
+          "Dar una idea clara de la disposición y medidas principales",
+          "Reemplazar el plano definitivo siempre",
+          "Eliminar la necesidad de medir"
+        ],
+        answer: 1,
+        explanation: "Correcta: el croquis muestra de forma clara la disposición general y datos básicos."
+      },
+      {
+        q: "8) Si una línea en el terreno mide 20 m y la escala es 1:200, en el plano debe medir:",
+        options: [
+          "1 cm",
+          "10 cm",
+          "20 cm",
+          "0,1 cm"
+        ],
+        answer: 1,
+        explanation: "Correcta: 20 m = 2000 cm; 2000/200 = 10 cm."
+      },
+      {
+        q: "9) La decametría está asociada al uso de:",
+        options: [
+          "Un teodolito",
+          "Una cinta o medición por tramos de longitud conocida",
+          "Una brújula exclusivamente",
+          "Un nivel de mano únicamente"
+        ],
+        answer: 1,
+        explanation: "Correcta: en trabajos básicos se vincula con medición lineal usando cinta."
+      },
+      {
+        q: "10) Para medir bien con cinta sobre una alineación, es importante:",
+        options: [
+          "Que la cinta siga una recta y esté correctamente tensada",
+          "Que la cinta quede floja",
+          "Medir con la cinta doblada",
+          "Cambiar el origen de lectura en cada tramo"
+        ],
+        answer: 0,
+        explanation: "Correcta: debe mantenerse la alineación y tensión adecuadas."
+      },
+      {
+        q: "11) Un punto fijo e inamovible útil para referencia puede ser:",
+        options: [
+          "Una hoja suelta",
+          "Una luminaria o una esquina construida",
+          "Una sombra",
+          "Una persona parada"
+        ],
+        answer: 1,
+        explanation: "Correcta: se usan elementos permanentes del entorno."
+      },
+      {
+        q: "12) Si una distancia se mide varias veces, el promedio sirve para:",
+        options: [
+          "Aumentar el error siempre",
+          "Obtener un valor representativo más confiable",
+          "Eliminar la necesidad de observar",
+          "Cambiar la escala"
+        ],
+        answer: 1,
+        explanation: "Correcta: promediar varias observaciones mejora la representatividad."
+      },
+      {
+        q: "13) En un trabajo sencillo de planimetría, los detalles deben anotarse:",
+        options: [
+          "Solo al final, de memoria",
+          "En el momento de la medición",
+          "Únicamente si sobran hojas",
+          "Después de dibujar a tinta"
+        ],
+        answer: 1,
+        explanation: "Correcta: conviene registrar los datos en el momento."
+      },
+      {
+        q: "14) El error en la medición a pasos suele ser:",
+        options: [
+          "Menor que con instrumentos precisos",
+          "Mayor que en una medición con cinta bien realizada",
+          "Nulo",
+          "Igual en cualquier terreno sin importar condiciones"
+        ],
+        answer: 1,
+        explanation: "Correcta: a pasos es una medición aproximada."
+      },
+      {
+        q: "15) Cuando se representa una puerta en un croquis sencillo de planta, normalmente interesa:",
+        options: [
+          "Su ubicación y sentido básico de apertura si corresponde",
+          "Su color exacto",
+          "La marca comercial",
+          "El material del picaporte solamente"
+        ],
+        answer: 0,
+        explanation: "Correcta: en un croquis importa sobre todo su ubicación funcional."
+      },
+      {
+        q: "16) Si el paso promedio de una persona es 0,75 m y recorre 40 pasos, la distancia aproximada es:",
+        options: [
+          "20 m",
+          "25 m",
+          "30 m",
+          "35 m"
+        ],
+        answer: 2,
+        explanation: "Correcta: 40 × 0,75 = 30 m."
+      },
+      {
+        q: "17) Una de las ventajas del croquis de campo es que:",
+        options: [
+          "Permite relacionar visualmente medidas y detalles observados",
+          "Reemplaza todos los cálculos",
+          "Evita el uso de escala",
+          "No necesita orientación"
+        ],
+        answer: 0,
+        explanation: "Correcta: el croquis ayuda a ordenar la información observada."
+      },
+      {
+        q: "18) En la simbología topográfica básica, una línea continua suele representar:",
+        options: [
+          "Un límite o elemento lineal visible según el contexto",
+          "Un error de cierre",
+          "Una cota automática",
+          "Solo curvas de nivel"
+        ],
+        answer: 0,
+        explanation: "Correcta: las líneas continuas suelen representar elementos visibles o límites, según la convención usada."
+      },
+      {
+        q: "19) Si una medición con cinta se hace en terreno irregular, conviene:",
+        options: [
+          "Ignorar las irregularidades",
+          "Cuidar la horizontalidad o medir por tramos adecuados",
+          "Aumentar la escala del plano",
+          "Cambiar el punto inicial por comodidad"
+        ],
+        answer: 1,
+        explanation: "Correcta: en terreno irregular se debe controlar cómo se mide el tramo."
+      },
+      {
+        q: "20) El objetivo de dejar referencias en avalizamiento es:",
+        options: [
+          "Encontrar el punto en una futura visita",
+          "Cambiar el norte del dibujo",
+          "Reducir la longitud de la cinta",
+          "Medir áreas automáticamente"
+        ],
+        answer: 0,
+        explanation: "Correcta: el avalizamiento permite reubicar el punto luego."
+      },
+      {
+        q: "21) En un plano o croquis, indicar el norte sirve para:",
+        options: [
+          "Establecer orientación",
+          "Indicar la escala vertical",
+          "Calcular perímetros automáticamente",
+          "Mostrar la altura de cada punto"
+        ],
+        answer: 0,
+        explanation: "Correcta: el norte orienta la representación."
+      },
+      {
+        q: "22) Una medición repetida que da valores muy distintos puede indicar:",
+        options: [
+          "Buena consistencia",
+          "Posibles errores de procedimiento o lectura",
+          "Que la escala está bien",
+          "Que no hace falta promediar"
+        ],
+        answer: 1,
+        explanation: "Correcta: una gran dispersión puede señalar errores."
+      },
+      {
+        q: "23) En símbolos topográficos, un árbol aislado suele representarse con:",
+        options: [
+          "Un símbolo puntual convencional",
+          "Una línea de cota",
+          "Un número de escala",
+          "Un eje cartesiano"
+        ],
+        answer: 0,
+        explanation: "Correcta: se representa con un símbolo puntual."
+      },
+      {
+        q: "24) Si en un cuaderno chico el dibujo no entra, lo correcto es:",
+        options: [
+          "Cambiar a una escala que permita representar todo claramente",
+          "Dibujar sin escala",
+          "Omitir partes medidas",
+          "Usar números inventados"
+        ],
+        answer: 0,
+        explanation: "Correcta: debe elegirse una escala adecuada al espacio disponible."
+      },
+      {
+        q: "25) El punto de partida de una medición debe quedar:",
+        options: [
+          "Bien identificado y anotado",
+          "Sin marcar para no recargar el croquis",
+          "Solo en la memoria del observador",
+          "Cambiado en cada observación"
+        ],
+        answer: 0,
+        explanation: "Correcta: el origen debe quedar claro."
+      },
+      {
+        q: "26) En medición con cinta, una lectura mal tomada en el cero puede producir:",
+        options: [
+          "Un error sistemático en el tramo",
+          "Un símbolo topográfico distinto",
+          "La orientación norte-sur",
+          "Una curva de nivel"
+        ],
+        answer: 0,
+        explanation: "Correcta: un error inicial afecta la medición del tramo."
+      },
+      {
+        q: "27) Un TP individual básico de planimetría suele pedir:",
+        options: [
+          "Croquis, medidas, escala y representación ordenada",
+          "Solo una foto del lugar",
+          "Únicamente teoría sin datos",
+          "Un plano sin medidas"
+        ],
+        answer: 0,
+        explanation: "Correcta: normalmente se pide croquis y datos medidos con orden."
+      },
+      {
+        q: "28) Una ventaja de usar puntos auxiliares visibles en una alineación es:",
+        options: [
+          "Facilitar la prolongación y control de la recta",
+          "Eliminar el uso de cinta",
+          "Cambiar la escala automáticamente",
+          "Evitar anotar en el croquis"
+        ],
+        answer: 0,
+        explanation: "Correcta: ayudan a materializar y controlar la recta."
+      },
+      {
+        q: "29) En topografía básica, una estaca o jalón se usa para:",
+        options: [
+          "Materializar puntos o alineaciones en el terreno",
+          "Dibujar símbolos en el cuaderno",
+          "Calcular áreas en gabinete",
+          "Medir temperatura"
+        ],
+        answer: 0,
+        explanation: "Correcta: sirven para señalar puntos o alineaciones."
+      },
+      {
+        q: "30) Si una respuesta en el control del trabajo no coincide con la lógica del croquis y las medidas, lo mejor es:",
+        options: [
+          "Revisar los datos y el procedimiento antes de entregar",
+          "Dejarlo igual",
+          "Borrar las medidas",
+          "Cambiar solo el título"
+        ],
+        answer: 0,
+        explanation: "Correcta: siempre conviene revisar coherencia entre croquis, medidas y cálculo."
+      }
+    ];
+
+    const quiz = document.getElementById('quiz');
+    const gradeBtn = document.getElementById('gradeBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const scoreText = document.getElementById('scoreText');
+    const extraText = document.getElementById('extraText');
+
+    function renderQuiz() {
+      quiz.innerHTML = '';
+      questions.forEach((item, index) => {
+        const card = document.createElement('section');
+        card.className = 'question';
+
+        const title = document.createElement('h3');
+        title.textContent = item.q;
+        card.appendChild(title);
+
+        const options = document.createElement('div');
+        options.className = 'options';
+
+        item.options.forEach((opt, optIndex) => {
+          const label = document.createElement('label');
+          label.className = 'option';
+          label.innerHTML = `<input type="radio" name="q${index}" value="${optIndex}"> ${opt}`;
+          options.appendChild(label);
+        });
+
+        const feedback = document.createElement('div');
+        feedback.className = 'feedback';
+        feedback.id = `feedback-${index}`;
+
+        card.appendChild(options);
+        card.appendChild(feedback);
+        quiz.appendChild(card);
+      });
+    }
+
+    function gradeQuiz() {
+      let correct = 0;
+      questions.forEach((item, index) => {
+        const selected = document.querySelector(`input[name="q${index}"]:checked`);
+        const feedback = document.getElementById(`feedback-${index}`);
+
+        if (!selected) {
+          feedback.className = 'feedback bad';
+          feedback.textContent = `Incorrecta. No seleccionaste opción. Respuesta correcta: ${item.options[item.answer]}.`;
+          return;
+        }
+
+        const value = Number(selected.value);
+        if (value === item.answer) {
+          correct++;
+          feedback.className = 'feedback ok';
+          feedback.textContent = 'Correcta. ' + item.explanation;
+        } else {
+          feedback.className = 'feedback bad';
+          feedback.textContent = `Incorrecta. Respuesta correcta: ${item.options[item.answer]}.`;
+        }
+      });
+
+      const total = questions.length;
+      const percentage = ((correct / total) * 100).toFixed(1);
+      const grade10 = ((correct / total) * 10).toFixed(2);
+
+      scoreText.textContent = `Puntaje: ${correct}/${total} · ${percentage}% · Nota estimada: ${grade10}/10`;
+
+      if (correct === total) {
+        extraText.textContent = 'Excelente. Respondiste todo correctamente.';
+      } else if (correct >= 24) {
+        extraText.textContent = 'Muy bien. Tenés una base sólida para parcialitos y TP.';
+      } else if (correct >= 18) {
+        extraText.textContent = 'Buen resultado. Conviene repasar algunos conceptos.';
+      } else {
+        extraText.textContent = 'Te conviene repasar planimetría básica antes de entregar o rendir.';
+      }
+
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    function resetQuiz() {
+      document.querySelectorAll('input[type="radio"]').forEach(input => input.checked = false);
+      document.querySelectorAll('.feedback').forEach(box => {
+        box.className = 'feedback';
+        box.textContent = '';
+      });
+      scoreText.textContent = 'Todavía no calificaste.';
+      extraText.innerHTML = 'Completá las preguntas y presioná <strong>Enviar y calificar</strong>.';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    gradeBtn.addEventListener('click', gradeQuiz);
+    resetBtn.addEventListener('click', resetQuiz);
+
+    renderQuiz();
+  </script>
+</body>
+</html>
