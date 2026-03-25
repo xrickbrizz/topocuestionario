@@ -18,13 +18,8 @@
       --danger: #d64545;
       --shadow: 0 12px 30px rgba(19, 51, 84, 0.08);
       --radius: 18px;
-    }* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
+    }* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
@@ -69,8 +64,8 @@ body {
 
 .hero p {
   margin: 0;
-  max-width: 780px;
-  color: rgba(255, 255, 255, 0.92);
+  max-width: 800px;
+  color: rgba(255, 255, 255, 0.93);
   line-height: 1.55;
   position: relative;
   z-index: 1;
@@ -88,14 +83,9 @@ body {
   z-index: 1;
 }
 
-.grid {
-  display: grid;
-  gap: 20px;
-}
-
-.grid.cols-2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
+.grid { display: grid; gap: 20px; }
+.grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
 .card {
   margin-top: 22px;
@@ -132,17 +122,21 @@ body {
   line-height: 1.5;
 }
 
+.info-list {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--text);
+  line-height: 1.7;
+}
+
 label {
   display: block;
   font-weight: 700;
   margin-bottom: 8px;
 }
 
-.field {
-  margin-bottom: 16px;
-}
+.field { margin-bottom: 16px; }
 
-input[type="text"],
 input[type="number"] {
   width: 100%;
   padding: 13px 14px;
@@ -152,13 +146,24 @@ input[type="number"] {
   font-size: 1rem;
   color: var(--text);
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
-input[type="text"]:focus,
 input[type="number"]:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 4px rgba(31, 111, 235, 0.12);
+}
+
+input.correct {
+  border-color: #70c48f;
+  background: #f5fcf8;
+  box-shadow: 0 0 0 4px rgba(30, 158, 90, 0.08);
+}
+
+input.incorrect {
+  border-color: #e59696;
+  background: #fff7f7;
+  box-shadow: 0 0 0 4px rgba(214, 69, 69, 0.08);
 }
 
 .question {
@@ -167,6 +172,17 @@ input[type="number"]:focus {
   border: 1px solid #e0ebf5;
   border-radius: 18px;
   margin-bottom: 16px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.question.correct {
+  border-color: #bfe5cf;
+  background: #f6fcf8;
+}
+
+.question.incorrect {
+  border-color: #f1c3c3;
+  background: #fff8f8;
 }
 
 .question h3 {
@@ -202,6 +218,28 @@ input[type="number"]:focus {
   accent-color: var(--primary);
 }
 
+.option.correct-option {
+  border-color: #9fd3b5;
+  background: #f4fcf7;
+}
+
+.option.wrong-selected {
+  border-color: #efb1b1;
+  background: #fff5f5;
+}
+
+.answer-reveal {
+  display: none;
+  margin-top: 12px;
+  padding: 11px 13px;
+  border-radius: 13px;
+  background: #edf5ff;
+  border: 1px solid #d7e7fb;
+  color: #1c4f8d;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
 .formula-chip {
   display: inline-block;
   padding: 8px 12px;
@@ -228,9 +266,7 @@ input[type="number"]:focus {
   padding: 18px;
 }
 
-.calc-box h3 {
-  margin: 0 0 10px;
-}
+.calc-box h3 { margin: 0 0 10px; }
 
 .calc-givens {
   display: flex;
@@ -247,6 +283,18 @@ input[type="number"]:focus {
   font-weight: 700;
 }
 
+.field-answer {
+  display: none;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--primary-dark);
+  background: #eef6ff;
+  border: 1px solid #d8e8fb;
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+
 .table-wrap {
   overflow-x: auto;
   border: 1px solid #dce8f2;
@@ -257,11 +305,10 @@ input[type="number"]:focus {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 780px;
+  min-width: 700px;
 }
 
-th,
-td {
+th, td {
   padding: 12px;
   border-bottom: 1px solid #e7eef5;
   text-align: center;
@@ -277,15 +324,12 @@ th {
   z-index: 1;
 }
 
-td:first-child,
-th:first-child {
+td:first-child, th:first-child {
   text-align: left;
   font-weight: 700;
 }
 
-td input {
-  min-width: 90px;
-}
+td input { min-width: 100px; }
 
 .actions {
   display: flex;
@@ -301,12 +345,10 @@ button {
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.18s ease, opacity 0.18s ease, background 0.18s ease;
+  transition: transform 0.18s ease, background 0.18s ease;
 }
 
-button:hover {
-  transform: translateY(-1px);
-}
+button:hover { transform: translateY(-1px); }
 
 .btn-primary {
   background: var(--primary);
@@ -314,9 +356,7 @@ button:hover {
   box-shadow: 0 10px 24px rgba(31, 111, 235, 0.22);
 }
 
-.btn-primary:hover {
-  background: #165ec9;
-}
+.btn-primary:hover { background: #165ec9; }
 
 .btn-secondary {
   background: #ecf4ff;
@@ -392,74 +432,32 @@ button:hover {
   color: #933838;
 }
 
-.history-empty {
-  color: var(--muted);
-  margin: 0;
-}
-
-.ranking {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: 12px;
-}
-
-.ranking li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  border: 1px solid #dce9f4;
+.answers-panel {
+  margin-top: 18px;
+  display: none;
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid #dbe8f5;
   background: #fbfdff;
-  border-radius: 16px;
 }
 
-.ranking .left strong {
-  display: block;
-  margin-bottom: 4px;
-  font-size: 1rem;
+.answers-panel h4 {
+  margin: 0 0 12px;
+  font-size: 1.08rem;
 }
 
-.ranking .left span {
-  color: var(--muted);
-  font-size: 0.93rem;
-}
-
-.ranking .right {
-  font-weight: 800;
-  color: var(--primary-dark);
-  font-size: 1.04rem;
-  white-space: nowrap;
-}
-
-.footnote {
-  margin-top: 16px;
-  color: var(--muted);
-  font-size: 0.93rem;
-  line-height: 1.5;
+.answers-panel ul {
+  margin: 0;
+  padding-left: 18px;
+  line-height: 1.7;
+  color: var(--text);
 }
 
 @media (max-width: 760px) {
-  .grid.cols-2 {
-    grid-template-columns: 1fr;
-  }
-
-  .hero {
-    padding: 24px 18px;
-    border-radius: 24px;
-  }
-
-  .card {
-    padding: 18px;
-  }
-
-  .score-circle {
-    width: 98px;
-    height: 98px;
-    font-size: 1.25rem;
-  }
+  .grid.cols-2, .grid.cols-3 { grid-template-columns: 1fr; }
+  .hero { padding: 24px 18px; border-radius: 24px; }
+  .card { padding: 18px; }
+  .score-circle { width: 98px; height: 98px; font-size: 1.25rem; }
 }
 
   </style>
@@ -469,24 +467,20 @@ button:hover {
     <header class="hero">
       <h1>Formulario de Topografía – Descomposición en Triángulos</h1>
       <p>
-        Actividad interactiva con preguntas de opción múltiple, ejercicios de cálculo y una tabla breve para completar.
-        Al final se calcula la nota automáticamente y se guarda un historial local en este navegador.
+        Actividad interactiva con preguntas de opción múltiple, ejercicios de cálculo y un bloque específico de ángulos.
+        Al corregir, se muestra la nota final y también las respuestas correctas.
       </p>
-      <div class="notice">Importante: sin backend, los resultados se guardan solo en este dispositivo.</div>
+      <div class="notice">Los resultados decimales deben ingresarse con 2 decimales y usando punto.</div>
     </header><form id="quizForm" novalidate>
   <section class="card">
-    <h2 class="section-title"><span class="badge">1</span>Datos del alumno</h2>
-    <p class="section-subtitle">Completa tus datos antes de corregir el formulario.</p>
-    <div class="grid cols-2">
-      <div class="field">
-        <label for="studentName">Nombre y apellido</label>
-        <input type="text" id="studentName" placeholder="Ej.: Rick Sánchez" required />
-      </div>
-      <div class="field">
-        <label for="groupName">Grupo o comisión</label>
-        <input type="text" id="groupName" placeholder="Ej.: Grupo 2 / Comisión A" />
-      </div>
-    </div>
+    <h2 class="section-title"><span class="badge">1</span>Indicaciones</h2>
+    <p class="section-subtitle">Lee estas pautas antes de comenzar.</p>
+    <ul class="info-list">
+      <li>La mayor parte del formulario es de opción múltiple.</li>
+      <li>En los ejercicios numéricos, escribe los resultados con <strong>2 decimales</strong>.</li>
+      <li>Para los decimales, utiliza <strong>punto</strong> y no coma.</li>
+      <li>Al presionar <strong>Corregir</strong>, se mostrará la nota y también las respuestas correctas.</li>
+    </ul>
   </section>
 
   <section class="card">
@@ -497,15 +491,15 @@ button:hover {
 
   <section class="card">
     <h2 class="section-title"><span class="badge">3</span>Cálculos cortos</h2>
-    <p class="section-subtitle">Usa calculadora y completa los resultados. Se admite una pequeña tolerancia decimal.</p>
+    <p class="section-subtitle">Calcula semiperímetro, superficie y radio inscrito.</p>
 
     <div class="grid cols-2">
       <div class="calc-box">
         <h3>Ejercicio A</h3>
         <div class="calc-givens">
-          <span>a = 7,0 m</span>
-          <span>b = 8,0 m</span>
-          <span>c = 9,0 m</span>
+          <span>a = 7.0 m</span>
+          <span>b = 8.0 m</span>
+          <span>c = 9.0 m</span>
         </div>
         <div>
           <span class="formula-chip">2p = a + b + c</span>
@@ -516,19 +510,23 @@ button:hover {
         <div class="grid cols-2" style="margin-top:16px;">
           <div class="field">
             <label for="calcA_2p">2p</label>
-            <input type="number" step="any" id="calcA_2p" placeholder="Valor" />
+            <input type="number" step="0.01" id="calcA_2p" placeholder="Ej.: 24.00" />
+            <div class="field-answer" id="ans_calcA_2p"></div>
           </div>
           <div class="field">
             <label for="calcA_p">p</label>
-            <input type="number" step="any" id="calcA_p" placeholder="Valor" />
+            <input type="number" step="0.01" id="calcA_p" placeholder="Ej.: 12.00" />
+            <div class="field-answer" id="ans_calcA_p"></div>
           </div>
           <div class="field">
             <label for="calcA_S">Superficie S (m²)</label>
-            <input type="number" step="any" id="calcA_S" placeholder="Valor" />
+            <input type="number" step="0.01" id="calcA_S" placeholder="Ej.: 26.83" />
+            <div class="field-answer" id="ans_calcA_S"></div>
           </div>
           <div class="field">
             <label for="calcA_r">Radio inscrito r (m)</label>
-            <input type="number" step="any" id="calcA_r" placeholder="Valor" />
+            <input type="number" step="0.01" id="calcA_r" placeholder="Ej.: 2.24" />
+            <div class="field-answer" id="ans_calcA_r"></div>
           </div>
         </div>
       </div>
@@ -536,9 +534,9 @@ button:hover {
       <div class="calc-box">
         <h3>Ejercicio B</h3>
         <div class="calc-givens">
-          <span>a = 5,0 m</span>
-          <span>b = 6,0 m</span>
-          <span>c = 7,0 m</span>
+          <span>a = 5.0 m</span>
+          <span>b = 6.0 m</span>
+          <span>c = 7.0 m</span>
         </div>
         <div>
           <span class="formula-chip">2p = a + b + c</span>
@@ -549,19 +547,23 @@ button:hover {
         <div class="grid cols-2" style="margin-top:16px;">
           <div class="field">
             <label for="calcB_2p">2p</label>
-            <input type="number" step="any" id="calcB_2p" placeholder="Valor" />
+            <input type="number" step="0.01" id="calcB_2p" placeholder="Ej.: 18.00" />
+            <div class="field-answer" id="ans_calcB_2p"></div>
           </div>
           <div class="field">
             <label for="calcB_p">p</label>
-            <input type="number" step="any" id="calcB_p" placeholder="Valor" />
+            <input type="number" step="0.01" id="calcB_p" placeholder="Ej.: 9.00" />
+            <div class="field-answer" id="ans_calcB_p"></div>
           </div>
           <div class="field">
             <label for="calcB_S">Superficie S (m²)</label>
-            <input type="number" step="any" id="calcB_S" placeholder="Valor" />
+            <input type="number" step="0.01" id="calcB_S" placeholder="Ej.: 14.70" />
+            <div class="field-answer" id="ans_calcB_S"></div>
           </div>
           <div class="field">
             <label for="calcB_r">Radio inscrito r (m)</label>
-            <input type="number" step="any" id="calcB_r" placeholder="Valor" />
+            <input type="number" step="0.01" id="calcB_r" placeholder="Ej.: 1.63" />
+            <div class="field-answer" id="ans_calcB_r"></div>
           </div>
         </div>
       </div>
@@ -569,12 +571,47 @@ button:hover {
   </section>
 
   <section class="card">
-    <h2 class="section-title"><span class="badge">4</span>Tabla breve de control</h2>
-    <p class="section-subtitle">Completa la fila usando los datos dados. Se evalúan cuatro valores.</p>
+    <h2 class="section-title"><span class="badge">4</span>Ángulos del triángulo</h2>
+    <p class="section-subtitle">Ahora calcula directamente los ángulos interiores. Recuerda que α está opuesto a a, β a b y γ a c.</p>
+
+    <div class="calc-box">
+      <h3>Ejercicio C</h3>
+      <div class="calc-givens">
+        <span>a = 6.0 m</span>
+        <span>b = 8.0 m</span>
+        <span>c = 10.0 m</span>
+      </div>
+      <div>
+        <span class="formula-chip">cos α = (b² + c² - a²) / 2bc</span>
+        <span class="formula-chip">cos β = (a² + c² - b²) / 2ac</span>
+        <span class="formula-chip">cos γ = (a² + b² - c²) / 2ab</span>
+      </div>
+      <div class="grid cols-3" style="margin-top:16px;">
+        <div class="field">
+          <label for="ang_alpha">α (°)</label>
+          <input type="number" step="0.01" id="ang_alpha" placeholder="Ej.: 36.87" />
+          <div class="field-answer" id="ans_ang_alpha"></div>
+        </div>
+        <div class="field">
+          <label for="ang_beta">β (°)</label>
+          <input type="number" step="0.01" id="ang_beta" placeholder="Ej.: 53.13" />
+          <div class="field-answer" id="ans_ang_beta"></div>
+        </div>
+        <div class="field">
+          <label for="ang_gamma">γ (°)</label>
+          <input type="number" step="0.01" id="ang_gamma" placeholder="Ej.: 90.00" />
+          <div class="field-answer" id="ans_ang_gamma"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title"><span class="badge">5</span>Tabla breve</h2>
+    <p class="section-subtitle">Completa la fila con semiperímetro, superficie y radio inscrito.</p>
 
     <div class="mini-note">
-      Datos del triángulo C: <strong>a = 10,0 m</strong>, <strong>b = 10,0 m</strong>, <strong>c = 12,0 m</strong>.
-      Calcula <strong>p</strong>, <strong>S</strong>, <strong>r</strong> y el <strong>control angular</strong>.
+      Datos del triángulo D: <strong>a = 10.0 m</strong>, <strong>b = 10.0 m</strong>, <strong>c = 12.0 m</strong>.
     </div>
 
     <div class="table-wrap" style="margin-top:16px;">
@@ -588,19 +625,26 @@ button:hover {
             <th>p</th>
             <th>S (m²)</th>
             <th>r (m)</th>
-            <th>Control angular</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>C</td>
-            <td>10,0</td>
-            <td>10,0</td>
-            <td>12,0</td>
-            <td><input type="number" step="any" id="table_p" placeholder="p" /></td>
-            <td><input type="number" step="any" id="table_S" placeholder="S" /></td>
-            <td><input type="number" step="any" id="table_r" placeholder="r" /></td>
-            <td><input type="number" step="any" id="table_control" placeholder="180" /></td>
+            <td>D</td>
+            <td>10.0</td>
+            <td>10.0</td>
+            <td>12.0</td>
+            <td>
+              <input type="number" step="0.01" id="table_p" placeholder="16.00" />
+              <div class="field-answer" id="ans_table_p"></div>
+            </td>
+            <td>
+              <input type="number" step="0.01" id="table_S" placeholder="48.00" />
+              <div class="field-answer" id="ans_table_S"></div>
+            </td>
+            <td>
+              <input type="number" step="0.01" id="table_r" placeholder="3.00" />
+              <div class="field-answer" id="ans_table_r"></div>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -608,36 +652,30 @@ button:hover {
   </section>
 
   <section class="card">
-    <h2 class="section-title"><span class="badge">5</span>Acciones</h2>
+    <h2 class="section-title"><span class="badge">6</span>Acciones</h2>
     <p class="section-subtitle">Cuando termines, corrige el formulario para obtener la nota final.</p>
     <div class="actions">
       <button type="button" class="btn-primary" id="gradeBtn">Corregir y calcular nota</button>
       <button type="reset" class="btn-secondary" id="resetBtn">Limpiar respuestas</button>
-      <button type="button" class="btn-secondary" id="clearHistoryBtn">Borrar historial local</button>
     </div>
 
     <div class="result-card" id="resultCard">
       <div class="result-top">
-        <div class="score-circle" id="scoreCircle">0,0</div>
+        <div class="score-circle" id="scoreCircle">0.00</div>
         <div class="result-info">
           <h3 id="resultTitle">Resultado</h3>
-          <p id="studentSummary"></p>
           <p id="resultSummary"></p>
+          <p id="extraSummary"></p>
         </div>
       </div>
       <div class="feedback-list" id="feedbackList"></div>
+      <div class="answers-panel" id="answersPanel">
+        <h4>Resumen de respuestas correctas</h4>
+        <ul id="answersSummary"></ul>
+      </div>
     </div>
   </section>
 </form>
-
-<section class="card">
-  <h2 class="section-title"><span class="badge">6</span>Historial local</h2>
-  <p class="section-subtitle">Aquí se muestran los resultados guardados en este navegador. No se comparten con otras personas.</p>
-  <div id="historyContainer"></div>
-  <p class="footnote">
-    Si en el futuro quieres que todos los integrantes del grupo vean los nombres y puntajes, habrá que agregar una base de datos o backend.
-  </p>
-</section>
 
   </div>  <script>
     const mcqData = [
@@ -701,7 +739,7 @@ button:hover {
         text: "Si al calcular los ángulos de un triángulo la suma no da 180°, lo más probable es que:",
         options: [
           "El triángulo no exista.",
-          "Haya un error de cálculo o redondeo.",
+          "Haya un error de cálculo o de redondeo.",
           "Falte medir la altura.",
           "La superficie sea nula."
         ],
@@ -742,7 +780,7 @@ button:hover {
       },
       {
         id: "q10",
-        text: "En una tabla final del trabajo, el control angular se usa para verificar:",
+        text: "En una tabla final del trabajo, el control de los ángulos sirve para verificar:",
         options: [
           "Que el perímetro sea entero.",
           "Que la suma de ángulos interiores del triángulo sea correcta.",
@@ -750,63 +788,92 @@ button:hover {
           "Que el radio inscrito sea mayor que todos los lados."
         ],
         correct: 1
+      },
+      {
+        id: "q11",
+        text: "¿Cuál de estas expresiones permite hallar directamente el ángulo α, opuesto al lado a?",
+        options: [
+          "cos α = (b² + c² - a²) / 2bc",
+          "cos α = (a² + b² - c²) / 2ab",
+          "cos α = (a² + c² - b²) / 2ac",
+          "cos α = (a + b + c) / 2"
+        ],
+        correct: 0
+      },
+      {
+        id: "q12",
+        text: "En un triángulo cualquiera, el ángulo mayor está siempre opuesto a:",
+        options: [
+          "El lado menor.",
+          "El lado mayor.",
+          "El semiperímetro.",
+          "La superficie."
+        ],
+        correct: 1
       }
     ];
 
     const answerKey = {
-      calcA_2p: 24,
-      calcA_p: 12,
-      calcA_S: 26.83281573,
-      calcA_r: 2.23606798,
-      calcB_2p: 18,
-      calcB_p: 9,
-      calcB_S: 14.69693846,
-      calcB_r: 1.63300427,
-      table_p: 16,
-      table_S: 48,
-      table_r: 3,
-      table_control: 180
+      calcA_2p: 24.00,
+      calcA_p: 12.00,
+      calcA_S: 26.83,
+      calcA_r: 2.24,
+      calcB_2p: 18.00,
+      calcB_p: 9.00,
+      calcB_S: 14.70,
+      calcB_r: 1.63,
+      ang_alpha: 36.87,
+      ang_beta: 53.13,
+      ang_gamma: 90.00,
+      table_p: 16.00,
+      table_S: 48.00,
+      table_r: 3.00
     };
 
     const tolerances = {
       calcA_2p: 0.02,
       calcA_p: 0.02,
-      calcA_S: 0.05,
-      calcA_r: 0.05,
+      calcA_S: 0.03,
+      calcA_r: 0.03,
       calcB_2p: 0.02,
       calcB_p: 0.02,
-      calcB_S: 0.05,
-      calcB_r: 0.05,
+      calcB_S: 0.03,
+      calcB_r: 0.03,
+      ang_alpha: 0.03,
+      ang_beta: 0.03,
+      ang_gamma: 0.03,
       table_p: 0.02,
-      table_S: 0.05,
-      table_r: 0.05,
-      table_control: 0.5
+      table_S: 0.03,
+      table_r: 0.03
     };
 
     const mcqContainer = document.getElementById("mcqContainer");
     const gradeBtn = document.getElementById("gradeBtn");
+    const quizForm = document.getElementById("quizForm");
     const resultCard = document.getElementById("resultCard");
     const scoreCircle = document.getElementById("scoreCircle");
     const resultTitle = document.getElementById("resultTitle");
     const resultSummary = document.getElementById("resultSummary");
-    const studentSummary = document.getElementById("studentSummary");
+    const extraSummary = document.getElementById("extraSummary");
     const feedbackList = document.getElementById("feedbackList");
-    const historyContainer = document.getElementById("historyContainer");
-    const clearHistoryBtn = document.getElementById("clearHistoryBtn");
-    const quizForm = document.getElementById("quizForm");
+    const answersPanel = document.getElementById("answersPanel");
+    const answersSummary = document.getElementById("answersSummary");
 
     function renderMCQ() {
       mcqContainer.innerHTML = mcqData.map((question, index) => {
         return `
-          <div class="question">
+          <div class="question" id="box_${question.id}">
             <h3>${index + 1}. ${question.text}</h3>
             <div class="options">
               ${question.options.map((option, i) => `
-                <label class="option">
+                <label class="option" data-question="${question.id}" data-index="${i}">
                   <input type="radio" name="${question.id}" value="${i}">
                   <span>${option}</span>
                 </label>
               `).join("")}
+            </div>
+            <div class="answer-reveal" id="answer_${question.id}">
+              <strong>Respuesta correcta:</strong> ${question.options[question.correct]}
             </div>
           </div>
         `;
@@ -819,7 +886,7 @@ button:hover {
     }
 
     function getNumericValue(id) {
-      const raw = document.getElementById(id).value.trim().replace(",", ".");
+      const raw = document.getElementById(id).value.trim();
       if (raw === "") return null;
       const val = Number(raw);
       return Number.isFinite(val) ? val : null;
@@ -829,15 +896,15 @@ button:hover {
       return userValue !== null && Math.abs(userValue - correctValue) <= tolerance;
     }
 
-    function toFixedComma(value, digits = 2) {
-      return value.toFixed(digits).replace(".", ",");
+    function toFixedPoint(value, digits = 2) {
+      return Number(value).toFixed(digits);
     }
 
     function getPerformanceMessage(scoreOver10) {
       if (scoreOver10 >= 9) return "Excelente trabajo. Dominas muy bien el tema.";
       if (scoreOver10 >= 7) return "Buen resultado. Hay una base sólida y pocos detalles para revisar.";
       if (scoreOver10 >= 6) return "Aprobado justo. Conviene reforzar fórmulas y controles.";
-      return "Necesitas repasar el método, la fórmula de Herón y los cálculos de control.";
+      return "Necesitas repasar el método, la fórmula de Herón y el cálculo de ángulos.";
     }
 
     function getResultColor(scoreOver10) {
@@ -849,103 +916,74 @@ button:hover {
     function buildFeedback(correctMcq, totalMcq, correctNumeric, totalNumeric) {
       const items = [];
 
-      items.push({
-        ok: correctMcq >= 7,
-        text: `Opción múltiple: acertaste ${correctMcq} de ${totalMcq}.`
-      });
-
-      items.push({
-        ok: correctNumeric >= 8,
-        text: `Cálculos y tabla: acertaste ${correctNumeric} de ${totalNumeric} valores numéricos.`
-      });
+      items.push({ ok: correctMcq >= 8, text: `Opción múltiple: acertaste ${correctMcq} de ${totalMcq}.` });
+      items.push({ ok: correctNumeric >= 10, text: `Ejercicios numéricos: acertaste ${correctNumeric} de ${totalNumeric}.` });
 
       if (correctMcq < totalMcq) {
-        items.push({
-          ok: false,
-          text: "Revisa especialmente los conceptos de semiperímetro, fórmula de Herón, radio inscrito y control angular."
-        });
+        items.push({ ok: false, text: "Revisa especialmente los conceptos de semiperímetro, fórmula de Herón y ley de cosenos para los ángulos." });
       }
 
       if (correctNumeric < totalNumeric) {
-        items.push({
-          ok: false,
-          text: "En los cálculos conviene no redondear demasiado pronto y verificar siempre cada paso antes del resultado final."
-        });
+        items.push({ ok: false, text: "En las cuentas numéricas conviene mantener más decimales internamente y redondear recién al final a 2 decimales." });
       }
 
       if (correctMcq === totalMcq && correctNumeric === totalNumeric) {
-        items.push({
-          ok: true,
-          text: "Perfecto: resolviste correctamente toda la actividad."
-        });
+        items.push({ ok: true, text: "Perfecto: resolviste correctamente toda la actividad." });
       }
 
       return items;
     }
 
-    function saveResult(entry) {
-      const existing = JSON.parse(localStorage.getItem("topografiaResultados") || "[]");
-      existing.push(entry);
-      localStorage.setItem("topografiaResultados", JSON.stringify(existing));
+    function resetVisualFeedback() {
+      document.querySelectorAll('.question').forEach(q => q.classList.remove('correct', 'incorrect'));
+      document.querySelectorAll('.option').forEach(o => o.classList.remove('correct-option', 'wrong-selected'));
+      document.querySelectorAll('.answer-reveal').forEach(a => a.style.display = 'none');
+      document.querySelectorAll('input[type="number"]').forEach(i => i.classList.remove('correct', 'incorrect'));
+      document.querySelectorAll('.field-answer').forEach(a => {
+        a.style.display = 'none';
+        a.textContent = '';
+      });
     }
 
-    function renderHistory() {
-      const data = JSON.parse(localStorage.getItem("topografiaResultados") || "[]");
-
-      if (!data.length) {
-        historyContainer.innerHTML = `<p class="history-empty">Todavía no hay resultados guardados en este navegador.</p>`;
-        return;
-      }
-
-      const sorted = [...data].sort((a, b) => b.score - a.score || new Date(b.dateIso) - new Date(a.dateIso));
-
-      historyContainer.innerHTML = `
-        <ol class="ranking">
-          ${sorted.map(item => `
-            <li>
-              <div class="left">
-                <strong>${escapeHTML(item.name)}</strong>
-                <span>${item.group ? escapeHTML(item.group) + " · " : ""}${item.dateText}</span>
-              </div>
-              <div class="right">${toFixedComma(item.score, 2)} / 10</div>
-            </li>
-          `).join("")}
-        </ol>
-      `;
-    }
-
-    function escapeHTML(str) {
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/\"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    function showNumericFeedback(id, isCorrect, correctValue) {
+      const input = document.getElementById(id);
+      const box = document.getElementById(`ans_${id}`);
+      input.classList.add(isCorrect ? 'correct' : 'incorrect');
+      box.style.display = 'block';
+      box.innerHTML = `<strong>Correcto:</strong> ${toFixedPoint(correctValue, 2)}`;
     }
 
     function gradeQuiz() {
-      const studentName = document.getElementById("studentName").value.trim();
-      const groupName = document.getElementById("groupName").value.trim();
-
-      if (!studentName) {
-        alert("Debes ingresar tu nombre y apellido antes de corregir.");
-        document.getElementById("studentName").focus();
-        return;
-      }
+      resetVisualFeedback();
 
       let correctMcq = 0;
       let correctNumeric = 0;
 
       mcqData.forEach(q => {
         const selected = getSelectedValue(q.id);
-        if (selected === q.correct) correctMcq++;
+        const questionBox = document.getElementById(`box_${q.id}`);
+        const answerBox = document.getElementById(`answer_${q.id}`);
+        answerBox.style.display = 'block';
+
+        document.querySelectorAll(`.option[data-question="${q.id}"]`).forEach(opt => {
+          const index = Number(opt.dataset.index);
+          if (index === q.correct) opt.classList.add('correct-option');
+          if (selected === index && selected !== q.correct) opt.classList.add('wrong-selected');
+        });
+
+        if (selected === q.correct) {
+          correctMcq++;
+          questionBox.classList.add('correct');
+        } else {
+          questionBox.classList.add('incorrect');
+        }
       });
 
       Object.keys(answerKey).forEach(id => {
         const userValue = getNumericValue(id);
-        if (isClose(userValue, answerKey[id], tolerances[id])) {
-          correctNumeric++;
-        }
+        const ok = isClose(userValue, answerKey[id], tolerances[id]);
+        if (ok) correctNumeric++;
+        showNumericFeedback(id, ok, answerKey[id]);
       });
 
       const totalMcq = mcqData.length;
@@ -955,610 +993,39 @@ button:hover {
       const scoreOver10 = (totalCorrect / totalItems) * 10;
       const percent = (totalCorrect / totalItems) * 100;
 
-      resultCard.style.display = "block";
-      scoreCircle.textContent = toFixedComma(scoreOver10, 2);
+      resultCard.style.display = 'block';
+      scoreCircle.textContent = toFixedPoint(scoreOver10, 2);
       scoreCircle.style.background = getResultColor(scoreOver10);
-      resultTitle.textContent = scoreOver10 >= 6 ? "Formulario corregido" : "Formulario corregido – revisar";
-      studentSummary.textContent = `${studentName}${groupName ? ` · ${groupName}` : ""}`;
-      resultSummary.textContent = `Respuestas correctas: ${totalCorrect} de ${totalItems} · ${toFixedComma(percent, 1)}% · Nota final: ${toFixedComma(scoreOver10, 2)} / 10. ${getPerformanceMessage(scoreOver10)}`;
+      resultTitle.textContent = scoreOver10 >= 6 ? 'Formulario corregido' : 'Formulario corregido – revisar';
+      resultSummary.textContent = `Respuestas correctas: ${totalCorrect} de ${totalItems} · ${toFixedPoint(percent, 2)}% · Nota final: ${toFixedPoint(scoreOver10, 2)} / 10.`;
+      extraSummary.textContent = getPerformanceMessage(scoreOver10);
 
       const feedback = buildFeedback(correctMcq, totalMcq, correctNumeric, totalNumeric);
       feedbackList.innerHTML = feedback.map(item => `
-        <div class="feedback-item ${item.ok ? "ok" : "bad"}">${item.text}</div>
-      `).join("");
+        <div class="feedback-item ${item.ok ? 'ok' : 'bad'}">${item.text}</div>
+      `).join('');
 
-      const now = new Date();
-      const entry = {
-        name: studentName,
-        group: groupName,
-        score: Number(scoreOver10.toFixed(2)),
-        percent: Number(percent.toFixed(1)),
-        totalCorrect,
-        totalItems,
-        dateIso: now.toISOString(),
-        dateText: now.toLocaleString("es-AR")
-      };
+      answersPanel.style.display = 'block';
+      answersSummary.innerHTML = `
+        <li>Ejercicio A: 2p = 24.00, p = 12.00, S = 26.83, r = 2.24.</li>
+        <li>Ejercicio B: 2p = 18.00, p = 9.00, S = 14.70, r = 1.63.</li>
+        <li>Ángulos del ejercicio C: α = 36.87°, β = 53.13°, γ = 90.00°.</li>
+        <li>Tabla del triángulo D: p = 16.00, S = 48.00, r = 3.00.</li>
+      `;
 
-      saveResult(entry);
-      renderHistory();
-      resultCard.scrollIntoView({ behavior: "smooth", block: "start" });
+      resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    gradeBtn.addEventListener("click", gradeQuiz);
+    document.getElementById('gradeBtn').addEventListener('click', gradeQuiz);
 
-    clearHistoryBtn.addEventListener("click", () => {
-      const confirmed = confirm("¿Seguro que quieres borrar todo el historial local de este navegador?");
-      if (!confirmed) return;
-      localStorage.removeItem("topografiaResultados");
-      renderHistory();
-    });
-
-    quizForm.addEventListener("reset", () => {
+    quizForm.addEventListener('reset', () => {
       setTimeout(() => {
-        resultCard.style.display = "none";
+        resetVisualFeedback();
+        resultCard.style.display = 'none';
+        answersPanel.style.display = 'none';
       }, 0);
     });
 
     renderMCQ();
-    renderHistory();
   </script></body>
-</html>    .question {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: var(--shadow);
-    }
-
-    .question h3 {
-      margin: 0 0 14px;
-      font-size: 1.06rem;
-      line-height: 1.4;
-    }
-
-    .options {
-      display: grid;
-      gap: 10px;
-    }
-
-    .option {
-      display: block;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px 14px;
-      cursor: pointer;
-      background: #fbfdff;
-      transition: border-color 0.2s ease, background 0.2s ease;
-    }
-
-    .option:hover {
-      border-color: #93c5fd;
-      background: #f8fbff;
-    }
-
-    .option input {
-      margin-right: 10px;
-      transform: translateY(1px);
-    }
-
-    .feedback {
-      margin-top: 12px;
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 2px solid transparent;
-      display: none;
-      font-weight: 700;
-    }
-
-    .feedback.ok {
-      display: block;
-      background: var(--ok-bg);
-      border-color: var(--ok-border);
-      color: #166534;
-    }
-
-    .feedback.bad {
-      display: block;
-      background: var(--bad-bg);
-      border-color: var(--bad-border);
-      color: #991b1b;
-    }
-
-    .result {
-      position: sticky;
-      bottom: 16px;
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(8px);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 16px;
-      box-shadow: var(--shadow);
-      margin-top: 22px;
-    }
-
-    .result h2 {
-      margin: 0 0 8px;
-      font-size: 1.3rem;
-    }
-
-    .result p {
-      margin: 6px 0;
-      color: var(--muted);
-    }
-
-    .score {
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: #111827;
-    }
-
-    .legend {
-      font-size: 0.95rem;
-      color: var(--muted);
-      margin-top: 8px;
-    }
-
-    @media (max-width: 700px) {
-      .wrap { padding: 14px; }
-      h1 { font-size: 1.55rem; }
-      .hero, .question, .result { border-radius: 16px; }
-    }
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <section class="hero">
-      <h1>Quiz de Planimetría Sencilla</h1>
-      <p class="subtitle">
-        Evaluación de práctica con 30 preguntas de opción múltiple sobre pasos, alineaciones,
-        medición con cinta, decametría, avalizamiento y nociones básicas de símbolos topográficos.
-      </p>
-      <div class="toolbar">
-        <div class="badge">30 preguntas</div>
-        <div class="badge">Múltiple opción</div>
-        <div class="badge">Corrección automática</div>
-        <button class="btn btn-primary" id="gradeBtn">Enviar y calificar</button>
-        <button class="btn btn-secondary" id="resetBtn">Reiniciar</button>
-      </div>
-      <p class="legend">Al calificar, cada respuesta correcta se marcará en verde y cada incorrecta en rojo.</p>
-    </section>
-
-    <main id="quiz" class="grid"></main>
-
-    <section class="result" id="resultBox">
-      <h2>Resultado</h2>
-      <div class="score" id="scoreText">Todavía no calificaste.</div>
-      <p id="extraText">Completá las preguntas y presioná <strong>Enviar y calificar</strong>.</p>
-    </section>
-  </div>
-
-  <script>
-    const questions = [
-      {
-        q: "1) En planimetría, una alineación es:",
-        options: [
-          "La diferencia de altura entre dos puntos",
-          "La dirección recta definida entre dos puntos",
-          "La inclinación de un terreno",
-          "Una medición angular únicamente"
-        ],
-        answer: 1,
-        explanation: "Correcta: una alineación representa una recta o dirección definida entre dos puntos."
-      },
-      {
-        q: "2) La medición a pasos se usa principalmente para:",
-        options: [
-          "Obtener distancias aproximadas en un reconocimiento inicial",
-          "Reemplazar siempre a la cinta con mayor precisión",
-          "Medir ángulos verticales",
-          "Determinar coordenadas exactas"
-        ],
-        answer: 0,
-        explanation: "Correcta: la medición a pasos sirve para estimaciones rápidas o croquis preliminares."
-      },
-      {
-        q: "3) Si una escala es 1:100, significa que:",
-        options: [
-          "1 cm en el terreno equivale a 100 cm en el plano",
-          "1 cm en el plano equivale a 100 cm en el terreno",
-          "100 cm en el plano equivale a 1 m en el terreno",
-          "No existe relación de reducción"
-        ],
-        answer: 1,
-        explanation: "Correcta: 1 unidad en el plano representa 100 de esas mismas unidades en el terreno."
-      },
-      {
-        q: "4) Una cinta métrica se emplea para:",
-        options: [
-          "Medir distancias lineales con mayor exactitud que a pasos",
-          "Medir solamente pendientes",
-          "Señalar puntos visibles",
-          "Medir rumbos magnéticos"
-        ],
-        answer: 0,
-        explanation: "Correcta: la cinta se usa para medir distancias lineales."
-      },
-      {
-        q: "5) El avalizamiento consiste en:",
-        options: [
-          "Promediar varias distancias",
-          "Marcar o referenciar puntos para poder ubicarlos nuevamente",
-          "Pasar medidas a escala",
-          "Corregir errores de cinta"
-        ],
-        answer: 1,
-        explanation: "Correcta: avalizar es dejar referencias para recuperar un punto."
-      },
-      {
-        q: "6) Cuando una persona cuenta sus pasos para medir, primero conviene:",
-        options: [
-          "Elegir cualquier longitud de paso",
-          "Calibrar su paso promedio en una distancia conocida",
-          "Usar solo medio paso",
-          "No anotar nada"
-        ],
-        answer: 1,
-        explanation: "Correcta: hay que conocer la longitud promedio del paso."
-      },
-      {
-        q: "7) En un croquis, la función principal es:",
-        options: [
-          "Representar con exactitud instrumental absoluta",
-          "Dar una idea clara de la disposición y medidas principales",
-          "Reemplazar el plano definitivo siempre",
-          "Eliminar la necesidad de medir"
-        ],
-        answer: 1,
-        explanation: "Correcta: el croquis muestra de forma clara la disposición general y datos básicos."
-      },
-      {
-        q: "8) Si una línea en el terreno mide 20 m y la escala es 1:200, en el plano debe medir:",
-        options: [
-          "1 cm",
-          "10 cm",
-          "20 cm",
-          "0,1 cm"
-        ],
-        answer: 1,
-        explanation: "Correcta: 20 m = 2000 cm; 2000/200 = 10 cm."
-      },
-      {
-        q: "9) La decametría está asociada al uso de:",
-        options: [
-          "Un teodolito",
-          "Una cinta o medición por tramos de longitud conocida",
-          "Una brújula exclusivamente",
-          "Un nivel de mano únicamente"
-        ],
-        answer: 1,
-        explanation: "Correcta: en trabajos básicos se vincula con medición lineal usando cinta."
-      },
-      {
-        q: "10) Para medir bien con cinta sobre una alineación, es importante:",
-        options: [
-          "Que la cinta siga una recta y esté correctamente tensada",
-          "Que la cinta quede floja",
-          "Medir con la cinta doblada",
-          "Cambiar el origen de lectura en cada tramo"
-        ],
-        answer: 0,
-        explanation: "Correcta: debe mantenerse la alineación y tensión adecuadas."
-      },
-      {
-        q: "11) Un punto fijo e inamovible útil para referencia puede ser:",
-        options: [
-          "Una hoja suelta",
-          "Una luminaria o una esquina construida",
-          "Una sombra",
-          "Una persona parada"
-        ],
-        answer: 1,
-        explanation: "Correcta: se usan elementos permanentes del entorno."
-      },
-      {
-        q: "12) Si una distancia se mide varias veces, el promedio sirve para:",
-        options: [
-          "Aumentar el error siempre",
-          "Obtener un valor representativo más confiable",
-          "Eliminar la necesidad de observar",
-          "Cambiar la escala"
-        ],
-        answer: 1,
-        explanation: "Correcta: promediar varias observaciones mejora la representatividad."
-      },
-      {
-        q: "13) En un trabajo sencillo de planimetría, los detalles deben anotarse:",
-        options: [
-          "Solo al final, de memoria",
-          "En el momento de la medición",
-          "Únicamente si sobran hojas",
-          "Después de dibujar a tinta"
-        ],
-        answer: 1,
-        explanation: "Correcta: conviene registrar los datos en el momento."
-      },
-      {
-        q: "14) El error en la medición a pasos suele ser:",
-        options: [
-          "Menor que con instrumentos precisos",
-          "Mayor que en una medición con cinta bien realizada",
-          "Nulo",
-          "Igual en cualquier terreno sin importar condiciones"
-        ],
-        answer: 1,
-        explanation: "Correcta: a pasos es una medición aproximada."
-      },
-      {
-        q: "15) Cuando se representa una puerta en un croquis sencillo de planta, normalmente interesa:",
-        options: [
-          "Su ubicación y sentido básico de apertura si corresponde",
-          "Su color exacto",
-          "La marca comercial",
-          "El material del picaporte solamente"
-        ],
-        answer: 0,
-        explanation: "Correcta: en un croquis importa sobre todo su ubicación funcional."
-      },
-      {
-        q: "16) Si el paso promedio de una persona es 0,75 m y recorre 40 pasos, la distancia aproximada es:",
-        options: [
-          "20 m",
-          "25 m",
-          "30 m",
-          "35 m"
-        ],
-        answer: 2,
-        explanation: "Correcta: 40 × 0,75 = 30 m."
-      },
-      {
-        q: "17) Una de las ventajas del croquis de campo es que:",
-        options: [
-          "Permite relacionar visualmente medidas y detalles observados",
-          "Reemplaza todos los cálculos",
-          "Evita el uso de escala",
-          "No necesita orientación"
-        ],
-        answer: 0,
-        explanation: "Correcta: el croquis ayuda a ordenar la información observada."
-      },
-      {
-        q: "18) En la simbología topográfica básica, una línea continua suele representar:",
-        options: [
-          "Un límite o elemento lineal visible según el contexto",
-          "Un error de cierre",
-          "Una cota automática",
-          "Solo curvas de nivel"
-        ],
-        answer: 0,
-        explanation: "Correcta: las líneas continuas suelen representar elementos visibles o límites, según la convención usada."
-      },
-      {
-        q: "19) Si una medición con cinta se hace en terreno irregular, conviene:",
-        options: [
-          "Ignorar las irregularidades",
-          "Cuidar la horizontalidad o medir por tramos adecuados",
-          "Aumentar la escala del plano",
-          "Cambiar el punto inicial por comodidad"
-        ],
-        answer: 1,
-        explanation: "Correcta: en terreno irregular se debe controlar cómo se mide el tramo."
-      },
-      {
-        q: "20) El objetivo de dejar referencias en avalizamiento es:",
-        options: [
-          "Encontrar el punto en una futura visita",
-          "Cambiar el norte del dibujo",
-          "Reducir la longitud de la cinta",
-          "Medir áreas automáticamente"
-        ],
-        answer: 0,
-        explanation: "Correcta: el avalizamiento permite reubicar el punto luego."
-      },
-      {
-        q: "21) En un plano o croquis, indicar el norte sirve para:",
-        options: [
-          "Establecer orientación",
-          "Indicar la escala vertical",
-          "Calcular perímetros automáticamente",
-          "Mostrar la altura de cada punto"
-        ],
-        answer: 0,
-        explanation: "Correcta: el norte orienta la representación."
-      },
-      {
-        q: "22) Una medición repetida que da valores muy distintos puede indicar:",
-        options: [
-          "Buena consistencia",
-          "Posibles errores de procedimiento o lectura",
-          "Que la escala está bien",
-          "Que no hace falta promediar"
-        ],
-        answer: 1,
-        explanation: "Correcta: una gran dispersión puede señalar errores."
-      },
-      {
-        q: "23) En símbolos topográficos, un árbol aislado suele representarse con:",
-        options: [
-          "Un símbolo puntual convencional",
-          "Una línea de cota",
-          "Un número de escala",
-          "Un eje cartesiano"
-        ],
-        answer: 0,
-        explanation: "Correcta: se representa con un símbolo puntual."
-      },
-      {
-        q: "24) Si en un cuaderno chico el dibujo no entra, lo correcto es:",
-        options: [
-          "Cambiar a una escala que permita representar todo claramente",
-          "Dibujar sin escala",
-          "Omitir partes medidas",
-          "Usar números inventados"
-        ],
-        answer: 0,
-        explanation: "Correcta: debe elegirse una escala adecuada al espacio disponible."
-      },
-      {
-        q: "25) El punto de partida de una medición debe quedar:",
-        options: [
-          "Bien identificado y anotado",
-          "Sin marcar para no recargar el croquis",
-          "Solo en la memoria del observador",
-          "Cambiado en cada observación"
-        ],
-        answer: 0,
-        explanation: "Correcta: el origen debe quedar claro."
-      },
-      {
-        q: "26) En medición con cinta, una lectura mal tomada en el cero puede producir:",
-        options: [
-          "Un error sistemático en el tramo",
-          "Un símbolo topográfico distinto",
-          "La orientación norte-sur",
-          "Una curva de nivel"
-        ],
-        answer: 0,
-        explanation: "Correcta: un error inicial afecta la medición del tramo."
-      },
-      {
-        q: "27) Un TP individual básico de planimetría suele pedir:",
-        options: [
-          "Croquis, medidas, escala y representación ordenada",
-          "Solo una foto del lugar",
-          "Únicamente teoría sin datos",
-          "Un plano sin medidas"
-        ],
-        answer: 0,
-        explanation: "Correcta: normalmente se pide croquis y datos medidos con orden."
-      },
-      {
-        q: "28) Una ventaja de usar puntos auxiliares visibles en una alineación es:",
-        options: [
-          "Facilitar la prolongación y control de la recta",
-          "Eliminar el uso de cinta",
-          "Cambiar la escala automáticamente",
-          "Evitar anotar en el croquis"
-        ],
-        answer: 0,
-        explanation: "Correcta: ayudan a materializar y controlar la recta."
-      },
-      {
-        q: "29) En topografía básica, una estaca o jalón se usa para:",
-        options: [
-          "Materializar puntos o alineaciones en el terreno",
-          "Dibujar símbolos en el cuaderno",
-          "Calcular áreas en gabinete",
-          "Medir temperatura"
-        ],
-        answer: 0,
-        explanation: "Correcta: sirven para señalar puntos o alineaciones."
-      },
-      {
-        q: "30) Si una respuesta en el control del trabajo no coincide con la lógica del croquis y las medidas, lo mejor es:",
-        options: [
-          "Revisar los datos y el procedimiento antes de entregar",
-          "Dejarlo igual",
-          "Borrar las medidas",
-          "Cambiar solo el título"
-        ],
-        answer: 0,
-        explanation: "Correcta: siempre conviene revisar coherencia entre croquis, medidas y cálculo."
-      }
-    ];
-
-    const quiz = document.getElementById('quiz');
-    const gradeBtn = document.getElementById('gradeBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const scoreText = document.getElementById('scoreText');
-    const extraText = document.getElementById('extraText');
-
-    function renderQuiz() {
-      quiz.innerHTML = '';
-      questions.forEach((item, index) => {
-        const card = document.createElement('section');
-        card.className = 'question';
-
-        const title = document.createElement('h3');
-        title.textContent = item.q;
-        card.appendChild(title);
-
-        const options = document.createElement('div');
-        options.className = 'options';
-
-        item.options.forEach((opt, optIndex) => {
-          const label = document.createElement('label');
-          label.className = 'option';
-          label.innerHTML = `<input type="radio" name="q${index}" value="${optIndex}"> ${opt}`;
-          options.appendChild(label);
-        });
-
-        const feedback = document.createElement('div');
-        feedback.className = 'feedback';
-        feedback.id = `feedback-${index}`;
-
-        card.appendChild(options);
-        card.appendChild(feedback);
-        quiz.appendChild(card);
-      });
-    }
-
-    function gradeQuiz() {
-      let correct = 0;
-      questions.forEach((item, index) => {
-        const selected = document.querySelector(`input[name="q${index}"]:checked`);
-        const feedback = document.getElementById(`feedback-${index}`);
-
-        if (!selected) {
-          feedback.className = 'feedback bad';
-          feedback.textContent = `Incorrecta. No seleccionaste opción. Respuesta correcta: ${item.options[item.answer]}.`;
-          return;
-        }
-
-        const value = Number(selected.value);
-        if (value === item.answer) {
-          correct++;
-          feedback.className = 'feedback ok';
-          feedback.textContent = 'Correcta. ' + item.explanation;
-        } else {
-          feedback.className = 'feedback bad';
-          feedback.textContent = `Incorrecta. Respuesta correcta: ${item.options[item.answer]}.`;
-        }
-      });
-
-      const total = questions.length;
-      const percentage = ((correct / total) * 100).toFixed(1);
-      const grade10 = ((correct / total) * 10).toFixed(2);
-
-      scoreText.textContent = `Puntaje: ${correct}/${total} · ${percentage}% · Nota estimada: ${grade10}/10`;
-
-      if (correct === total) {
-        extraText.textContent = 'Excelente. Respondiste todo correctamente.';
-      } else if (correct >= 24) {
-        extraText.textContent = 'Muy bien. Tenés una base sólida para parcialitos y TP.';
-      } else if (correct >= 18) {
-        extraText.textContent = 'Buen resultado. Conviene repasar algunos conceptos.';
-      } else {
-        extraText.textContent = 'Te conviene repasar planimetría básica antes de entregar o rendir.';
-      }
-
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    }
-
-    function resetQuiz() {
-      document.querySelectorAll('input[type="radio"]').forEach(input => input.checked = false);
-      document.querySelectorAll('.feedback').forEach(box => {
-        box.className = 'feedback';
-        box.textContent = '';
-      });
-      scoreText.textContent = 'Todavía no calificaste.';
-      extraText.innerHTML = 'Completá las preguntas y presioná <strong>Enviar y calificar</strong>.';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    gradeBtn.addEventListener('click', gradeQuiz);
-    resetBtn.addEventListener('click', resetQuiz);
-
-    renderQuiz();
-  </script>
-</body>
-</html>
+      </html> 
