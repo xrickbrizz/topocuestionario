@@ -1,106 +1,1008 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiz de Planimetría Sencilla</title>
+  <title>Formulario de Topografía – Descomposición en Triángulos</title>
   <style>
     :root {
-      --bg: #f5f7fb;
+      --bg: #f3f7fb;
       --card: #ffffff;
-      --text: #1f2937;
-      --muted: #6b7280;
-      --primary: #2563eb;
-      --border: #dbe3f0;
-      --ok-bg: #eafaf0;
-      --ok-border: #22c55e;
-      --bad-bg: #fff1f2;
-      --bad-border: #ef4444;
-      --shadow: 0 10px 30px rgba(0,0,0,0.08);
+      --card-2: #f8fbff;
+      --text: #17324d;
+      --muted: #60758a;
+      --line: #d9e6f2;
+      --primary: #1f6feb;
+      --primary-dark: #1557b0;
+      --success: #1e9e5a;
+      --warning: #d48a00;
+      --danger: #d64545;
+      --shadow: 0 12px 30px rgba(19, 51, 84, 0.08);
+      --radius: 18px;
+    }* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(180deg, #eef5fc 0%, #f7fbff 100%);
+  color: var(--text);
+}
+
+.container {
+  width: min(1100px, calc(100% - 28px));
+  margin: 28px auto 50px;
+}
+
+.hero {
+  background: linear-gradient(135deg, #1f6feb 0%, #3d8bfd 100%);
+  color: white;
+  border-radius: 28px;
+  padding: 30px 24px;
+  box-shadow: 0 14px 36px rgba(31, 111, 235, 0.28);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  right: -70px;
+  top: -70px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.hero h1 {
+  margin: 0 0 10px;
+  font-size: clamp(1.8rem, 2.4vw, 2.6rem);
+  line-height: 1.15;
+  position: relative;
+  z-index: 1;
+}
+
+.hero p {
+  margin: 0;
+  max-width: 780px;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.55;
+  position: relative;
+  z-index: 1;
+}
+
+.notice {
+  margin-top: 14px;
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 0.94rem;
+  position: relative;
+  z-index: 1;
+}
+
+.grid {
+  display: grid;
+  gap: 20px;
+}
+
+.grid.cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.card {
+  margin-top: 22px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 8px;
+  font-size: 1.35rem;
+}
+
+.section-title .badge {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  color: white;
+  font-weight: 700;
+  background: var(--primary);
+  flex-shrink: 0;
+}
+
+.section-subtitle {
+  margin: 0 0 18px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.field {
+  margin-bottom: 16px;
+}
+
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid #c8d8e8;
+  border-radius: 14px;
+  background: #fcfeff;
+  font-size: 1rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(31, 111, 235, 0.12);
+}
+
+.question {
+  padding: 18px;
+  background: var(--card-2);
+  border: 1px solid #e0ebf5;
+  border-radius: 18px;
+  margin-bottom: 16px;
+}
+
+.question h3 {
+  margin: 0 0 12px;
+  font-size: 1.03rem;
+  line-height: 1.45;
+}
+
+.options {
+  display: grid;
+  gap: 10px;
+}
+
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid #dbe7f2;
+  background: white;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.option:hover {
+  border-color: #9fc0f3;
+  transform: translateY(-1px);
+}
+
+.option input {
+  margin-top: 2px;
+  accent-color: var(--primary);
+}
+
+.formula-chip {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #edf5ff;
+  color: var(--primary-dark);
+  font-weight: 700;
+  margin: 6px 10px 6px 0;
+  border: 1px solid #d5e6fb;
+  font-size: 0.95rem;
+}
+
+.mini-note {
+  margin-top: 10px;
+  font-size: 0.93rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.calc-box {
+  background: linear-gradient(180deg, #fbfdff 0%, #f4f9ff 100%);
+  border: 1px solid #dbe8f5;
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.calc-box h3 {
+  margin: 0 0 10px;
+}
+
+.calc-givens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.calc-givens span {
+  background: white;
+  border: 1px solid #dbe7f2;
+  border-radius: 999px;
+  padding: 9px 12px;
+  font-weight: 700;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid #dce8f2;
+  border-radius: 18px;
+  background: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 780px;
+}
+
+th,
+td {
+  padding: 12px;
+  border-bottom: 1px solid #e7eef5;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+th {
+  background: #f1f7ff;
+  color: #1c4f8d;
+  font-weight: 700;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+td:first-child,
+th:first-child {
+  text-align: left;
+  font-weight: 700;
+}
+
+td input {
+  min-width: 90px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+button {
+  border: none;
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.18s ease, opacity 0.18s ease, background 0.18s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 10px 24px rgba(31, 111, 235, 0.22);
+}
+
+.btn-primary:hover {
+  background: #165ec9;
+}
+
+.btn-secondary {
+  background: #ecf4ff;
+  color: #1c4f8d;
+  border: 1px solid #d3e5fb;
+}
+
+.result-card {
+  display: none;
+  margin-top: 24px;
+  padding: 22px;
+  border-radius: 20px;
+  border: 1px solid #dbe8f5;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+}
+
+.result-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.score-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-weight: 800;
+  font-size: 1.45rem;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+}
+
+.result-info h3 {
+  margin: 0 0 8px;
+  font-size: 1.45rem;
+}
+
+.result-info p {
+  margin: 4px 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.feedback-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.feedback-item {
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 0.96rem;
+  line-height: 1.45;
+  border: 1px solid #dde8f3;
+  background: #fcfeff;
+}
+
+.feedback-item.ok {
+  border-color: #bfe5cf;
+  background: #f3fcf7;
+  color: #1f6e43;
+}
+
+.feedback-item.bad {
+  border-color: #f1c3c3;
+  background: #fff5f5;
+  color: #933838;
+}
+
+.history-empty {
+  color: var(--muted);
+  margin: 0;
+}
+
+.ranking {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.ranking li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid #dce9f4;
+  background: #fbfdff;
+  border-radius: 16px;
+}
+
+.ranking .left strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 1rem;
+}
+
+.ranking .left span {
+  color: var(--muted);
+  font-size: 0.93rem;
+}
+
+.ranking .right {
+  font-weight: 800;
+  color: var(--primary-dark);
+  font-size: 1.04rem;
+  white-space: nowrap;
+}
+
+.footnote {
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: 0.93rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 760px) {
+  .grid.cols-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding: 24px 18px;
+    border-radius: 24px;
+  }
+
+  .card {
+    padding: 18px;
+  }
+
+  .score-circle {
+    width: 98px;
+    height: 98px;
+    font-size: 1.25rem;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="hero">
+      <h1>Formulario de Topografía – Descomposición en Triángulos</h1>
+      <p>
+        Actividad interactiva con preguntas de opción múltiple, ejercicios de cálculo y una tabla breve para completar.
+        Al final se calcula la nota automáticamente y se guarda un historial local en este navegador.
+      </p>
+      <div class="notice">Importante: sin backend, los resultados se guardan solo en este dispositivo.</div>
+    </header><form id="quizForm" novalidate>
+  <section class="card">
+    <h2 class="section-title"><span class="badge">1</span>Datos del alumno</h2>
+    <p class="section-subtitle">Completa tus datos antes de corregir el formulario.</p>
+    <div class="grid cols-2">
+      <div class="field">
+        <label for="studentName">Nombre y apellido</label>
+        <input type="text" id="studentName" placeholder="Ej.: Rick Sánchez" required />
+      </div>
+      <div class="field">
+        <label for="groupName">Grupo o comisión</label>
+        <input type="text" id="groupName" placeholder="Ej.: Grupo 2 / Comisión A" />
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title"><span class="badge">2</span>Preguntas de opción múltiple</h2>
+    <p class="section-subtitle">Selecciona una sola respuesta por pregunta.</p>
+    <div id="mcqContainer"></div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title"><span class="badge">3</span>Cálculos cortos</h2>
+    <p class="section-subtitle">Usa calculadora y completa los resultados. Se admite una pequeña tolerancia decimal.</p>
+
+    <div class="grid cols-2">
+      <div class="calc-box">
+        <h3>Ejercicio A</h3>
+        <div class="calc-givens">
+          <span>a = 7,0 m</span>
+          <span>b = 8,0 m</span>
+          <span>c = 9,0 m</span>
+        </div>
+        <div>
+          <span class="formula-chip">2p = a + b + c</span>
+          <span class="formula-chip">p = (a + b + c) / 2</span>
+          <span class="formula-chip">S = √[p(p-a)(p-b)(p-c)]</span>
+          <span class="formula-chip">r = S / p</span>
+        </div>
+        <div class="grid cols-2" style="margin-top:16px;">
+          <div class="field">
+            <label for="calcA_2p">2p</label>
+            <input type="number" step="any" id="calcA_2p" placeholder="Valor" />
+          </div>
+          <div class="field">
+            <label for="calcA_p">p</label>
+            <input type="number" step="any" id="calcA_p" placeholder="Valor" />
+          </div>
+          <div class="field">
+            <label for="calcA_S">Superficie S (m²)</label>
+            <input type="number" step="any" id="calcA_S" placeholder="Valor" />
+          </div>
+          <div class="field">
+            <label for="calcA_r">Radio inscrito r (m)</label>
+            <input type="number" step="any" id="calcA_r" placeholder="Valor" />
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-box">
+        <h3>Ejercicio B</h3>
+        <div class="calc-givens">
+          <span>a = 5,0 m</span>
+          <span>b = 6,0 m</span>
+          <span>c = 7,0 m</span>
+        </div>
+        <div>
+          <span class="formula-chip">2p = a + b + c</span>
+          <span class="formula-chip">p = (a + b + c) / 2</span>
+          <span class="formula-chip">S = √[p(p-a)(p-b)(p-c)]</span>
+          <span class="formula-chip">r = S / p</span>
+        </div>
+        <div class="grid cols-2" style="margin-top:16px;">
+          <div class="field">
+            <label for="calcB_2p">2p</label>
+            <input type="number" step="any" id="calcB_2p" placeholder="Valor" />
+          </div>
+          <div class="field">
+            <label for="calcB_p">p</label>
+            <input type="number" step="any" id="calcB_p" placeholder="Valor" />
+          </div>
+          <div class="field">
+            <label for="calcB_S">Superficie S (m²)</label>
+            <input type="number" step="any" id="calcB_S" placeholder="Valor" />
+          </div>
+          <div class="field">
+            <label for="calcB_r">Radio inscrito r (m)</label>
+            <input type="number" step="any" id="calcB_r" placeholder="Valor" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title"><span class="badge">4</span>Tabla breve de control</h2>
+    <p class="section-subtitle">Completa la fila usando los datos dados. Se evalúan cuatro valores.</p>
+
+    <div class="mini-note">
+      Datos del triángulo C: <strong>a = 10,0 m</strong>, <strong>b = 10,0 m</strong>, <strong>c = 12,0 m</strong>.
+      Calcula <strong>p</strong>, <strong>S</strong>, <strong>r</strong> y el <strong>control angular</strong>.
+    </div>
+
+    <div class="table-wrap" style="margin-top:16px;">
+      <table>
+        <thead>
+          <tr>
+            <th>Triángulo</th>
+            <th>a (m)</th>
+            <th>b (m)</th>
+            <th>c (m)</th>
+            <th>p</th>
+            <th>S (m²)</th>
+            <th>r (m)</th>
+            <th>Control angular</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>C</td>
+            <td>10,0</td>
+            <td>10,0</td>
+            <td>12,0</td>
+            <td><input type="number" step="any" id="table_p" placeholder="p" /></td>
+            <td><input type="number" step="any" id="table_S" placeholder="S" /></td>
+            <td><input type="number" step="any" id="table_r" placeholder="r" /></td>
+            <td><input type="number" step="any" id="table_control" placeholder="180" /></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title"><span class="badge">5</span>Acciones</h2>
+    <p class="section-subtitle">Cuando termines, corrige el formulario para obtener la nota final.</p>
+    <div class="actions">
+      <button type="button" class="btn-primary" id="gradeBtn">Corregir y calcular nota</button>
+      <button type="reset" class="btn-secondary" id="resetBtn">Limpiar respuestas</button>
+      <button type="button" class="btn-secondary" id="clearHistoryBtn">Borrar historial local</button>
+    </div>
+
+    <div class="result-card" id="resultCard">
+      <div class="result-top">
+        <div class="score-circle" id="scoreCircle">0,0</div>
+        <div class="result-info">
+          <h3 id="resultTitle">Resultado</h3>
+          <p id="studentSummary"></p>
+          <p id="resultSummary"></p>
+        </div>
+      </div>
+      <div class="feedback-list" id="feedbackList"></div>
+    </div>
+  </section>
+</form>
+
+<section class="card">
+  <h2 class="section-title"><span class="badge">6</span>Historial local</h2>
+  <p class="section-subtitle">Aquí se muestran los resultados guardados en este navegador. No se comparten con otras personas.</p>
+  <div id="historyContainer"></div>
+  <p class="footnote">
+    Si en el futuro quieres que todos los integrantes del grupo vean los nombres y puntajes, habrá que agregar una base de datos o backend.
+  </p>
+</section>
+
+  </div>  <script>
+    const mcqData = [
+      {
+        id: "q1",
+        text: "¿Para qué se utiliza principalmente el método de descomposición en triángulos?",
+        options: [
+          "Para calcular el volumen de un terreno.",
+          "Para determinar superficies a partir de triángulos.",
+          "Para hallar únicamente el perímetro.",
+          "Para medir desniveles de nivelación."
+        ],
+        correct: 1
+      },
+      {
+        id: "q2",
+        text: "La superficie de un triángulo conociendo sus tres lados se obtiene con:",
+        options: [
+          "Teorema de Pitágoras.",
+          "Fórmula de Herón.",
+          "Ley de tangentes solamente.",
+          "Regla del cartabón."
+        ],
+        correct: 1
+      },
+      {
+        id: "q3",
+        text: "El semiperímetro p se calcula como:",
+        options: [
+          "p = a + b + c",
+          "p = (a + b + c) / 2",
+          "p = ab / c",
+          "p = S / r"
+        ],
+        correct: 1
+      },
+      {
+        id: "q4",
+        text: "Si S es la superficie y p el semiperímetro, el radio de la circunferencia inscrita es:",
+        options: [
+          "r = p / S",
+          "r = S + p",
+          "r = S / p",
+          "r = S² / p"
+        ],
+        correct: 2
+      },
+      {
+        id: "q5",
+        text: "Como control geométrico, la suma de los ángulos interiores de un triángulo debe ser:",
+        options: [
+          "90°",
+          "180°",
+          "270°",
+          "360°"
+        ],
+        correct: 1
+      },
+      {
+        id: "q6",
+        text: "Si al calcular los ángulos de un triángulo la suma no da 180°, lo más probable es que:",
+        options: [
+          "El triángulo no exista.",
+          "Haya un error de cálculo o redondeo.",
+          "Falte medir la altura.",
+          "La superficie sea nula."
+        ],
+        correct: 1
+      },
+      {
+        id: "q7",
+        text: "Al descomponer un polígono en triángulos, la superficie total resulta de:",
+        options: [
+          "Restar las superficies de los triángulos.",
+          "Multiplicar los semiperímetros.",
+          "Sumar las superficies de todos los triángulos.",
+          "Promediar los lados medidos."
+        ],
+        correct: 2
+      },
+      {
+        id: "q8",
+        text: "¿Qué dato es clave para aplicar directamente la fórmula de Herón?",
+        options: [
+          "Los tres lados del triángulo.",
+          "Dos ángulos y una altura.",
+          "Solo la base y la altura.",
+          "El área y el perímetro del polígono."
+        ],
+        correct: 0
+      },
+      {
+        id: "q9",
+        text: "Trabajar con varios decimales durante el cálculo sirve principalmente para:",
+        options: [
+          "Evitar errores acumulados por redondeo prematuro.",
+          "Aumentar el número de triángulos.",
+          "Cambiar el tipo de método utilizado.",
+          "Eliminar la necesidad del control angular."
+        ],
+        correct: 0
+      },
+      {
+        id: "q10",
+        text: "En una tabla final del trabajo, el control angular se usa para verificar:",
+        options: [
+          "Que el perímetro sea entero.",
+          "Que la suma de ángulos interiores del triángulo sea correcta.",
+          "Que el semiperímetro coincida con el área.",
+          "Que el radio inscrito sea mayor que todos los lados."
+        ],
+        correct: 1
+      }
+    ];
+
+    const answerKey = {
+      calcA_2p: 24,
+      calcA_p: 12,
+      calcA_S: 26.83281573,
+      calcA_r: 2.23606798,
+      calcB_2p: 18,
+      calcB_p: 9,
+      calcB_S: 14.69693846,
+      calcB_r: 1.63300427,
+      table_p: 16,
+      table_S: 48,
+      table_r: 3,
+      table_control: 180
+    };
+
+    const tolerances = {
+      calcA_2p: 0.02,
+      calcA_p: 0.02,
+      calcA_S: 0.05,
+      calcA_r: 0.05,
+      calcB_2p: 0.02,
+      calcB_p: 0.02,
+      calcB_S: 0.05,
+      calcB_r: 0.05,
+      table_p: 0.02,
+      table_S: 0.05,
+      table_r: 0.05,
+      table_control: 0.5
+    };
+
+    const mcqContainer = document.getElementById("mcqContainer");
+    const gradeBtn = document.getElementById("gradeBtn");
+    const resultCard = document.getElementById("resultCard");
+    const scoreCircle = document.getElementById("scoreCircle");
+    const resultTitle = document.getElementById("resultTitle");
+    const resultSummary = document.getElementById("resultSummary");
+    const studentSummary = document.getElementById("studentSummary");
+    const feedbackList = document.getElementById("feedbackList");
+    const historyContainer = document.getElementById("historyContainer");
+    const clearHistoryBtn = document.getElementById("clearHistoryBtn");
+    const quizForm = document.getElementById("quizForm");
+
+    function renderMCQ() {
+      mcqContainer.innerHTML = mcqData.map((question, index) => {
+        return `
+          <div class="question">
+            <h3>${index + 1}. ${question.text}</h3>
+            <div class="options">
+              ${question.options.map((option, i) => `
+                <label class="option">
+                  <input type="radio" name="${question.id}" value="${i}">
+                  <span>${option}</span>
+                </label>
+              `).join("")}
+            </div>
+          </div>
+        `;
+      }).join("");
     }
 
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(180deg, #eef4ff 0%, var(--bg) 100%);
-      color: var(--text);
+    function getSelectedValue(name) {
+      const checked = document.querySelector(`input[name="${name}"]:checked`);
+      return checked ? Number(checked.value) : null;
     }
 
-    .wrap {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 24px;
+    function getNumericValue(id) {
+      const raw = document.getElementById(id).value.trim().replace(",", ".");
+      if (raw === "") return null;
+      const val = Number(raw);
+      return Number.isFinite(val) ? val : null;
     }
 
-    .hero {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      padding: 24px;
-      box-shadow: var(--shadow);
-      margin-bottom: 20px;
+    function isClose(userValue, correctValue, tolerance) {
+      return userValue !== null && Math.abs(userValue - correctValue) <= tolerance;
     }
 
-    h1 {
-      margin: 0 0 8px;
-      font-size: 2rem;
+    function toFixedComma(value, digits = 2) {
+      return value.toFixed(digits).replace(".", ",");
     }
 
-    .subtitle {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.5;
+    function getPerformanceMessage(scoreOver10) {
+      if (scoreOver10 >= 9) return "Excelente trabajo. Dominas muy bien el tema.";
+      if (scoreOver10 >= 7) return "Buen resultado. Hay una base sólida y pocos detalles para revisar.";
+      if (scoreOver10 >= 6) return "Aprobado justo. Conviene reforzar fórmulas y controles.";
+      return "Necesitas repasar el método, la fórmula de Herón y los cálculos de control.";
     }
 
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 18px;
-      align-items: center;
+    function getResultColor(scoreOver10) {
+      if (scoreOver10 >= 7) return "linear-gradient(135deg, #1e9e5a, #38b974)";
+      if (scoreOver10 >= 6) return "linear-gradient(135deg, #d48a00, #f0a91c)";
+      return "linear-gradient(135deg, #d64545, #ee6969)";
     }
 
-    .badge {
-      background: #eef2ff;
-      color: #1e40af;
-      border: 1px solid #c7d2fe;
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-size: 0.95rem;
-      font-weight: 700;
+    function buildFeedback(correctMcq, totalMcq, correctNumeric, totalNumeric) {
+      const items = [];
+
+      items.push({
+        ok: correctMcq >= 7,
+        text: `Opción múltiple: acertaste ${correctMcq} de ${totalMcq}.`
+      });
+
+      items.push({
+        ok: correctNumeric >= 8,
+        text: `Cálculos y tabla: acertaste ${correctNumeric} de ${totalNumeric} valores numéricos.`
+      });
+
+      if (correctMcq < totalMcq) {
+        items.push({
+          ok: false,
+          text: "Revisa especialmente los conceptos de semiperímetro, fórmula de Herón, radio inscrito y control angular."
+        });
+      }
+
+      if (correctNumeric < totalNumeric) {
+        items.push({
+          ok: false,
+          text: "En los cálculos conviene no redondear demasiado pronto y verificar siempre cada paso antes del resultado final."
+        });
+      }
+
+      if (correctMcq === totalMcq && correctNumeric === totalNumeric) {
+        items.push({
+          ok: true,
+          text: "Perfecto: resolviste correctamente toda la actividad."
+        });
+      }
+
+      return items;
     }
 
-    .btn {
-      border: 0;
-      border-radius: 14px;
-      padding: 12px 18px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.15s ease, opacity 0.2s ease;
+    function saveResult(entry) {
+      const existing = JSON.parse(localStorage.getItem("topografiaResultados") || "[]");
+      existing.push(entry);
+      localStorage.setItem("topografiaResultados", JSON.stringify(existing));
     }
 
-    .btn:hover { transform: translateY(-1px); }
-    .btn:active { transform: translateY(0); }
+    function renderHistory() {
+      const data = JSON.parse(localStorage.getItem("topografiaResultados") || "[]");
 
-    .btn-primary {
-      background: var(--primary);
-      color: white;
+      if (!data.length) {
+        historyContainer.innerHTML = `<p class="history-empty">Todavía no hay resultados guardados en este navegador.</p>`;
+        return;
+      }
+
+      const sorted = [...data].sort((a, b) => b.score - a.score || new Date(b.dateIso) - new Date(a.dateIso));
+
+      historyContainer.innerHTML = `
+        <ol class="ranking">
+          ${sorted.map(item => `
+            <li>
+              <div class="left">
+                <strong>${escapeHTML(item.name)}</strong>
+                <span>${item.group ? escapeHTML(item.group) + " · " : ""}${item.dateText}</span>
+              </div>
+              <div class="right">${toFixedComma(item.score, 2)} / 10</div>
+            </li>
+          `).join("")}
+        </ol>
+      `;
     }
 
-    .btn-secondary {
-      background: #e5e7eb;
-      color: #111827;
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
-    .grid {
-      display: grid;
-      gap: 16px;
+    function gradeQuiz() {
+      const studentName = document.getElementById("studentName").value.trim();
+      const groupName = document.getElementById("groupName").value.trim();
+
+      if (!studentName) {
+        alert("Debes ingresar tu nombre y apellido antes de corregir.");
+        document.getElementById("studentName").focus();
+        return;
+      }
+
+      let correctMcq = 0;
+      let correctNumeric = 0;
+
+      mcqData.forEach(q => {
+        const selected = getSelectedValue(q.id);
+        if (selected === q.correct) correctMcq++;
+      });
+
+      Object.keys(answerKey).forEach(id => {
+        const userValue = getNumericValue(id);
+        if (isClose(userValue, answerKey[id], tolerances[id])) {
+          correctNumeric++;
+        }
+      });
+
+      const totalMcq = mcqData.length;
+      const totalNumeric = Object.keys(answerKey).length;
+      const totalItems = totalMcq + totalNumeric;
+      const totalCorrect = correctMcq + correctNumeric;
+      const scoreOver10 = (totalCorrect / totalItems) * 10;
+      const percent = (totalCorrect / totalItems) * 100;
+
+      resultCard.style.display = "block";
+      scoreCircle.textContent = toFixedComma(scoreOver10, 2);
+      scoreCircle.style.background = getResultColor(scoreOver10);
+      resultTitle.textContent = scoreOver10 >= 6 ? "Formulario corregido" : "Formulario corregido – revisar";
+      studentSummary.textContent = `${studentName}${groupName ? ` · ${groupName}` : ""}`;
+      resultSummary.textContent = `Respuestas correctas: ${totalCorrect} de ${totalItems} · ${toFixedComma(percent, 1)}% · Nota final: ${toFixedComma(scoreOver10, 2)} / 10. ${getPerformanceMessage(scoreOver10)}`;
+
+      const feedback = buildFeedback(correctMcq, totalMcq, correctNumeric, totalNumeric);
+      feedbackList.innerHTML = feedback.map(item => `
+        <div class="feedback-item ${item.ok ? "ok" : "bad"}">${item.text}</div>
+      `).join("");
+
+      const now = new Date();
+      const entry = {
+        name: studentName,
+        group: groupName,
+        score: Number(scoreOver10.toFixed(2)),
+        percent: Number(percent.toFixed(1)),
+        totalCorrect,
+        totalItems,
+        dateIso: now.toISOString(),
+        dateText: now.toLocaleString("es-AR")
+      };
+
+      saveResult(entry);
+      renderHistory();
+      resultCard.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    .question {
+    gradeBtn.addEventListener("click", gradeQuiz);
+
+    clearHistoryBtn.addEventListener("click", () => {
+      const confirmed = confirm("¿Seguro que quieres borrar todo el historial local de este navegador?");
+      if (!confirmed) return;
+      localStorage.removeItem("topografiaResultados");
+      renderHistory();
+    });
+
+    quizForm.addEventListener("reset", () => {
+      setTimeout(() => {
+        resultCard.style.display = "none";
+      }, 0);
+    });
+
+    renderMCQ();
+    renderHistory();
+  </script></body>
+</html>    .question {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 18px;
