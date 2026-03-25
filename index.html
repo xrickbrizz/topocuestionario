@@ -1,11 +1,11 @@
-<!DOCTYPE html><html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Formulario de Topografía – Descomposición en Triángulos</title>
   <style>
     :root {
-      --bg: #f3f7fb;
       --card: #ffffff;
       --card-2: #f8fbff;
       --text: #17324d;
@@ -18,448 +18,474 @@
       --danger: #d64545;
       --shadow: 0 12px 30px rgba(19, 51, 84, 0.08);
       --radius: 18px;
-    }* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+    }
 
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(180deg, #eef5fc 0%, #f7fbff 100%);
-  color: var(--text);
-}
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
-.container {
-  width: min(1100px, calc(100% - 28px));
-  margin: 28px auto 50px;
-}
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #eef5fc 0%, #f7fbff 100%);
+      color: var(--text);
+    }
 
-.hero {
-  background: linear-gradient(135deg, #1f6feb 0%, #3d8bfd 100%);
-  color: white;
-  border-radius: 28px;
-  padding: 30px 24px;
-  box-shadow: 0 14px 36px rgba(31, 111, 235, 0.28);
-  position: relative;
-  overflow: hidden;
-}
+    .container {
+      width: min(1120px, calc(100% - 28px));
+      margin: 28px auto 50px;
+    }
 
-.hero::after {
-  content: "";
-  position: absolute;
-  width: 240px;
-  height: 240px;
-  right: -70px;
-  top: -70px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.12);
-}
+    .hero {
+      background: linear-gradient(135deg, #1f6feb 0%, #3d8bfd 100%);
+      color: white;
+      border-radius: 28px;
+      padding: 30px 24px;
+      box-shadow: 0 14px 36px rgba(31, 111, 235, 0.28);
+      position: relative;
+      overflow: hidden;
+    }
 
-.hero h1 {
-  margin: 0 0 10px;
-  font-size: clamp(1.8rem, 2.4vw, 2.6rem);
-  line-height: 1.15;
-  position: relative;
-  z-index: 1;
-}
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      right: -70px;
+      top: -70px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+    }
 
-.hero p {
-  margin: 0;
-  max-width: 800px;
-  color: rgba(255, 255, 255, 0.93);
-  line-height: 1.55;
-  position: relative;
-  z-index: 1;
-}
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.8rem, 2.4vw, 2.6rem);
+      line-height: 1.15;
+      position: relative;
+      z-index: 1;
+    }
 
-.notice {
-  margin-top: 14px;
-  display: inline-block;
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  padding: 10px 14px;
-  border-radius: 999px;
-  font-size: 0.94rem;
-  position: relative;
-  z-index: 1;
-}
+    .hero p {
+      margin: 0;
+      max-width: 860px;
+      color: rgba(255, 255, 255, 0.93);
+      line-height: 1.55;
+      position: relative;
+      z-index: 1;
+    }
 
-.grid { display: grid; gap: 20px; }
-.grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .notice {
+      margin-top: 14px;
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 0.94rem;
+      position: relative;
+      z-index: 1;
+    }
 
-.card {
-  margin-top: 22px;
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 22px;
-}
+    .grid { display: grid; gap: 20px; }
+    .grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 0 0 8px;
-  font-size: 1.35rem;
-}
+    .card {
+      margin-top: 22px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
 
-.section-title .badge {
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  color: white;
-  font-weight: 700;
-  background: var(--primary);
-  flex-shrink: 0;
-}
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 8px;
+      font-size: 1.35rem;
+    }
 
-.section-subtitle {
-  margin: 0 0 18px;
-  color: var(--muted);
-  line-height: 1.5;
-}
+    .section-title .badge {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
+      background: var(--primary);
+      flex-shrink: 0;
+    }
 
-.info-list {
-  margin: 0;
-  padding-left: 18px;
-  color: var(--text);
-  line-height: 1.7;
-}
+    .section-subtitle {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
 
-label {
-  display: block;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
+    .info-list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text);
+      line-height: 1.7;
+    }
 
-.field { margin-bottom: 16px; }
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
 
-input[type="number"] {
-  width: 100%;
-  padding: 13px 14px;
-  border: 1px solid #c8d8e8;
-  border-radius: 14px;
-  background: #fcfeff;
-  font-size: 1rem;
-  color: var(--text);
-  outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-}
+    .field { margin-bottom: 16px; }
 
-input[type="number"]:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(31, 111, 235, 0.12);
-}
+    input[type="number"] {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #c8d8e8;
+      border-radius: 14px;
+      background: #fcfeff;
+      font-size: 1rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
 
-input.correct {
-  border-color: #70c48f;
-  background: #f5fcf8;
-  box-shadow: 0 0 0 4px rgba(30, 158, 90, 0.08);
-}
+    input[type="number"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(31, 111, 235, 0.12);
+    }
 
-input.incorrect {
-  border-color: #e59696;
-  background: #fff7f7;
-  box-shadow: 0 0 0 4px rgba(214, 69, 69, 0.08);
-}
+    input.correct {
+      border-color: #70c48f;
+      background: #f5fcf8;
+      box-shadow: 0 0 0 4px rgba(30, 158, 90, 0.08);
+    }
 
-.question {
-  padding: 18px;
-  background: var(--card-2);
-  border: 1px solid #e0ebf5;
-  border-radius: 18px;
-  margin-bottom: 16px;
-  transition: border-color 0.2s ease, background 0.2s ease;
-}
+    input.incorrect {
+      border-color: #e59696;
+      background: #fff7f7;
+      box-shadow: 0 0 0 4px rgba(214, 69, 69, 0.08);
+    }
 
-.question.correct {
-  border-color: #bfe5cf;
-  background: #f6fcf8;
-}
+    .question {
+      padding: 18px;
+      background: var(--card-2);
+      border: 1px solid #e0ebf5;
+      border-radius: 18px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
 
-.question.incorrect {
-  border-color: #f1c3c3;
-  background: #fff8f8;
-}
+    .question.correct {
+      border-color: #bfe5cf;
+      background: #f6fcf8;
+    }
 
-.question h3 {
-  margin: 0 0 12px;
-  font-size: 1.03rem;
-  line-height: 1.45;
-}
+    .question.incorrect {
+      border-color: #f1c3c3;
+      background: #fff8f8;
+    }
 
-.options {
-  display: grid;
-  gap: 10px;
-}
+    .question h3 {
+      margin: 0 0 12px;
+      font-size: 1.03rem;
+      line-height: 1.45;
+    }
 
-.option {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 12px 12px;
-  border-radius: 14px;
-  border: 1px solid #dbe7f2;
-  background: white;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
+    .options {
+      display: grid;
+      gap: 10px;
+    }
 
-.option:hover {
-  border-color: #9fc0f3;
-  transform: translateY(-1px);
-}
+    .option {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid #dbe7f2;
+      background: white;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
 
-.option input {
-  margin-top: 2px;
-  accent-color: var(--primary);
-}
+    .option:hover {
+      border-color: #9fc0f3;
+      transform: translateY(-1px);
+    }
 
-.option.correct-option {
-  border-color: #9fd3b5;
-  background: #f4fcf7;
-}
+    .option input {
+      margin-top: 2px;
+      accent-color: var(--primary);
+    }
 
-.option.wrong-selected {
-  border-color: #efb1b1;
-  background: #fff5f5;
-}
+    .option.correct-option {
+      border-color: #9fd3b5;
+      background: #f4fcf7;
+    }
 
-.answer-reveal {
-  display: none;
-  margin-top: 12px;
-  padding: 11px 13px;
-  border-radius: 13px;
-  background: #edf5ff;
-  border: 1px solid #d7e7fb;
-  color: #1c4f8d;
-  font-size: 0.95rem;
-  line-height: 1.45;
-}
+    .option.wrong-selected {
+      border-color: #efb1b1;
+      background: #fff5f5;
+    }
 
-.formula-chip {
-  display: inline-block;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: #edf5ff;
-  color: var(--primary-dark);
-  font-weight: 700;
-  margin: 6px 10px 6px 0;
-  border: 1px solid #d5e6fb;
-  font-size: 0.95rem;
-}
+    .answer-reveal {
+      display: none;
+      margin-top: 12px;
+      padding: 11px 13px;
+      border-radius: 13px;
+      background: #edf5ff;
+      border: 1px solid #d7e7fb;
+      color: #1c4f8d;
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
 
-.mini-note {
-  margin-top: 10px;
-  font-size: 0.93rem;
-  color: var(--muted);
-  line-height: 1.5;
-}
+    .formula-chip {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #edf5ff;
+      color: var(--primary-dark);
+      font-weight: 700;
+      margin: 6px 10px 6px 0;
+      border: 1px solid #d5e6fb;
+      font-size: 0.95rem;
+    }
 
-.calc-box {
-  background: linear-gradient(180deg, #fbfdff 0%, #f4f9ff 100%);
-  border: 1px solid #dbe8f5;
-  border-radius: 18px;
-  padding: 18px;
-}
+    .mini-note {
+      margin-top: 10px;
+      font-size: 0.93rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
 
-.calc-box h3 { margin: 0 0 10px; }
+    .calc-box {
+      background: linear-gradient(180deg, #fbfdff 0%, #f4f9ff 100%);
+      border: 1px solid #dbe8f5;
+      border-radius: 18px;
+      padding: 18px;
+    }
 
-.calc-givens {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 14px;
-}
+    .calc-box h3 { margin: 0 0 10px; }
 
-.calc-givens span {
-  background: white;
-  border: 1px solid #dbe7f2;
-  border-radius: 999px;
-  padding: 9px 12px;
-  font-weight: 700;
-}
+    .calc-givens {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
 
-.field-answer {
-  display: none;
-  margin-top: 8px;
-  font-size: 0.9rem;
-  line-height: 1.4;
-  color: var(--primary-dark);
-  background: #eef6ff;
-  border: 1px solid #d8e8fb;
-  border-radius: 12px;
-  padding: 8px 10px;
-}
+    .calc-givens span {
+      background: white;
+      border: 1px solid #dbe7f2;
+      border-radius: 999px;
+      padding: 9px 12px;
+      font-weight: 700;
+    }
 
-.table-wrap {
-  overflow-x: auto;
-  border: 1px solid #dce8f2;
-  border-radius: 18px;
-  background: white;
-}
+    .field-answer {
+      display: none;
+      margin-top: 8px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: var(--primary-dark);
+      background: #eef6ff;
+      border: 1px solid #d8e8fb;
+      border-radius: 12px;
+      padding: 8px 10px;
+    }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 700px;
-}
+    .angle-card {
+      background: #fcfeff;
+      border: 1px solid #dbe8f5;
+      border-radius: 16px;
+      padding: 16px;
+    }
 
-th, td {
-  padding: 12px;
-  border-bottom: 1px solid #e7eef5;
-  text-align: center;
-  font-size: 0.95rem;
-}
+    .angle-card h4 {
+      margin: 0 0 12px;
+      font-size: 1rem;
+    }
 
-th {
-  background: #f1f7ff;
-  color: #1c4f8d;
-  font-weight: 700;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
+    .angle-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
 
-td:first-child, th:first-child {
-  text-align: left;
-  font-weight: 700;
-}
+    .angle-grid small {
+      display: block;
+      color: var(--muted);
+      margin-top: 6px;
+      font-size: 0.82rem;
+    }
 
-td input { min-width: 100px; }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid #dce8f2;
+      border-radius: 18px;
+      background: white;
+    }
 
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 22px;
-}
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+    }
 
-button {
-  border: none;
-  border-radius: 14px;
-  padding: 14px 18px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform 0.18s ease, background 0.18s ease;
-}
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #e7eef5;
+      text-align: center;
+      font-size: 0.95rem;
+    }
 
-button:hover { transform: translateY(-1px); }
+    th {
+      background: #f1f7ff;
+      color: #1c4f8d;
+      font-weight: 700;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
 
-.btn-primary {
-  background: var(--primary);
-  color: white;
-  box-shadow: 0 10px 24px rgba(31, 111, 235, 0.22);
-}
+    td:first-child, th:first-child {
+      text-align: left;
+      font-weight: 700;
+    }
 
-.btn-primary:hover { background: #165ec9; }
+    td input { min-width: 100px; }
 
-.btn-secondary {
-  background: #ecf4ff;
-  color: #1c4f8d;
-  border: 1px solid #d3e5fb;
-}
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
 
-.result-card {
-  display: none;
-  margin-top: 24px;
-  padding: 22px;
-  border-radius: 20px;
-  border: 1px solid #dbe8f5;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-}
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 14px 18px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
 
-.result-top {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 18px;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 18px;
-}
+    button:hover { transform: translateY(-1px); }
 
-.score-circle {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  color: white;
-  font-weight: 800;
-  font-size: 1.45rem;
-  box-shadow: 0 12px 24px rgba(0,0,0,0.12);
-}
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 10px 24px rgba(31, 111, 235, 0.22);
+    }
 
-.result-info h3 {
-  margin: 0 0 8px;
-  font-size: 1.45rem;
-}
+    .btn-primary:hover { background: #165ec9; }
 
-.result-info p {
-  margin: 4px 0;
-  color: var(--muted);
-  line-height: 1.5;
-}
+    .btn-secondary {
+      background: #ecf4ff;
+      color: #1c4f8d;
+      border: 1px solid #d3e5fb;
+    }
 
-.feedback-list {
-  display: grid;
-  gap: 10px;
-  margin-top: 14px;
-}
+    .result-card {
+      display: none;
+      margin-top: 24px;
+      padding: 22px;
+      border-radius: 20px;
+      border: 1px solid #dbe8f5;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    }
 
-.feedback-item {
-  padding: 12px 14px;
-  border-radius: 14px;
-  font-size: 0.96rem;
-  line-height: 1.45;
-  border: 1px solid #dde8f3;
-  background: #fcfeff;
-}
+    .result-top {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
 
-.feedback-item.ok {
-  border-color: #bfe5cf;
-  background: #f3fcf7;
-  color: #1f6e43;
-}
+    .score-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 800;
+      font-size: 1.45rem;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+    }
 
-.feedback-item.bad {
-  border-color: #f1c3c3;
-  background: #fff5f5;
-  color: #933838;
-}
+    .result-info h3 {
+      margin: 0 0 8px;
+      font-size: 1.45rem;
+    }
 
-.answers-panel {
-  margin-top: 18px;
-  display: none;
-  padding: 18px;
-  border-radius: 18px;
-  border: 1px solid #dbe8f5;
-  background: #fbfdff;
-}
+    .result-info p {
+      margin: 4px 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
 
-.answers-panel h4 {
-  margin: 0 0 12px;
-  font-size: 1.08rem;
-}
+    .feedback-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
 
-.answers-panel ul {
-  margin: 0;
-  padding-left: 18px;
-  line-height: 1.7;
-  color: var(--text);
-}
+    .feedback-item {
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-size: 0.96rem;
+      line-height: 1.45;
+      border: 1px solid #dde8f3;
+      background: #fcfeff;
+    }
 
-@media (max-width: 760px) {
-  .grid.cols-2, .grid.cols-3 { grid-template-columns: 1fr; }
-  .hero { padding: 24px 18px; border-radius: 24px; }
-  .card { padding: 18px; }
-  .score-circle { width: 98px; height: 98px; font-size: 1.25rem; }
-}
+    .feedback-item.ok {
+      border-color: #bfe5cf;
+      background: #f3fcf7;
+      color: #1f6e43;
+    }
 
+    .feedback-item.bad {
+      border-color: #f1c3c3;
+      background: #fff5f5;
+      color: #933838;
+    }
+
+    .answers-panel {
+      margin-top: 18px;
+      display: none;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid #dbe8f5;
+      background: #fbfdff;
+    }
+
+    .answers-panel h4 {
+      margin: 0 0 12px;
+      font-size: 1.08rem;
+    }
+
+    .answers-panel ul {
+      margin: 0;
+      padding-left: 18px;
+      line-height: 1.7;
+      color: var(--text);
+    }
+
+    @media (max-width: 760px) {
+      .grid.cols-2, .grid.cols-3, .angle-grid { grid-template-columns: 1fr; }
+      .hero { padding: 24px 18px; border-radius: 24px; }
+      .card { padding: 18px; }
+      .score-circle { width: 98px; height: 98px; font-size: 1.25rem; }
+    }
   </style>
 </head>
 <body>
@@ -470,214 +496,262 @@ button:hover { transform: translateY(-1px); }
         Actividad interactiva con preguntas de opción múltiple, ejercicios de cálculo y un bloque específico de ángulos.
         Al corregir, se muestra la nota final y también las respuestas correctas.
       </p>
-      <div class="notice">Los resultados decimales deben ingresarse con 2 decimales y usando punto.</div>
-    </header><form id="quizForm" novalidate>
-  <section class="card">
-    <h2 class="section-title"><span class="badge">1</span>Indicaciones</h2>
-    <p class="section-subtitle">Lee estas pautas antes de comenzar.</p>
-    <ul class="info-list">
-      <li>La mayor parte del formulario es de opción múltiple.</li>
-      <li>En los ejercicios numéricos, escribe los resultados con <strong>2 decimales</strong>.</li>
-      <li>Para los decimales, utiliza <strong>punto</strong> y no coma.</li>
-      <li>Al presionar <strong>Corregir</strong>, se mostrará la nota y también las respuestas correctas.</li>
-    </ul>
-  </section>
+      <div class="notice">Semiperímetro, superficie y radio: con 2 decimales y usando punto. Ángulos: en grados, minutos y segundos.</div>
+    </header>
 
-  <section class="card">
-    <h2 class="section-title"><span class="badge">2</span>Preguntas de opción múltiple</h2>
-    <p class="section-subtitle">Selecciona una sola respuesta por pregunta.</p>
-    <div id="mcqContainer"></div>
-  </section>
+    <form id="quizForm" novalidate>
+      <section class="card">
+        <h2 class="section-title"><span class="badge">1</span>Indicaciones</h2>
+        <p class="section-subtitle">Lee estas pautas antes de comenzar.</p>
+        <ul class="info-list">
+          <li>La mayor parte del formulario es de opción múltiple.</li>
+          <li>En los ejercicios numéricos, escribe los resultados con <strong>2 decimales</strong>.</li>
+          <li>Para los decimales, utiliza <strong>punto</strong> y no coma.</li>
+          <li>Los <strong>ángulos</strong> deben responderse en <strong>grados, minutos y segundos</strong>.</li>
+          <li>Al presionar <strong>Corregir</strong>, se mostrará la nota y también las respuestas correctas.</li>
+        </ul>
+      </section>
 
-  <section class="card">
-    <h2 class="section-title"><span class="badge">3</span>Cálculos cortos</h2>
-    <p class="section-subtitle">Calcula semiperímetro, superficie y radio inscrito.</p>
+      <section class="card">
+        <h2 class="section-title"><span class="badge">2</span>Preguntas de opción múltiple</h2>
+        <p class="section-subtitle">Selecciona una sola respuesta por pregunta.</p>
+        <div id="mcqContainer"></div>
+      </section>
 
-    <div class="grid cols-2">
-      <div class="calc-box">
-        <h3>Ejercicio A</h3>
-        <div class="calc-givens">
-          <span>a = 7.0 m</span>
-          <span>b = 8.0 m</span>
-          <span>c = 9.0 m</span>
-        </div>
-        <div>
-          <span class="formula-chip">2p = a + b + c</span>
-          <span class="formula-chip">p = (a + b + c) / 2</span>
-          <span class="formula-chip">S = √[p(p-a)(p-b)(p-c)]</span>
-          <span class="formula-chip">r = S / p</span>
-        </div>
-        <div class="grid cols-2" style="margin-top:16px;">
-          <div class="field">
-            <label for="calcA_2p">2p</label>
-            <input type="number" step="0.01" id="calcA_2p" placeholder="Ej.: 24.00" />
-            <div class="field-answer" id="ans_calcA_2p"></div>
+      <section class="card">
+        <h2 class="section-title"><span class="badge">3</span>Cálculos cortos</h2>
+        <p class="section-subtitle">Calcula semiperímetro, superficie y radio inscrito.</p>
+
+        <div class="grid cols-2">
+          <div class="calc-box">
+            <h3>Ejercicio A</h3>
+            <div class="calc-givens">
+              <span>a = 7.0 m</span>
+              <span>b = 8.0 m</span>
+              <span>c = 9.0 m</span>
+            </div>
+            <div>
+              <span class="formula-chip">2p = a + b + c</span>
+              <span class="formula-chip">p = (a + b + c) / 2</span>
+              <span class="formula-chip">S = √[p(p-a)(p-b)(p-c)]</span>
+              <span class="formula-chip">r = S / p</span>
+            </div>
+            <div class="grid cols-2" style="margin-top:16px;">
+              <div class="field">
+                <label for="calcA_2p">2p</label>
+                <input type="number" step="0.01" id="calcA_2p" placeholder="24.00" />
+                <div class="field-answer" id="ans_calcA_2p"></div>
+              </div>
+              <div class="field">
+                <label for="calcA_p">p</label>
+                <input type="number" step="0.01" id="calcA_p" placeholder="12.00" />
+                <div class="field-answer" id="ans_calcA_p"></div>
+              </div>
+              <div class="field">
+                <label for="calcA_S">Superficie S (m²)</label>
+                <input type="number" step="0.01" id="calcA_S" placeholder="26.83" />
+                <div class="field-answer" id="ans_calcA_S"></div>
+              </div>
+              <div class="field">
+                <label for="calcA_r">Radio inscrito r (m)</label>
+                <input type="number" step="0.01" id="calcA_r" placeholder="2.24" />
+                <div class="field-answer" id="ans_calcA_r"></div>
+              </div>
+            </div>
           </div>
-          <div class="field">
-            <label for="calcA_p">p</label>
-            <input type="number" step="0.01" id="calcA_p" placeholder="Ej.: 12.00" />
-            <div class="field-answer" id="ans_calcA_p"></div>
-          </div>
-          <div class="field">
-            <label for="calcA_S">Superficie S (m²)</label>
-            <input type="number" step="0.01" id="calcA_S" placeholder="Ej.: 26.83" />
-            <div class="field-answer" id="ans_calcA_S"></div>
-          </div>
-          <div class="field">
-            <label for="calcA_r">Radio inscrito r (m)</label>
-            <input type="number" step="0.01" id="calcA_r" placeholder="Ej.: 2.24" />
-            <div class="field-answer" id="ans_calcA_r"></div>
-          </div>
-        </div>
-      </div>
 
-      <div class="calc-box">
-        <h3>Ejercicio B</h3>
-        <div class="calc-givens">
-          <span>a = 5.0 m</span>
-          <span>b = 6.0 m</span>
-          <span>c = 7.0 m</span>
-        </div>
-        <div>
-          <span class="formula-chip">2p = a + b + c</span>
-          <span class="formula-chip">p = (a + b + c) / 2</span>
-          <span class="formula-chip">S = √[p(p-a)(p-b)(p-c)]</span>
-          <span class="formula-chip">r = S / p</span>
-        </div>
-        <div class="grid cols-2" style="margin-top:16px;">
-          <div class="field">
-            <label for="calcB_2p">2p</label>
-            <input type="number" step="0.01" id="calcB_2p" placeholder="Ej.: 18.00" />
-            <div class="field-answer" id="ans_calcB_2p"></div>
-          </div>
-          <div class="field">
-            <label for="calcB_p">p</label>
-            <input type="number" step="0.01" id="calcB_p" placeholder="Ej.: 9.00" />
-            <div class="field-answer" id="ans_calcB_p"></div>
-          </div>
-          <div class="field">
-            <label for="calcB_S">Superficie S (m²)</label>
-            <input type="number" step="0.01" id="calcB_S" placeholder="Ej.: 14.70" />
-            <div class="field-answer" id="ans_calcB_S"></div>
-          </div>
-          <div class="field">
-            <label for="calcB_r">Radio inscrito r (m)</label>
-            <input type="number" step="0.01" id="calcB_r" placeholder="Ej.: 1.63" />
-            <div class="field-answer" id="ans_calcB_r"></div>
+          <div class="calc-box">
+            <h3>Ejercicio B</h3>
+            <div class="calc-givens">
+              <span>a = 5.0 m</span>
+              <span>b = 6.0 m</span>
+              <span>c = 7.0 m</span>
+            </div>
+            <div>
+              <span class="formula-chip">2p = a + b + c</span>
+              <span class="formula-chip">p = (a + b + c) / 2</span>
+              <span class="formula-chip">S = √[p(p-a)(p-b)(p-c)]</span>
+              <span class="formula-chip">r = S / p</span>
+            </div>
+            <div class="grid cols-2" style="margin-top:16px;">
+              <div class="field">
+                <label for="calcB_2p">2p</label>
+                <input type="number" step="0.01" id="calcB_2p" placeholder="18.00" />
+                <div class="field-answer" id="ans_calcB_2p"></div>
+              </div>
+              <div class="field">
+                <label for="calcB_p">p</label>
+                <input type="number" step="0.01" id="calcB_p" placeholder="9.00" />
+                <div class="field-answer" id="ans_calcB_p"></div>
+              </div>
+              <div class="field">
+                <label for="calcB_S">Superficie S (m²)</label>
+                <input type="number" step="0.01" id="calcB_S" placeholder="14.70" />
+                <div class="field-answer" id="ans_calcB_S"></div>
+              </div>
+              <div class="field">
+                <label for="calcB_r">Radio inscrito r (m)</label>
+                <input type="number" step="0.01" id="calcB_r" placeholder="1.63" />
+                <div class="field-answer" id="ans_calcB_r"></div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <section class="card">
-    <h2 class="section-title"><span class="badge">4</span>Ángulos del triángulo</h2>
-    <p class="section-subtitle">Ahora calcula directamente los ángulos interiores. Recuerda que α está opuesto a a, β a b y γ a c.</p>
+      <section class="card">
+        <h2 class="section-title"><span class="badge">4</span>Ángulos del triángulo</h2>
+        <p class="section-subtitle">Usa las fórmulas con radio inscrito y semiperímetro. Completa cada ángulo en grados, minutos y segundos.</p>
 
-    <div class="calc-box">
-      <h3>Ejercicio C</h3>
-      <div class="calc-givens">
-        <span>a = 6.0 m</span>
-        <span>b = 8.0 m</span>
-        <span>c = 10.0 m</span>
-      </div>
-      <div>
-        <span class="formula-chip">cos α = (b² + c² - a²) / 2bc</span>
-        <span class="formula-chip">cos β = (a² + c² - b²) / 2ac</span>
-        <span class="formula-chip">cos γ = (a² + b² - c²) / 2ab</span>
-      </div>
-      <div class="grid cols-3" style="margin-top:16px;">
-        <div class="field">
-          <label for="ang_alpha">α (°)</label>
-          <input type="number" step="0.01" id="ang_alpha" placeholder="Ej.: 36.87" />
-          <div class="field-answer" id="ans_ang_alpha"></div>
+        <div class="calc-box">
+          <h3>Ejercicio C</h3>
+          <div class="calc-givens">
+            <span>a = 6.0 m</span>
+            <span>b = 8.0 m</span>
+            <span>c = 10.0 m</span>
+            <span>p = 12.0 m</span>
+            <span>r = 2.0 m</span>
+          </div>
+          <div>
+            <span class="formula-chip">α = 2 arctg (r / (p-a))</span>
+            <span class="formula-chip">β = 2 arctg (r / (p-b))</span>
+            <span class="formula-chip">γ = 2 arctg (r / (p-c))</span>
+          </div>
+
+          <div class="grid cols-3" style="margin-top:18px;">
+            <div class="angle-card">
+              <h4>Ángulo α</h4>
+              <div class="angle-grid">
+                <div>
+                  <label for="alpha_g">Grados</label>
+                  <input type="number" step="1" id="alpha_g" placeholder="36" />
+                </div>
+                <div>
+                  <label for="alpha_m">Minutos</label>
+                  <input type="number" step="1" id="alpha_m" placeholder="52" />
+                </div>
+                <div>
+                  <label for="alpha_s">Segundos</label>
+                  <input type="number" step="1" id="alpha_s" placeholder="12" />
+                </div>
+              </div>
+              <div class="field-answer" id="ans_angle_alpha"></div>
+            </div>
+
+            <div class="angle-card">
+              <h4>Ángulo β</h4>
+              <div class="angle-grid">
+                <div>
+                  <label for="beta_g">Grados</label>
+                  <input type="number" step="1" id="beta_g" placeholder="53" />
+                </div>
+                <div>
+                  <label for="beta_m">Minutos</label>
+                  <input type="number" step="1" id="beta_m" placeholder="07" />
+                </div>
+                <div>
+                  <label for="beta_s">Segundos</label>
+                  <input type="number" step="1" id="beta_s" placeholder="48" />
+                </div>
+              </div>
+              <div class="field-answer" id="ans_angle_beta"></div>
+            </div>
+
+            <div class="angle-card">
+              <h4>Ángulo γ</h4>
+              <div class="angle-grid">
+                <div>
+                  <label for="gamma_g">Grados</label>
+                  <input type="number" step="1" id="gamma_g" placeholder="90" />
+                </div>
+                <div>
+                  <label for="gamma_m">Minutos</label>
+                  <input type="number" step="1" id="gamma_m" placeholder="00" />
+                </div>
+                <div>
+                  <label for="gamma_s">Segundos</label>
+                  <input type="number" step="1" id="gamma_s" placeholder="00" />
+                </div>
+              </div>
+              <div class="field-answer" id="ans_angle_gamma"></div>
+            </div>
+          </div>
         </div>
-        <div class="field">
-          <label for="ang_beta">β (°)</label>
-          <input type="number" step="0.01" id="ang_beta" placeholder="Ej.: 53.13" />
-          <div class="field-answer" id="ans_ang_beta"></div>
+      </section>
+
+      <section class="card">
+        <h2 class="section-title"><span class="badge">5</span>Tabla breve</h2>
+        <p class="section-subtitle">Completa la fila con semiperímetro, superficie y radio inscrito.</p>
+
+        <div class="mini-note">
+          Datos del triángulo D: <strong>a = 10.0 m</strong>, <strong>b = 10.0 m</strong>, <strong>c = 12.0 m</strong>.
         </div>
-        <div class="field">
-          <label for="ang_gamma">γ (°)</label>
-          <input type="number" step="0.01" id="ang_gamma" placeholder="Ej.: 90.00" />
-          <div class="field-answer" id="ans_ang_gamma"></div>
+
+        <div class="table-wrap" style="margin-top:16px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Triángulo</th>
+                <th>a (m)</th>
+                <th>b (m)</th>
+                <th>c (m)</th>
+                <th>p</th>
+                <th>S (m²)</th>
+                <th>r (m)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>D</td>
+                <td>10.0</td>
+                <td>10.0</td>
+                <td>12.0</td>
+                <td>
+                  <input type="number" step="0.01" id="table_p" placeholder="16.00" />
+                  <div class="field-answer" id="ans_table_p"></div>
+                </td>
+                <td>
+                  <input type="number" step="0.01" id="table_S" placeholder="48.00" />
+                  <div class="field-answer" id="ans_table_S"></div>
+                </td>
+                <td>
+                  <input type="number" step="0.01" id="table_r" placeholder="3.00" />
+                  <div class="field-answer" id="ans_table_r"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <section class="card">
-    <h2 class="section-title"><span class="badge">5</span>Tabla breve</h2>
-    <p class="section-subtitle">Completa la fila con semiperímetro, superficie y radio inscrito.</p>
-
-    <div class="mini-note">
-      Datos del triángulo D: <strong>a = 10.0 m</strong>, <strong>b = 10.0 m</strong>, <strong>c = 12.0 m</strong>.
-    </div>
-
-    <div class="table-wrap" style="margin-top:16px;">
-      <table>
-        <thead>
-          <tr>
-            <th>Triángulo</th>
-            <th>a (m)</th>
-            <th>b (m)</th>
-            <th>c (m)</th>
-            <th>p</th>
-            <th>S (m²)</th>
-            <th>r (m)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>D</td>
-            <td>10.0</td>
-            <td>10.0</td>
-            <td>12.0</td>
-            <td>
-              <input type="number" step="0.01" id="table_p" placeholder="16.00" />
-              <div class="field-answer" id="ans_table_p"></div>
-            </td>
-            <td>
-              <input type="number" step="0.01" id="table_S" placeholder="48.00" />
-              <div class="field-answer" id="ans_table_S"></div>
-            </td>
-            <td>
-              <input type="number" step="0.01" id="table_r" placeholder="3.00" />
-              <div class="field-answer" id="ans_table_r"></div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <section class="card">
-    <h2 class="section-title"><span class="badge">6</span>Acciones</h2>
-    <p class="section-subtitle">Cuando termines, corrige el formulario para obtener la nota final.</p>
-    <div class="actions">
-      <button type="button" class="btn-primary" id="gradeBtn">Corregir y calcular nota</button>
-      <button type="reset" class="btn-secondary" id="resetBtn">Limpiar respuestas</button>
-    </div>
-
-    <div class="result-card" id="resultCard">
-      <div class="result-top">
-        <div class="score-circle" id="scoreCircle">0.00</div>
-        <div class="result-info">
-          <h3 id="resultTitle">Resultado</h3>
-          <p id="resultSummary"></p>
-          <p id="extraSummary"></p>
+      <section class="card">
+        <h2 class="section-title"><span class="badge">6</span>Acciones</h2>
+        <p class="section-subtitle">Cuando termines, corrige el formulario para obtener la nota final.</p>
+        <div class="actions">
+          <button type="button" class="btn-primary" id="gradeBtn">Corregir y calcular nota</button>
+          <button type="reset" class="btn-secondary">Limpiar respuestas</button>
         </div>
-      </div>
-      <div class="feedback-list" id="feedbackList"></div>
-      <div class="answers-panel" id="answersPanel">
-        <h4>Resumen de respuestas correctas</h4>
-        <ul id="answersSummary"></ul>
-      </div>
-    </div>
-  </section>
-</form>
 
-  </div>  <script>
+        <div class="result-card" id="resultCard">
+          <div class="result-top">
+            <div class="score-circle" id="scoreCircle">0.00</div>
+            <div class="result-info">
+              <h3 id="resultTitle">Resultado</h3>
+              <p id="resultSummary"></p>
+              <p id="extraSummary"></p>
+            </div>
+          </div>
+          <div class="feedback-list" id="feedbackList"></div>
+          <div class="answers-panel" id="answersPanel">
+            <h4>Resumen de respuestas correctas</h4>
+            <ul id="answersSummary"></ul>
+          </div>
+        </div>
+      </section>
+    </form>
+  </div>
+
+  <script>
     const mcqData = [
       {
         id: "q1",
@@ -791,18 +865,40 @@ button:hover { transform: translateY(-1px); }
       },
       {
         id: "q11",
-        text: "Si se quiere hallar directamente el ángulo α usando el radio inscrito r y el semiperímetro p, ¿cuál es la expresión correcta?",
+        text: "La expresión α = 2 arctg (r / (p-a)) corresponde a:",
         options: [
-          "α = arctan(r / (p-a))",
-          "α = 2 arctan(r / (p-a))",
-          "α = arctan((p-a) / r)",
-          "α = 2 arctan((p+a) / r)"
+          "Ángulo α",
+          "Ángulo β",
+          "Ángulo γ",
+          "Semiperímetro"
+        ],
+        correct: 0
+      },
+      {
+        id: "q12",
+        text: "La expresión β = 2 arctg (r / (p-b)) corresponde a:",
+        options: [
+          "Ángulo α",
+          "Ángulo β",
+          "Ángulo γ",
+          "Superficie"
         ],
         correct: 1
+      },
+      {
+        id: "q13",
+        text: "La expresión γ = 2 arctg (r / (p-c)) corresponde a:",
+        options: [
+          "Radio inscrito",
+          "Ángulo α",
+          "Ángulo β",
+          "Ángulo γ"
+        ],
+        correct: 3
       }
     ];
 
-    const answerKey = {
+    const numericAnswerKey = {
       calcA_2p: 24.00,
       calcA_p: 12.00,
       calcA_S: 26.83,
@@ -811,15 +907,12 @@ button:hover { transform: translateY(-1px); }
       calcB_p: 9.00,
       calcB_S: 14.70,
       calcB_r: 1.63,
-      ang_alpha: 36.87,
-      ang_beta: 53.13,
-      ang_gamma: 90.00,
       table_p: 16.00,
       table_S: 48.00,
       table_r: 3.00
     };
 
-    const tolerances = {
+    const numericTolerances = {
       calcA_2p: 0.02,
       calcA_p: 0.02,
       calcA_S: 0.03,
@@ -828,12 +921,15 @@ button:hover { transform: translateY(-1px); }
       calcB_p: 0.02,
       calcB_S: 0.03,
       calcB_r: 0.03,
-      ang_alpha: 0.03,
-      ang_beta: 0.03,
-      ang_gamma: 0.03,
       table_p: 0.02,
       table_S: 0.03,
       table_r: 0.03
+    };
+
+    const angleAnswerKey = {
+      alpha: { deg: 36, min: 52, sec: 12 },
+      beta:  { deg: 53, min: 7,  sec: 48 },
+      gamma: { deg: 90, min: 0,  sec: 0 }
     };
 
     const mcqContainer = document.getElementById("mcqContainer");
@@ -849,24 +945,22 @@ button:hover { transform: translateY(-1px); }
     const answersSummary = document.getElementById("answersSummary");
 
     function renderMCQ() {
-      mcqContainer.innerHTML = mcqData.map((question, index) => {
-        return `
-          <div class="question" id="box_${question.id}">
-            <h3>${index + 1}. ${question.text}</h3>
-            <div class="options">
-              ${question.options.map((option, i) => `
-                <label class="option" data-question="${question.id}" data-index="${i}">
-                  <input type="radio" name="${question.id}" value="${i}">
-                  <span>${option}</span>
-                </label>
-              `).join("")}
-            </div>
-            <div class="answer-reveal" id="answer_${question.id}">
-              <strong>Respuesta correcta:</strong> ${question.options[question.correct]}
-            </div>
+      mcqContainer.innerHTML = mcqData.map((question, index) => `
+        <div class="question" id="box_${question.id}">
+          <h3>${index + 1}. ${question.text}</h3>
+          <div class="options">
+            ${question.options.map((option, i) => `
+              <label class="option" data-question="${question.id}" data-index="${i}">
+                <input type="radio" name="${question.id}" value="${i}">
+                <span>${option}</span>
+              </label>
+            `).join("")}
           </div>
-        `;
-      }).join("");
+          <div class="answer-reveal" id="answer_${question.id}">
+            <strong>Respuesta correcta:</strong> ${question.options[question.correct]}
+          </div>
+        </div>
+      `).join("");
     }
 
     function getSelectedValue(name) {
@@ -889,11 +983,44 @@ button:hover { transform: translateY(-1px); }
       return Number(value).toFixed(digits);
     }
 
+    function dmsToDecimal(deg, min, sec) {
+      return Number(deg) + Number(min) / 60 + Number(sec) / 3600;
+    }
+
+    function getAngleInput(prefix) {
+      const deg = getNumericValue(`${prefix}_g`);
+      const min = getNumericValue(`${prefix}_m`);
+      const sec = getNumericValue(`${prefix}_s`);
+      if (deg === null || min === null || sec === null) return null;
+      return { deg, min, sec };
+    }
+
+    function markAngleInputs(prefix, isCorrect) {
+      ["g", "m", "s"].forEach(part => {
+        const input = document.getElementById(`${prefix}_${part}`);
+        input.classList.add(isCorrect ? "correct" : "incorrect");
+      });
+    }
+
+    function showAngleFeedback(prefix, correctDMS) {
+      const box = document.getElementById(`ans_angle_${prefix}`);
+      box.style.display = "block";
+      box.innerHTML = `<strong>Correcto:</strong> ${correctDMS.deg}° ${String(correctDMS.min).padStart(2, "0")}' ${String(correctDMS.sec).padStart(2, "0")}"`;
+    }
+
+    function showNumericFeedback(id, isCorrect, correctValue) {
+      const input = document.getElementById(id);
+      const box = document.getElementById(`ans_${id}`);
+      input.classList.add(isCorrect ? "correct" : "incorrect");
+      box.style.display = "block";
+      box.innerHTML = `<strong>Correcto:</strong> ${toFixedPoint(correctValue, 2)}`;
+    }
+
     function getPerformanceMessage(scoreOver10) {
       if (scoreOver10 >= 9) return "Excelente trabajo. Dominas muy bien el tema.";
       if (scoreOver10 >= 7) return "Buen resultado. Hay una base sólida y pocos detalles para revisar.";
       if (scoreOver10 >= 6) return "Aprobado justo. Conviene reforzar fórmulas y controles.";
-      return "Necesitas repasar el método, la fórmula de Herón y el cálculo de ángulos.";
+      return "Necesitas repasar el método, la fórmula de Herón y el cálculo de ángulos con arctangente.";
     }
 
     function getResultColor(scoreOver10) {
@@ -902,21 +1029,26 @@ button:hover { transform: translateY(-1px); }
       return "linear-gradient(135deg, #d64545, #ee6969)";
     }
 
-    function buildFeedback(correctMcq, totalMcq, correctNumeric, totalNumeric) {
+    function buildFeedback(correctMcq, totalMcq, correctCalc, totalCalc, correctAngles, totalAngles) {
       const items = [];
 
-      items.push({ ok: correctMcq >= 8, text: `Opción múltiple: acertaste ${correctMcq} de ${totalMcq}.` });
-      items.push({ ok: correctNumeric >= 10, text: `Ejercicios numéricos: acertaste ${correctNumeric} de ${totalNumeric}.` });
+      items.push({ ok: correctMcq >= 9, text: `Opción múltiple: acertaste ${correctMcq} de ${totalMcq}.` });
+      items.push({ ok: correctCalc >= 8, text: `Cálculos de p, S y r: acertaste ${correctCalc} de ${totalCalc}.` });
+      items.push({ ok: correctAngles >= 2, text: `Ángulos en grados, minutos y segundos: acertaste ${correctAngles} de ${totalAngles}.` });
 
       if (correctMcq < totalMcq) {
-        items.push({ ok: false, text: "Revisa especialmente los conceptos de semiperímetro, fórmula de Herón y ley de cosenos para los ángulos." });
+        items.push({ ok: false, text: "Revisa especialmente los conceptos de semiperímetro, fórmula de Herón y la identificación de las fórmulas de α, β y γ." });
       }
 
-      if (correctNumeric < totalNumeric) {
-        items.push({ ok: false, text: "En las cuentas numéricas conviene mantener más decimales internamente y redondear recién al final a 2 decimales." });
+      if (correctCalc < totalCalc) {
+        items.push({ ok: false, text: "En los cálculos numéricos conviene mantener más decimales internamente y redondear recién al final a 2 decimales." });
       }
 
-      if (correctMcq === totalMcq && correctNumeric === totalNumeric) {
+      if (correctAngles < totalAngles) {
+        items.push({ ok: false, text: "En los ángulos, verifica bien la sustitución en α = 2 arctg(r/(p-a)), β = 2 arctg(r/(p-b)) y γ = 2 arctg(r/(p-c))." });
+      }
+
+      if (correctMcq === totalMcq && correctCalc === totalCalc && correctAngles === totalAngles) {
         items.push({ ok: true, text: "Perfecto: resolviste correctamente toda la actividad." });
       }
 
@@ -924,97 +1056,108 @@ button:hover { transform: translateY(-1px); }
     }
 
     function resetVisualFeedback() {
-      document.querySelectorAll('.question').forEach(q => q.classList.remove('correct', 'incorrect'));
-      document.querySelectorAll('.option').forEach(o => o.classList.remove('correct-option', 'wrong-selected'));
-      document.querySelectorAll('.answer-reveal').forEach(a => a.style.display = 'none');
-      document.querySelectorAll('input[type="number"]').forEach(i => i.classList.remove('correct', 'incorrect'));
-      document.querySelectorAll('.field-answer').forEach(a => {
-        a.style.display = 'none';
-        a.textContent = '';
+      document.querySelectorAll(".question").forEach(q => q.classList.remove("correct", "incorrect"));
+      document.querySelectorAll(".option").forEach(o => o.classList.remove("correct-option", "wrong-selected"));
+      document.querySelectorAll(".answer-reveal").forEach(a => a.style.display = "none");
+      document.querySelectorAll("input[type='number']").forEach(i => i.classList.remove("correct", "incorrect"));
+      document.querySelectorAll(".field-answer").forEach(a => {
+        a.style.display = "none";
+        a.textContent = "";
       });
-    }
-
-    function showNumericFeedback(id, isCorrect, correctValue) {
-      const input = document.getElementById(id);
-      const box = document.getElementById(`ans_${id}`);
-      input.classList.add(isCorrect ? 'correct' : 'incorrect');
-      box.style.display = 'block';
-      box.innerHTML = `<strong>Correcto:</strong> ${toFixedPoint(correctValue, 2)}`;
     }
 
     function gradeQuiz() {
       resetVisualFeedback();
 
       let correctMcq = 0;
-      let correctNumeric = 0;
+      let correctCalc = 0;
+      let correctAngles = 0;
 
       mcqData.forEach(q => {
         const selected = getSelectedValue(q.id);
         const questionBox = document.getElementById(`box_${q.id}`);
         const answerBox = document.getElementById(`answer_${q.id}`);
-        answerBox.style.display = 'block';
+        answerBox.style.display = "block";
 
-        document.querySelectorAll(`.option[data-question="${q.id}"]`).forEach(opt => {
+        document.querySelectorAll(`.option[data-question='${q.id}']`).forEach(opt => {
           const index = Number(opt.dataset.index);
-          if (index === q.correct) opt.classList.add('correct-option');
-          if (selected === index && selected !== q.correct) opt.classList.add('wrong-selected');
+          if (index === q.correct) opt.classList.add("correct-option");
+          if (selected === index && selected !== q.correct) opt.classList.add("wrong-selected");
         });
 
         if (selected === q.correct) {
           correctMcq++;
-          questionBox.classList.add('correct');
+          questionBox.classList.add("correct");
         } else {
-          questionBox.classList.add('incorrect');
+          questionBox.classList.add("incorrect");
         }
       });
 
-      Object.keys(answerKey).forEach(id => {
+      Object.keys(numericAnswerKey).forEach(id => {
         const userValue = getNumericValue(id);
-        const ok = isClose(userValue, answerKey[id], tolerances[id]);
-        if (ok) correctNumeric++;
-        showNumericFeedback(id, ok, answerKey[id]);
+        const ok = isClose(userValue, numericAnswerKey[id], numericTolerances[id]);
+        if (ok) correctCalc++;
+        showNumericFeedback(id, ok, numericAnswerKey[id]);
+      });
+
+      Object.keys(angleAnswerKey).forEach(prefix => {
+        const userAngle = getAngleInput(prefix);
+        const correctDMS = angleAnswerKey[prefix];
+        const expectedDecimal = dmsToDecimal(correctDMS.deg, correctDMS.min, correctDMS.sec);
+        let ok = false;
+
+        if (userAngle) {
+          const userDecimal = dmsToDecimal(userAngle.deg, userAngle.min, userAngle.sec);
+          ok = Math.abs(userDecimal - expectedDecimal) <= (1 / 3600);
+        }
+
+        if (ok) correctAngles++;
+        markAngleInputs(prefix, ok);
+        showAngleFeedback(prefix, correctDMS);
       });
 
       const totalMcq = mcqData.length;
-      const totalNumeric = Object.keys(answerKey).length;
-      const totalItems = totalMcq + totalNumeric;
-      const totalCorrect = correctMcq + correctNumeric;
+      const totalCalc = Object.keys(numericAnswerKey).length;
+      const totalAngles = Object.keys(angleAnswerKey).length;
+      const totalItems = totalMcq + totalCalc + totalAngles;
+      const totalCorrect = correctMcq + correctCalc + correctAngles;
       const scoreOver10 = (totalCorrect / totalItems) * 10;
       const percent = (totalCorrect / totalItems) * 100;
 
-      resultCard.style.display = 'block';
+      resultCard.style.display = "block";
       scoreCircle.textContent = toFixedPoint(scoreOver10, 2);
       scoreCircle.style.background = getResultColor(scoreOver10);
-      resultTitle.textContent = scoreOver10 >= 6 ? 'Formulario corregido' : 'Formulario corregido – revisar';
+      resultTitle.textContent = scoreOver10 >= 6 ? "Formulario corregido" : "Formulario corregido – revisar";
       resultSummary.textContent = `Respuestas correctas: ${totalCorrect} de ${totalItems} · ${toFixedPoint(percent, 2)}% · Nota final: ${toFixedPoint(scoreOver10, 2)} / 10.`;
       extraSummary.textContent = getPerformanceMessage(scoreOver10);
 
-      const feedback = buildFeedback(correctMcq, totalMcq, correctNumeric, totalNumeric);
+      const feedback = buildFeedback(correctMcq, totalMcq, correctCalc, totalCalc, correctAngles, totalAngles);
       feedbackList.innerHTML = feedback.map(item => `
-        <div class="feedback-item ${item.ok ? 'ok' : 'bad'}">${item.text}</div>
-      `).join('');
+        <div class="feedback-item ${item.ok ? "ok" : "bad"}">${item.text}</div>
+      `).join("");
 
-      answersPanel.style.display = 'block';
+      answersPanel.style.display = "block";
       answersSummary.innerHTML = `
         <li>Ejercicio A: 2p = 24.00, p = 12.00, S = 26.83, r = 2.24.</li>
         <li>Ejercicio B: 2p = 18.00, p = 9.00, S = 14.70, r = 1.63.</li>
-        <li>Ángulos del ejercicio C: α = 36.87°, β = 53.13°, γ = 90.00°.</li>
+        <li>Ejercicio C: α = 36° 52' 12", β = 53° 07' 48", γ = 90° 00' 00".</li>
         <li>Tabla del triángulo D: p = 16.00, S = 48.00, r = 3.00.</li>
       `;
 
-      resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      resultCard.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    document.getElementById('gradeBtn').addEventListener('click', gradeQuiz);
+    document.getElementById("gradeBtn").addEventListener("click", gradeQuiz);
 
-    quizForm.addEventListener('reset', () => {
+    quizForm.addEventListener("reset", () => {
       setTimeout(() => {
         resetVisualFeedback();
-        resultCard.style.display = 'none';
-        answersPanel.style.display = 'none';
+        resultCard.style.display = "none";
+        answersPanel.style.display = "none";
       }, 0);
     });
 
     renderMCQ();
-  </script></body>
+  </script>
+</body>
 </html>
