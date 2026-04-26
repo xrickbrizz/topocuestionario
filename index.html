@@ -3,1161 +3,636 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Formulario de Topografía – Descomposición en Triángulos</title>
+  <title>Cuestionario Práctico - Teodolito</title>
   <style>
-    :root {
-      --card: #ffffff;
-      --card-2: #f8fbff;
-      --text: #17324d;
-      --muted: #60758a;
-      --line: #d9e6f2;
-      --primary: #1f6feb;
-      --primary-dark: #1557b0;
-      --success: #1e9e5a;
-      --warning: #d48a00;
-      --danger: #d64545;
-      --shadow: 0 12px 30px rgba(19, 51, 84, 0.08);
-      --radius: 18px;
+    :root{
+      --bg:#0f172a;
+      --panel:#111827;
+      --panel-2:#1e293b;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --border:#243244;
+      --good:#22c55e;
+      --good-bg:#052e16;
+      --bad:#ef4444;
+      --bad-bg:#3f0a0a;
+      --accent:#4f46e5;
+      --accent-2:#6366f1;
     }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(180deg, #eef5fc 0%, #f7fbff 100%);
-      color: var(--text);
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background: radial-gradient(1200px 800px at 20% 0%, #172554 0%, var(--bg) 45%);
+      color:var(--text);
+      min-height:100vh;
     }
-
-    .container {
-      width: min(1120px, calc(100% - 28px));
-      margin: 28px auto 50px;
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:24px;
     }
-
-    .hero {
-      background: linear-gradient(135deg, #1f6feb 0%, #3d8bfd 100%);
-      color: white;
-      border-radius: 28px;
-      padding: 30px 24px;
-      box-shadow: 0 14px 36px rgba(31, 111, 235, 0.28);
-      position: relative;
-      overflow: hidden;
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:18px;
+      gap:16px;
     }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      width: 240px;
-      height: 240px;
-      right: -70px;
-      top: -70px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.12);
+    .title{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
     }
-
-    .hero h1 {
-      margin: 0 0 10px;
-      font-size: clamp(1.8rem, 2.4vw, 2.6rem);
-      line-height: 1.15;
-      position: relative;
-      z-index: 1;
+    .title h1{
+      margin:0;
+      font-size:28px;
+      line-height:1.1;
+      letter-spacing:-0.02em;
     }
-
-    .hero p {
-      margin: 0;
-      max-width: 860px;
-      color: rgba(255, 255, 255, 0.93);
-      line-height: 1.55;
-      position: relative;
-      z-index: 1;
+    .title p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
     }
-
-    .notice {
-      margin-top: 14px;
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.16);
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      padding: 10px 14px;
-      border-radius: 999px;
-      font-size: 0.94rem;
-      position: relative;
-      z-index: 1;
+    .pill{
+      background:#0b1220;
+      border:1px solid var(--border);
+      border-radius:999px;
+      padding:10px 14px;
+      color:var(--muted);
+      font-size:14px;
     }
-
-    .grid { display: grid; gap: 20px; }
-    .grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-
-    .card {
-      margin-top: 22px;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 22px;
+    .grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:18px;
     }
-
-    .section-title {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 0 0 8px;
-      font-size: 1.35rem;
+    .card{
+      background:rgba(17,24,39,.88);
+      border:1px solid rgba(36,50,68,.8);
+      border-radius:20px;
+      box-shadow:0 20px 60px rgba(0,0,0,.30);
+      overflow:hidden;
     }
-
-    .section-title .badge {
-      width: 34px;
-      height: 34px;
-      display: grid;
-      place-items: center;
-      border-radius: 12px;
-      color: white;
-      font-weight: 700;
-      background: var(--primary);
-      flex-shrink: 0;
+    .card-head{
+      padding:18px 20px 0 20px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:16px;
     }
-
-    .section-subtitle {
-      margin: 0 0 18px;
-      color: var(--muted);
-      line-height: 1.5;
+    .qmeta{
+      color:var(--muted);
+      font-size:13px;
+      margin-bottom:8px;
     }
-
-    .info-list {
-      margin: 0;
-      padding-left: 18px;
-      color: var(--text);
-      line-height: 1.7;
+    .question{
+      margin:0;
+      font-size:22px;
+      line-height:1.35;
+      letter-spacing:-0.01em;
     }
-
-    label {
-      display: block;
-      font-weight: 700;
-      margin-bottom: 8px;
+    .progressbar{
+      height:10px;
+      width:100%;
+      background:#0b1220;
+      border-top:1px solid rgba(36,50,68,.8);
+      border-bottom:1px solid rgba(36,50,68,.8);
+      position:relative;
+      margin-top:18px;
     }
-
-    .field { margin-bottom: 16px; }
-
-    input[type="number"] {
-      width: 100%;
-      padding: 13px 14px;
-      border: 1px solid #c8d8e8;
-      border-radius: 14px;
-      background: #fcfeff;
-      font-size: 1rem;
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    .progressbar > div{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,var(--accent),var(--accent-2));
+      transition:width .25s ease;
     }
-
-    input[type="number"]:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 4px rgba(31, 111, 235, 0.12);
+    .body{
+      padding:20px;
     }
-
-    input.correct {
-      border-color: #70c48f;
-      background: #f5fcf8;
-      box-shadow: 0 0 0 4px rgba(30, 158, 90, 0.08);
+    .options{
+      display:grid;
+      gap:12px;
     }
-
-    input.incorrect {
-      border-color: #e59696;
-      background: #fff7f7;
-      box-shadow: 0 0 0 4px rgba(214, 69, 69, 0.08);
+    .option{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:16px 16px 14px 16px;
+      cursor:pointer;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease;
+      position:relative;
+      overflow:hidden;
     }
-
-    .question {
-      padding: 18px;
-      background: var(--card-2);
-      border: 1px solid #e0ebf5;
-      border-radius: 18px;
-      margin-bottom: 16px;
-      transition: border-color 0.2s ease, background 0.2s ease;
+    .option:hover{ transform:translateY(-1px); background:#162033; }
+    .option .row{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
     }
-
-    .question.correct {
-      border-color: #bfe5cf;
-      background: #f6fcf8;
+    .badge{
+      min-width:28px;
+      height:28px;
+      border-radius:999px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      background:#0b1220;
+      border:1px solid var(--border);
+      color:var(--text);
+      flex:0 0 auto;
     }
-
-    .question.incorrect {
-      border-color: #f1c3c3;
-      background: #fff8f8;
+    .opt-text{
+      font-size:16px;
+      line-height:1.4;
+      margin-top:1px;
+      flex:1;
     }
-
-    .question h3 {
-      margin: 0 0 12px;
-      font-size: 1.03rem;
-      line-height: 1.45;
+    .feedback{
+      margin-top:12px;
+      padding-top:12px;
+      border-top:1px dashed rgba(148,163,184,.22);
+      color:#dbeafe;
+      display:none;
+      font-size:14px;
+      line-height:1.45;
     }
-
-    .options {
-      display: grid;
-      gap: 10px;
+    .status{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-weight:700;
+      margin-bottom:6px;
     }
-
-    .option {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border: 1px solid #dbe7f2;
-      background: white;
-      cursor: pointer;
-      transition: 0.2s ease;
+    .option.correct{
+      border-color:rgba(34,197,94,.85);
+      background:linear-gradient(180deg, rgba(5,46,22,.95), rgba(6,31,18,.95));
     }
-
-    .option:hover {
-      border-color: #9fc0f3;
-      transform: translateY(-1px);
+    .option.correct .badge{ border-color:rgba(34,197,94,.85); color:#bbf7d0; background:rgba(34,197,94,.12); }
+    .option.correct .feedback{ display:block; color:#bbf7d0; }
+    .option.correct .status{ color:#86efac; }
+    .option.incorrect{
+      border-color:rgba(239,68,68,.85);
+      background:linear-gradient(180deg, rgba(63,10,10,.95), rgba(40,10,10,.95));
     }
-
-    .option input {
-      margin-top: 2px;
-      accent-color: var(--primary);
+    .option.incorrect .badge{ border-color:rgba(239,68,68,.85); color:#fecaca; background:rgba(239,68,68,.10); }
+    .option.incorrect .feedback{ display:block; color:#fecaca; }
+    .option.incorrect .status{ color:#fca5a5; }
+    .option.neutral{
+      opacity:.85;
+      background:#101826;
     }
-
-    .option.correct-option {
-      border-color: #9fd3b5;
-      background: #f4fcf7;
+    .option.neutral .feedback{ display:block; color:#cbd5e1; }
+    .option.neutral .status{ color:#cbd5e1; }
+    .option.locked{ cursor:default; }
+    .footer{
+      padding:18px 20px 20px 20px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      border-top:1px solid rgba(36,50,68,.8);
+      background:rgba(9,15,30,.55);
+      flex-wrap:wrap;
     }
-
-    .option.wrong-selected {
-      border-color: #efb1b1;
-      background: #fff5f5;
+    .btns{ display:flex; gap:10px; flex-wrap:wrap; }
+    button{
+      border:none;
+      border-radius:14px;
+      padding:12px 16px;
+      font-size:14px;
+      font-weight:700;
+      cursor:pointer;
     }
-
-    .answer-reveal {
-      display: none;
-      margin-top: 12px;
-      padding: 11px 13px;
-      border-radius: 13px;
-      background: #edf5ff;
-      border: 1px solid #d7e7fb;
-      color: #1c4f8d;
-      font-size: 0.95rem;
-      line-height: 1.45;
+    .btn-primary{
+      background:linear-gradient(90deg,var(--accent),var(--accent-2));
+      color:white;
     }
-
-    .formula-chip {
-      display: inline-block;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: #edf5ff;
-      color: var(--primary-dark);
-      font-weight: 700;
-      margin: 6px 10px 6px 0;
-      border: 1px solid #d5e6fb;
-      font-size: 0.95rem;
+    .btn-secondary{
+      background:#0b1220;
+      color:var(--text);
+      border:1px solid var(--border);
     }
-
-    .mini-note {
-      margin-top: 10px;
-      font-size: 0.93rem;
-      color: var(--muted);
-      line-height: 1.5;
+    .btn-primary:disabled, .btn-secondary:disabled{
+      opacity:.55;
+      cursor:not-allowed;
     }
-
-    .calc-box {
-      background: linear-gradient(180deg, #fbfdff 0%, #f4f9ff 100%);
-      border: 1px solid #dbe8f5;
-      border-radius: 18px;
-      padding: 18px;
+    .hint{
+      color:var(--muted);
+      font-size:13px;
     }
-
-    .calc-box h3 { margin: 0 0 10px; }
-
-    .calc-givens {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 14px;
+    .summary{
+      display:none;
+      padding:22px 20px 22px 20px;
     }
-
-    .calc-givens span {
-      background: white;
-      border: 1px solid #dbe7f2;
-      border-radius: 999px;
-      padding: 9px 12px;
-      font-weight: 700;
+    .summary h2{ margin:0 0 8px 0; font-size:24px; }
+    .summary p{ margin:0; color:var(--muted); }
+    .score{
+      margin-top:14px;
+      padding:14px 16px;
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:#0b1220;
+      font-size:16px;
     }
-
-    .field-answer {
-      display: none;
-      margin-top: 8px;
-      font-size: 0.9rem;
-      line-height: 1.4;
-      color: var(--primary-dark);
-      background: #eef6ff;
-      border: 1px solid #d8e8fb;
-      border-radius: 12px;
-      padding: 8px 10px;
-    }
-
-    .angle-card {
-      background: #fcfeff;
-      border: 1px solid #dbe8f5;
-      border-radius: 16px;
-      padding: 16px;
-    }
-
-    .angle-card h4 {
-      margin: 0 0 12px;
-      font-size: 1rem;
-    }
-
-    .angle-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .angle-grid small {
-      display: block;
-      color: var(--muted);
-      margin-top: 6px;
-      font-size: 0.82rem;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-      border: 1px solid #dce8f2;
-      border-radius: 18px;
-      background: white;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 700px;
-    }
-
-    th, td {
-      padding: 12px;
-      border-bottom: 1px solid #e7eef5;
-      text-align: center;
-      font-size: 0.95rem;
-    }
-
-    th {
-      background: #f1f7ff;
-      color: #1c4f8d;
-      font-weight: 700;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-
-    td:first-child, th:first-child {
-      text-align: left;
-      font-weight: 700;
-    }
-
-    td input { min-width: 100px; }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 22px;
-    }
-
-    button {
-      border: none;
-      border-radius: 14px;
-      padding: 14px 18px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.18s ease, background 0.18s ease;
-    }
-
-    button:hover { transform: translateY(-1px); }
-
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-      box-shadow: 0 10px 24px rgba(31, 111, 235, 0.22);
-    }
-
-    .btn-primary:hover { background: #165ec9; }
-
-    .btn-secondary {
-      background: #ecf4ff;
-      color: #1c4f8d;
-      border: 1px solid #d3e5fb;
-    }
-
-    .result-card {
-      display: none;
-      margin-top: 24px;
-      padding: 22px;
-      border-radius: 20px;
-      border: 1px solid #dbe8f5;
-      background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-    }
-
-    .result-top {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 18px;
-    }
-
-    .score-circle {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      color: white;
-      font-weight: 800;
-      font-size: 1.45rem;
-      box-shadow: 0 12px 24px rgba(0,0,0,0.12);
-    }
-
-    .result-info h3 {
-      margin: 0 0 8px;
-      font-size: 1.45rem;
-    }
-
-    .result-info p {
-      margin: 4px 0;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .feedback-list {
-      display: grid;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .feedback-item {
-      padding: 12px 14px;
-      border-radius: 14px;
-      font-size: 0.96rem;
-      line-height: 1.45;
-      border: 1px solid #dde8f3;
-      background: #fcfeff;
-    }
-
-    .feedback-item.ok {
-      border-color: #bfe5cf;
-      background: #f3fcf7;
-      color: #1f6e43;
-    }
-
-    .feedback-item.bad {
-      border-color: #f1c3c3;
-      background: #fff5f5;
-      color: #933838;
-    }
-
-    .answers-panel {
-      margin-top: 18px;
-      display: none;
-      padding: 18px;
-      border-radius: 18px;
-      border: 1px solid #dbe8f5;
-      background: #fbfdff;
-    }
-
-    .answers-panel h4 {
-      margin: 0 0 12px;
-      font-size: 1.08rem;
-    }
-
-    .answers-panel ul {
-      margin: 0;
-      padding-left: 18px;
-      line-height: 1.7;
-      color: var(--text);
-    }
-
-    @media (max-width: 760px) {
-      .grid.cols-2, .grid.cols-3, .angle-grid { grid-template-columns: 1fr; }
-      .hero { padding: 24px 18px; border-radius: 24px; }
-      .card { padding: 18px; }
-      .score-circle { width: 98px; height: 98px; font-size: 1.25rem; }
+    @media (max-width:760px){
+      .title h1{ font-size:24px; }
+      .question{ font-size:20px; }
+      .card-head, .body, .footer, .summary{ padding-left:16px; padding-right:16px; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header class="hero">
-      <h1>Formulario de Topografía – Descomposición en Triángulos</h1>
-      <p>
-        Actividad interactiva con preguntas de opción múltiple, ejercicios de cálculo y un bloque específico de ángulos.
-        Al corregir, se muestra la nota final y también las respuestas correctas.
-      </p>
-      <div class="notice">Semiperímetro, superficie y radio: con 2 decimales y usando punto. Ángulos: en grados, minutos y segundos.</div>
-    </header>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="title">
+        <h1>Cuestionario práctico de topografía</h1>
+        <p>Teodolito · 25 preguntas · selección múltiple y verdadero/falso</p>
+      </div>
+      <div class="pill" id="counter">1 / 25</div>
+    </div>
 
-    <form id="quizForm" novalidate>
-      <section class="card">
-        <h2 class="section-title"><span class="badge">1</span>Indicaciones</h2>
-        <p class="section-subtitle">Lee estas pautas antes de comenzar.</p>
-        <ul class="info-list">
-          <li>La mayor parte del formulario es de opción múltiple.</li>
-          <li>En los ejercicios numéricos, escribe los resultados con <strong>2 decimales</strong>.</li>
-          <li>Para los decimales, utiliza <strong>punto</strong> y no coma.</li>
-          <li>Los <strong>ángulos</strong> deben responderse en <strong>grados, minutos y segundos</strong>.</li>
-          <li>Al presionar <strong>Corregir</strong>, se mostrará la nota y también las respuestas correctas.</li>
-        </ul>
-      </section>
-
-      <section class="card">
-        <h2 class="section-title"><span class="badge">2</span>Preguntas de opción múltiple</h2>
-        <p class="section-subtitle">Selecciona una sola respuesta por pregunta.</p>
-        <div id="mcqContainer"></div>
-      </section>
-
-      <section class="card">
-        <h2 class="section-title"><span class="badge">3</span>Cálculos cortos</h2>
-        <p class="section-subtitle">Calcula semiperímetro, superficie y radio inscrito.</p>
-
-        <div class="grid cols-2">
-          <div class="calc-box">
-            <h3>Ejercicio A</h3>
-            <div class="calc-givens">
-              <span>a = 7.0 m</span>
-              <span>b = 8.0 m</span>
-              <span>c = 9.0 m</span>
-            </div>
-            <div>
-              <span class="formula-chip">2p = a + b + c</span>
-              <span class="formula-chip">p = (a + b + c) / 2</span>
-              <span class="formula-chip">S = √[p(p-a)(p-b)(p-c)]</span>
-              <span class="formula-chip">r = S / p</span>
-            </div>
-            <div class="grid cols-2" style="margin-top:16px;">
-              <div class="field">
-                <label for="calcA_2p">2p</label>
-                <input type="number" step="0.01" id="calcA_2p" placeholder="24.00" />
-                <div class="field-answer" id="ans_calcA_2p"></div>
-              </div>
-              <div class="field">
-                <label for="calcA_p">p</label>
-                <input type="number" step="0.01" id="calcA_p" placeholder="12.00" />
-                <div class="field-answer" id="ans_calcA_p"></div>
-              </div>
-              <div class="field">
-                <label for="calcA_S">Superficie S (m²)</label>
-                <input type="number" step="0.01" id="calcA_S" placeholder="26.83" />
-                <div class="field-answer" id="ans_calcA_S"></div>
-              </div>
-              <div class="field">
-                <label for="calcA_r">Radio inscrito r (m)</label>
-                <input type="number" step="0.01" id="calcA_r" placeholder="2.24" />
-                <div class="field-answer" id="ans_calcA_r"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="calc-box">
-            <h3>Ejercicio B</h3>
-            <div class="calc-givens">
-              <span>a = 5.0 m</span>
-              <span>b = 6.0 m</span>
-              <span>c = 7.0 m</span>
-            </div>
-            <div>
-              <span class="formula-chip">2p = a + b + c</span>
-              <span class="formula-chip">p = (a + b + c) / 2</span>
-              <span class="formula-chip">S = √[p(p-a)(p-b)(p-c)]</span>
-              <span class="formula-chip">r = S / p</span>
-            </div>
-            <div class="grid cols-2" style="margin-top:16px;">
-              <div class="field">
-                <label for="calcB_2p">2p</label>
-                <input type="number" step="0.01" id="calcB_2p" placeholder="18.00" />
-                <div class="field-answer" id="ans_calcB_2p"></div>
-              </div>
-              <div class="field">
-                <label for="calcB_p">p</label>
-                <input type="number" step="0.01" id="calcB_p" placeholder="9.00" />
-                <div class="field-answer" id="ans_calcB_p"></div>
-              </div>
-              <div class="field">
-                <label for="calcB_S">Superficie S (m²)</label>
-                <input type="number" step="0.01" id="calcB_S" placeholder="14.70" />
-                <div class="field-answer" id="ans_calcB_S"></div>
-              </div>
-              <div class="field">
-                <label for="calcB_r">Radio inscrito r (m)</label>
-                <input type="number" step="0.01" id="calcB_r" placeholder="1.63" />
-                <div class="field-answer" id="ans_calcB_r"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2 class="section-title"><span class="badge">4</span>Ángulos del triángulo</h2>
-        <p class="section-subtitle">Usa las fórmulas con radio inscrito y semiperímetro. Completa cada ángulo en grados, minutos y segundos.</p>
-
-        <div class="calc-box">
-          <h3>Ejercicio C</h3>
-          <div class="calc-givens">
-            <span>a = 6.0 m</span>
-            <span>b = 8.0 m</span>
-            <span>c = 10.0 m</span>
-            <span>p = 12.0 m</span>
-            <span>r = 2.0 m</span>
-          </div>
+    <div class="card">
+      <div id="quizView">
+        <div class="card-head">
           <div>
-            <span class="formula-chip">α = 2 arctg (r / (p-a))</span>
-            <span class="formula-chip">β = 2 arctg (r / (p-b))</span>
-            <span class="formula-chip">γ = 2 arctg (r / (p-c))</span>
-          </div>
-
-          <div class="grid cols-3" style="margin-top:18px;">
-            <div class="angle-card">
-              <h4>Ángulo α</h4>
-              <div class="angle-grid">
-                <div>
-                  <label for="alpha_g">Grados</label>
-                  <input type="number" step="1" id="alpha_g" placeholder="36" />
-                </div>
-                <div>
-                  <label for="alpha_m">Minutos</label>
-                  <input type="number" step="1" id="alpha_m" placeholder="52" />
-                </div>
-                <div>
-                  <label for="alpha_s">Segundos</label>
-                  <input type="number" step="1" id="alpha_s" placeholder="12" />
-                </div>
-              </div>
-              <div class="field-answer" id="ans_angle_alpha"></div>
-            </div>
-
-            <div class="angle-card">
-              <h4>Ángulo β</h4>
-              <div class="angle-grid">
-                <div>
-                  <label for="beta_g">Grados</label>
-                  <input type="number" step="1" id="beta_g" placeholder="53" />
-                </div>
-                <div>
-                  <label for="beta_m">Minutos</label>
-                  <input type="number" step="1" id="beta_m" placeholder="07" />
-                </div>
-                <div>
-                  <label for="beta_s">Segundos</label>
-                  <input type="number" step="1" id="beta_s" placeholder="48" />
-                </div>
-              </div>
-              <div class="field-answer" id="ans_angle_beta"></div>
-            </div>
-
-            <div class="angle-card">
-              <h4>Ángulo γ</h4>
-              <div class="angle-grid">
-                <div>
-                  <label for="gamma_g">Grados</label>
-                  <input type="number" step="1" id="gamma_g" placeholder="90" />
-                </div>
-                <div>
-                  <label for="gamma_m">Minutos</label>
-                  <input type="number" step="1" id="gamma_m" placeholder="00" />
-                </div>
-                <div>
-                  <label for="gamma_s">Segundos</label>
-                  <input type="number" step="1" id="gamma_s" placeholder="00" />
-                </div>
-              </div>
-              <div class="field-answer" id="ans_angle_gamma"></div>
-            </div>
+            <div class="qmeta" id="qMeta">Pregunta 1</div>
+            <h2 class="question" id="question"></h2>
           </div>
         </div>
-      </section>
-
-      <section class="card">
-        <h2 class="section-title"><span class="badge">5</span>Tabla breve</h2>
-        <p class="section-subtitle">Completa la fila con semiperímetro, superficie y radio inscrito.</p>
-
-        <div class="mini-note">
-          Datos del triángulo D: <strong>a = 10.0 m</strong>, <strong>b = 10.0 m</strong>, <strong>c = 12.0 m</strong>.
+        <div class="progressbar"><div id="progress"></div></div>
+        <div class="body">
+          <div class="options" id="options"></div>
         </div>
-
-        <div class="table-wrap" style="margin-top:16px;">
-          <table>
-            <thead>
-              <tr>
-                <th>Triángulo</th>
-                <th>a (m)</th>
-                <th>b (m)</th>
-                <th>c (m)</th>
-                <th>p</th>
-                <th>S (m²)</th>
-                <th>r (m)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>D</td>
-                <td>10.0</td>
-                <td>10.0</td>
-                <td>12.0</td>
-                <td>
-                  <input type="number" step="0.01" id="table_p" placeholder="16.00" />
-                  <div class="field-answer" id="ans_table_p"></div>
-                </td>
-                <td>
-                  <input type="number" step="0.01" id="table_S" placeholder="48.00" />
-                  <div class="field-answer" id="ans_table_S"></div>
-                </td>
-                <td>
-                  <input type="number" step="0.01" id="table_r" placeholder="3.00" />
-                  <div class="field-answer" id="ans_table_r"></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2 class="section-title"><span class="badge">6</span>Acciones</h2>
-        <p class="section-subtitle">Cuando termines, corrige el formulario para obtener la nota final.</p>
-        <div class="actions">
-          <button type="button" class="btn-primary" id="gradeBtn">Corregir y calcular nota</button>
-          <button type="reset" class="btn-secondary">Limpiar respuestas</button>
-        </div>
-
-        <div class="result-card" id="resultCard">
-          <div class="result-top">
-            <div class="score-circle" id="scoreCircle">0.00</div>
-            <div class="result-info">
-              <h3 id="resultTitle">Resultado</h3>
-              <p id="resultSummary"></p>
-              <p id="extraSummary"></p>
-            </div>
-          </div>
-          <div class="feedback-list" id="feedbackList"></div>
-          <div class="answers-panel" id="answersPanel">
-            <h4>Resumen de respuestas correctas</h4>
-            <ul id="answersSummary"></ul>
+        <div class="footer">
+          <div class="hint" id="hint">Elegí una opción para ver la corrección y la explicación.</div>
+          <div class="btns">
+            <button class="btn-secondary" id="prevBtn">Anterior</button>
+            <button class="btn-primary" id="nextBtn" disabled>Siguiente</button>
           </div>
         </div>
-      </section>
-    </form>
+      </div>
+
+      <div class="summary" id="summaryView">
+        <h2>Terminaste el cuestionario 👏</h2>
+        <p>Podés volver a recorrerlo o reiniciar para practicar otra vez.</p>
+        <div class="score" id="scoreBox"></div>
+        <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn-primary" id="restartBtn">Reiniciar</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
-    const mcqData = [
+    const quiz = [
       {
-        id: "q1",
-        text: "¿Para qué se utiliza principalmente el método de descomposición en triángulos?",
+        question: "Al centrar un teodolito con plomada óptica, después de atornillarlo al trípode, ¿cuál es el procedimiento correcto para hacer coincidir la plomada con la estaca?",
         options: [
-          "Para calcular el volumen de un terreno.",
-          "Para determinar superficies a partir de triángulos.",
-          "Para hallar únicamente el perímetro.",
-          "Para medir desniveles de nivelación."
-        ],
-        correct: 1
+          { text: "Calar inmediatamente el nivel tubular con los tornillos calantes.", correct: false, explanation: "No corresponde: el calado y la verticalización vienen después del centrado inicial." },
+          { text: "Levantar dos patas del trípode (dejando una clavada) y observar por la plomada óptica moviéndolas hasta centrar.", correct: true, explanation: "Correcto: se usa la ayuda de las patas del trípode para lograr el centrado sobre la estaca." },
+          { text: "Mover el tornillo de fijación central y arrastrar la plataforma.", correct: false, explanation: "Eso no es la técnica inicial; el deslizamiento solo se usa al final para afinar." }
+        ]
       },
       {
-        id: "q2",
-        text: "La superficie de un triángulo conociendo sus tres lados se obtiene con:",
+        question: "Durante la verticalización, colocas el nivel de alidada paralelo a la línea de los tornillos calantes V1 y V2. ¿Cómo debes girar estos tornillos para centrar la burbuja?",
         options: [
-          "Teorema de Pitágoras.",
-          "Fórmula de Herón.",
-          "Ley de tangentes solamente.",
-          "Regla del cartabón."
-        ],
-        correct: 1
+          { text: "Ambos en el mismo sentido (horario).", correct: false, explanation: "No genera el efecto de palanca necesario para nivelar." },
+          { text: "Solo girar V1, dejando V2 fijo.", correct: false, explanation: "No permite un calado correcto de la plataforma." },
+          { text: "De forma simultánea y en sentido antagónico (contrario) de giro.", correct: true, explanation: "Correcto: el calado se hace con V1 y V2 en sentido contrario." }
+        ]
       },
       {
-        id: "q3",
-        text: "El semiperímetro p se calcula como:",
+        question: "Después de calar la burbuja con los tornillos V1 y V2, ¿qué paso sigue para utilizar el tornillo V3?",
         options: [
-          "p = a + b + c",
-          "p = (a + b + c) / 2",
-          "p = ab / c",
-          "p = S / r"
-        ],
-        correct: 1
+          { text: "Girar la alidada 180°.", correct: false, explanation: "Ese giro se usa luego como comprobación." },
+          { text: "Girar la alidada 90°.", correct: true, explanation: "Correcto: se gira 90° para calar el tercer tornillo en dirección perpendicular." },
+          { text: "Bajar las patas del trípode.", correct: false, explanation: "Las patas no se usan para este paso de nivelación fina." }
+        ]
       },
       {
-        id: "q4",
-        text: "Si S es la superficie y p el semiperímetro, el radio de la circunferencia inscrita es:",
+        question: "Giras la alidada 180° para verificar el calado y notas que la burbuja se desplaza de su centro. ¿Qué significa esto?",
         options: [
-          "r = p / S",
-          "r = S + p",
-          "r = S / p",
-          "r = S² / p"
-        ],
-        correct: 2
+          { text: "Que el instrumento tiene un error de colimación.", correct: false, explanation: "La colimación afecta el apunte, no el comportamiento de la burbuja." },
+          { text: "Que actúan dos errores: el del nivel tubular y el de verticalidad.", correct: true, explanation: "Correcto: el desplazamiento refleja falta de paralelismo y error de verticalidad." },
+          { text: "Que el terreno ha cedido.", correct: false, explanation: "El desajuste observado corresponde a condiciones instrumentales y de estacionamiento." }
+        ]
       },
       {
-        id: "q5",
-        text: "Como control geométrico, la suma de los ángulos interiores de un triángulo debe ser:",
+        question: "Estás en la posición de comprobación a 180° y la burbuja se ha desviado. Para corregir el error de verticalidad, ¿qué debes manipular?",
         options: [
-          "90°",
-          "180°",
-          "270°",
-          "360°"
-        ],
-        correct: 1
+          { text: "Los tornillos propios del nivel de alidada para corregir la mitad del desplazamiento.", correct: false, explanation: "Esos tornillos corrigen el nivel tubular, no la verticalidad del eje." },
+          { text: "Los tornillos calantes V1 y V2 para corregir la mitad del desplazamiento.", correct: true, explanation: "Correcto: V1 y V2 corrigen la mitad del desplazamiento para lograr verticalidad." },
+          { text: "Los tornillos calantes V1 y V2 para llevar la burbuja totalmente al centro.", correct: false, explanation: "No se corrige todo el desplazamiento con ellos; solo la mitad." }
+        ]
       },
       {
-        id: "q6",
-        text: "Si al calcular los ángulos de un triángulo la suma no da 180°, lo más probable es que:",
+        question: "Para que las mediciones no tengan error de colimación, el eje de colimación (C) debe cumplir una condición fundamental de fábrica. ¿Cuál es?",
         options: [
-          "El triángulo no exista.",
-          "Haya un error de cálculo o de redondeo.",
-          "Falte medir la altura.",
-          "La superficie sea nula."
-        ],
-        correct: 1
+          { text: "Ser perpendicular al eje vertical (C ⟂ V).", correct: false, explanation: "No es la condición correcta del eje de colimación." },
+          { text: "Ser paralelo al eje horizontal (C ≡ H).", correct: false, explanation: "No es la relación geométrica adecuada." },
+          { text: "Ser perpendicular al eje horizontal (C ⟂ H).", correct: true, explanation: "Correcto: el eje de colimación debe ser perpendicular al eje horizontal." }
+        ]
       },
       {
-        id: "q7",
-        text: "Al descomponer un polígono en triángulos, la superficie total resulta de:",
+        question: "Quieres verificar en campo si tu teodolito sufre error de colimación. ¿Qué tipo de punto debes elegir para apuntar en Posición I y II?",
         options: [
-          "Restar las superficies de los triángulos.",
-          "Multiplicar los semiperímetros.",
-          "Sumar las superficies de todos los triángulos.",
-          "Promediar los lados medidos."
-        ],
-        correct: 2
+          { text: "Un punto elevado a unos 45° sobre el horizonte.", correct: false, explanation: "Eso se usa para detectar el error de inclinación." },
+          { text: "Un punto de fácil ubicación sobre el horizonte (elevación cercana a 0°).", correct: true, explanation: "Correcto: sobre el horizonte se anula la influencia de la inclinación." },
+          { text: "Un punto en el piso (nadir).", correct: false, explanation: "No sirve para comprobar la colimación geométrica del anteojo." }
+        ]
       },
       {
-        id: "q8",
-        text: "¿Qué dato es clave para aplicar directamente la fórmula de Herón?",
+        question: "Tras apuntar a un punto en el horizonte en Posición I y Posición II, calculas la diferencia entre ambas lecturas y le restas 180°. ¿Qué resultado numérico obtienes?",
         options: [
-          "Los tres lados del triángulo.",
-          "Dos ángulos y una altura.",
-          "Solo la base y la altura.",
-          "El área y el perímetro del polígono."
-        ],
-        correct: 0
+          { text: "El rumbo correcto libre de error.", correct: false, explanation: "No, esa diferencia no entrega directamente el rumbo correcto." },
+          { text: "El error de colimación exacto (c).", correct: false, explanation: "La diferencia da el doble del error, no el error simple." },
+          { text: "El doble del error de colimación (2c).", correct: true, explanation: "Correcto: al restar 180° se obtiene el doble del error de colimación." }
+        ]
       },
       {
-        id: "q9",
-        text: "Trabajar con varios decimales durante el cálculo sirve principalmente para:",
+        question: "Has calculado el rumbo correcto (LI) sin influencia de colimación y lo impones en el limbo. Al mirar por el anteojo, el punto ha quedado desapuntado. ¿Cómo corriges mecánicamente el aparato?",
         options: [
-          "Evitar errores acumulados por redondeo prematuro.",
-          "Aumentar el número de triángulos.",
-          "Cambiar el tipo de método utilizado.",
-          "Eliminar la necesidad del control angular."
-        ],
-        correct: 0
+          { text: "Moviendo los montantes del anteojo.", correct: false, explanation: "Eso corrige el error de inclinación, no la colimación." },
+          { text: "Desplazando la cruz de hilos del retículo para provocar nuevamente el apunte.", correct: true, explanation: "Correcto: se ajusta el retículo para materializar el nuevo eje de colimación." },
+          { text: "Girando el teodolito desde la plataforma base.", correct: false, explanation: "Eso arruina el estacionamiento y la lectura." }
+        ]
       },
       {
-        id: "q10",
-        text: "En una tabla final del trabajo, el control de los ángulos sirve para verificar:",
+        question: "¿Qué ejes deben ser estrictamente perpendiculares entre sí para evitar el error de inclinación?",
         options: [
-          "Que el perímetro sea entero.",
-          "Que la suma de ángulos interiores del triángulo sea correcta.",
-          "Que el semiperímetro coincida con el área.",
-          "Que el radio inscrito sea mayor que todos los lados."
-        ],
-        correct: 1
+          { text: "El eje horizontal y el eje vertical (H ⟂ V).", correct: true, explanation: "Correcto: si no se cumple H ⟂ V aparece el error de inclinación." },
+          { text: "El eje de colimación y el eje vertical (C ⟂ V).", correct: false, explanation: "No es la condición primaria que define la inclinación." },
+          { text: "El eje del nivel esférico y la plomada.", correct: false, explanation: "No corresponde a las condiciones instrumentales del teodolito." }
+        ]
       },
       {
-        id: "q11",
-        text: "La expresión α = 2 arctg (r / (p-a)) corresponde a:",
+        question: "A diferencia de la colimación, para verificar la influencia del error de inclinación necesitas apuntar a:",
         options: [
-          "Ángulo α",
-          "Ángulo β",
-          "Ángulo γ",
-          "Semiperímetro"
-        ],
-        correct: 0
+          { text: "Un punto sobre la línea del horizonte (h = 0°).", correct: false, explanation: "Ahí la tangente es cero y el error de inclinación se anula." },
+          { text: "Un punto con una elevación cercana a 45° sobre el horizonte.", correct: true, explanation: "Correcto: a 45° la tangente vale 1 y el error aparece en su verdadera magnitud." },
+          { text: "Un punto situado a más de 1 km de distancia, sin importar su altura.", correct: false, explanation: "La distancia no reemplaza a la altura angular, que es la variable crítica." }
+        ]
       },
       {
-        id: "q12",
-        text: "La expresión β = 2 arctg (r / (p-b)) corresponde a:",
+        question: "Una vez impuesto el rumbo correcto (LI) para eliminar el error de inclinación, observas el objetivo elevado desapuntado. ¿Cómo reajustas el apunte mecánicamente?",
         options: [
-          "Ángulo α",
-          "Ángulo β",
-          "Ángulo γ",
-          "Superficie"
-        ],
-        correct: 1
+          { text: "Ajustando los tornillos calantes V1 y V2.", correct: false, explanation: "Eso altera la verticalización, no la inclinación del anteojo." },
+          { text: "Desplazando la cruz de hilos del retículo.", correct: false, explanation: "Eso modifica la colimación, no la inclinación." },
+          { text: "Desplazando los montantes del anteojo.", correct: true, explanation: "Correcto: los montantes corrigen físicamente el error de inclinación." }
+        ]
       },
       {
-        id: "q13",
-        text: "La expresión γ = 2 arctg (r / (p-c)) corresponde a:",
+        question: "Tienes un teodolito descalibrado. ¿En qué orden exacto debes realizar la verificación y corrección de ejes?",
         options: [
-          "Radio inscrito",
-          "Ángulo α",
-          "Ángulo β",
-          "Ángulo γ"
-        ],
-        correct: 3
+          { text: "Primero Inclinación, luego Colimación.", correct: false, explanation: "Incorrecto: así las lecturas en altura quedarían viciadas." },
+          { text: "Primero Colimación, luego Inclinación.", correct: true, explanation: "Correcto: primero colimación y luego inclinación para aislar correctamente los errores." },
+          { text: "Es indistinto, ambos son independientes y no interfieren.", correct: false, explanation: "Sí interfieren; el orden importa." }
+        ]
+      },
+      {
+        question: "Según el material, los errores de verticalidad y centración se encuadran como errores de tipo:",
+        options: [
+          { text: "Instrumentales.", correct: false, explanation: "No dependen de una falla del mecanismo interno." },
+          { text: "Naturales.", correct: false, explanation: "No son provocados por el ambiente." },
+          { text: "Personales.", correct: true, explanation: "Correcto: dependen del cuidado y atención del operador." }
+        ]
+      },
+      {
+        question: "Verdadero o Falso: Si notas un error de centración sistemático, puedes corregirlo ajustando permanentemente los tornillos del teodolito.",
+        options: [
+          { text: "Verdadero.", correct: false, explanation: "Falso: la centración no se corrige permanentemente con tornillos del instrumento." },
+          { text: "Falso.", correct: true, explanation: "Correcto: solo se puede centrar y verticalizar con precisión durante el estacionamiento." }
+        ]
+      },
+      {
+        question: "¿A qué concepto corresponde la definición: 'la menor división que el operador puede individualizar con certeza dentro de la menor división del sistema de lectura'?",
+        options: [
+          { text: "Apreciación angular.", correct: false, explanation: "La apreciación es una relación mecánica fija del instrumento." },
+          { text: "Estimación angular.", correct: true, explanation: "Correcto: depende de la agudeza visual del operario." },
+          { text: "Precisión de nonio.", correct: false, explanation: "Es un distractor que mezcla términos distintos." }
+        ]
+      },
+      {
+        question: "¿Cuál es la principal característica y función del limbo?",
+        options: [
+          { text: "Es la plataforma inferior con patas extensibles.", correct: false, explanation: "Eso corresponde al trípode o a la base, no al limbo." },
+          { text: "Es un disco grabado y graduado de 0° a 360° para leer ángulos.", correct: true, explanation: "Correcto: el limbo es el disco graduado que permite obtener el valor angular horizontal." },
+          { text: "Es la lente frontal biconvexa del anteojo.", correct: false, explanation: "Eso es el objetivo, no el limbo." }
+        ]
+      },
+      {
+        question: "Al mirar por el anteojo, además de la cruz filar principal ves dos hilos cortos paralelos al hilo horizontal. ¿Qué son y para qué sirven?",
+        options: [
+          { text: "Hilos estadimétricos, sirven para determinar distancias indirectamente.", correct: true, explanation: "Correcto: son los hilos estadimétricos usados para cálculo de distancias." },
+          { text: "Guías de colimación, sirven para apuntar el nadir.", correct: false, explanation: "No es su función real." },
+          { text: "Hilos de nivelación, sirven para verificar la inclinación.", correct: false, explanation: "No corresponden a esa función." }
+        ]
+      },
+      {
+        question: "Estás apuntando a un jalón muy distante y lo ves borroso. Para mejorar la nitidez del jalón específicamente, debes operar:",
+        options: [
+          { text: "El anillo de ajuste de la visual (junto al ojo).", correct: false, explanation: "Ese ajuste es para acomodar el ojo del operador, no el objeto." },
+          { text: "El tornillo de enfoque del anteojo (tornillo ranurado).", correct: true, explanation: "Correcto: ese tornillo sirve para enfocar el objeto según su distancia." },
+          { text: "Los tornillos de micrometría óptica.", correct: false, explanation: "Esos pertenecen al sistema de lectura angular." }
+        ]
+      },
+      {
+        question: "En el uso del trípode para un teodolito moderno con plomada óptica, para realizar el centrado, la indicación práctica inicial es:",
+        options: [
+          { text: "Clavar las 3 patas simultáneamente sobre la estaca y luego mirar por la plomada.", correct: false, explanation: "Dificulta el centrado preciso sobre la estaca." },
+          { text: "Clavar solo 1 pata, dejar 2 levantadas y mover el conjunto mirándolo por la plomada óptica hasta centrar.", correct: true, explanation: "Correcto: se centra primero con una pata firme y dos levantadas, luego se terminan de clavar." },
+          { text: "Clavar 2 patas y dejar 1 floja para moverla si la burbuja se sale.", correct: false, explanation: "No es el procedimiento descrito para el centrado inicial." }
+        ]
+      },
+      {
+        question: "¿Cuál de los siguientes niveles se corrige usando las patas extensibles del trípode (subiendo o bajando la longitud)?",
+        options: [
+          { text: "El nivel tubular de la alidada.", correct: false, explanation: "Ese se corrige con los tornillos calantes, no con las patas." },
+          { text: "El nivel de anteojo.", correct: false, explanation: "No corresponde a esta fase de estacionamiento." },
+          { text: "El nivel esférico de la plataforma.", correct: true, explanation: "Correcto: el nivel esférico se corrige ajustando las patas del trípode." }
+        ]
+      },
+      {
+        question: "Según las condiciones de fábrica, el eje vertical (V) es aquel que:",
+        options: [
+          { text: "Pasa por el centro focal de la lente y los hilos filares.", correct: false, explanation: "Eso describe el eje de colimación, no el vertical." },
+          { text: "Atraviesa el centro de la alidada y el limbo extendiéndose del cenit al nadir.", correct: true, explanation: "Correcto: ese es el eje vertical del instrumento." },
+          { text: "Es el eje de rotación (basculación) del lente telescópico.", correct: false, explanation: "Eso corresponde al eje horizontal." }
+        ]
+      },
+      {
+        question: "Estás rindiendo el examen y tu teodolito tiene un claro error de inclinación, pero no tienes permitido ajustarle los montantes. ¿Cómo consigues un rumbo válido para aprobar tu lectura?",
+        options: [
+          { text: "Apunto siempre a nivel del horizonte (h = 0°).", correct: false, explanation: "Eso no resuelve el problema para puntos elevados." },
+          { text: "Tomo lectura en I Posición y en II Posición (vuelta de campana) sobre el mismo punto y promedio los resultados de minutos y segundos.", correct: true, explanation: "Correcto: al promediar ambas posiciones se anula la influencia del error de inclinación." },
+          { text: "Multiplico la lectura por la tangente de 45°.", correct: false, explanation: "Eso no aplica como corrección práctica del rumbo." }
+        ]
+      },
+      {
+        question: "El teodolito se utiliza en topografía para planimetría de precisión. Esto significa que primordialmente su objetivo es obtener:",
+        options: [
+          { text: "Exclusivamente distancias por método de alineación a pasos.", correct: false, explanation: "Eso no define la planimetría de precisión." },
+          { text: "La proyección horizontal de los puntos en el terreno.", correct: true, explanation: "Correcto: la planimetría busca la proyección horizontal de los puntos." },
+          { text: "Diferencias de altitud a nivel del mar.", correct: false, explanation: "Eso corresponde a la altimetría." }
+        ]
+      },
+      {
+        question: "El teodolito posee tornillos de freno (fijación) y de movimientos lentos. ¿Cuándo debes usar el tornillo de movimientos lentos?",
+        options: [
+          { text: "Solo cuando el teodolito se descala durante la medición.", correct: false, explanation: "Si se descala, hay que reestacionar, no usar el movimiento lento." },
+          { text: "Después de aflojar el freno, para dar vuelta de campana al anteojo.", correct: false, explanation: "La vuelta de campana se hace con el freno liberado, no con el movimiento lento." },
+          { text: "Después de haber bloqueado el tornillo de fijación, para realizar un apunte preciso al milímetro en la cruz filar.", correct: true, explanation: "Correcto: primero se bloquea y luego se usa el movimiento lento para el ajuste fino." }
+        ]
       }
     ];
 
-    const numericAnswerKey = {
-      calcA_2p: 24.00,
-      calcA_p: 12.00,
-      calcA_S: 26.83,
-      calcA_r: 2.24,
-      calcB_2p: 18.00,
-      calcB_p: 9.00,
-      calcB_S: 14.70,
-      calcB_r: 1.63,
-      table_p: 16.00,
-      table_S: 48.00,
-      table_r: 3.00
+    const letters = ["A", "B", "C", "D"];
+    const state = {
+      index: 0,
+      answered: Array(quiz.length).fill(false),
+      selectedByQ: Array(quiz.length).fill(null),
+      score: 0,
+      correctByQ: Array(quiz.length).fill(false)
     };
 
-    const numericTolerances = {
-      calcA_2p: 0.02,
-      calcA_p: 0.02,
-      calcA_S: 0.03,
-      calcA_r: 0.03,
-      calcB_2p: 0.02,
-      calcB_p: 0.02,
-      calcB_S: 0.03,
-      calcB_r: 0.03,
-      table_p: 0.02,
-      table_S: 0.03,
-      table_r: 0.03
-    };
+    const questionEl = document.getElementById('question');
+    const optionsEl = document.getElementById('options');
+    const counterEl = document.getElementById('counter');
+    const qMetaEl = document.getElementById('qMeta');
+    const progressEl = document.getElementById('progress');
+    const hintEl = document.getElementById('hint');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const quizView = document.getElementById('quizView');
+    const summaryView = document.getElementById('summaryView');
+    const scoreBox = document.getElementById('scoreBox');
+    const restartBtn = document.getElementById('restartBtn');
 
-    const angleAnswerKey = {
-      alpha: { deg: 36, min: 52, sec: 12 },
-      beta:  { deg: 53, min: 7,  sec: 48 },
-      gamma: { deg: 90, min: 0,  sec: 0 }
-    };
+    function updateHeader() {
+      counterEl.textContent = `${state.index + 1} / ${quiz.length}`;
+      qMetaEl.textContent = `Pregunta ${state.index + 1}`;
+      progressEl.style.width = `${((state.index) / quiz.length) * 100}%`;
+      prevBtn.disabled = state.index === 0;
+      nextBtn.disabled = !state.answered[state.index];
+      nextBtn.textContent = state.index === quiz.length - 1 ? 'Finalizar' : 'Siguiente';
+      hintEl.textContent = state.answered[state.index]
+        ? 'Ya elegiste una respuesta. Podés pasar a la siguiente pregunta.'
+        : 'Elegí una opción para ver si es correcta y revisar la explicación de cada alternativa.';
+    }
 
-    const mcqContainer = document.getElementById("mcqContainer");
-    const gradeBtn = document.getElementById("gradeBtn");
-    const quizForm = document.getElementById("quizForm");
-    const resultCard = document.getElementById("resultCard");
-    const scoreCircle = document.getElementById("scoreCircle");
-    const resultTitle = document.getElementById("resultTitle");
-    const resultSummary = document.getElementById("resultSummary");
-    const extraSummary = document.getElementById("extraSummary");
-    const feedbackList = document.getElementById("feedbackList");
-    const answersPanel = document.getElementById("answersPanel");
-    const answersSummary = document.getElementById("answersSummary");
-
-    function renderMCQ() {
-      mcqContainer.innerHTML = mcqData.map((question, index) => `
-        <div class="question" id="box_${question.id}">
-          <h3>${index + 1}. ${question.text}</h3>
-          <div class="options">
-            ${question.options.map((option, i) => `
-              <label class="option" data-question="${question.id}" data-index="${i}">
-                <input type="radio" name="${question.id}" value="${i}">
-                <span>${option}</span>
-              </label>
-            `).join("")}
+    function renderQuestion() {
+      const q = quiz[state.index];
+      questionEl.textContent = q.question;
+      optionsEl.innerHTML = '';
+      q.options.forEach((opt, i) => {
+        const div = document.createElement('div');
+        div.className = 'option';
+        div.dataset.index = i;
+        div.innerHTML = `
+          <div class="row">
+            <div class="badge">${letters[i] || String(i+1)}</div>
+            <div class="opt-text">${opt.text}</div>
           </div>
-          <div class="answer-reveal" id="answer_${question.id}">
-            <strong>Respuesta correcta:</strong> ${question.options[question.correct]}
-          </div>
-        </div>
-      `).join("");
-    }
-
-    function getSelectedValue(name) {
-      const checked = document.querySelector(`input[name="${name}"]:checked`);
-      return checked ? Number(checked.value) : null;
-    }
-
-    function getNumericValue(id) {
-      const raw = document.getElementById(id).value.trim();
-      if (raw === "") return null;
-      const val = Number(raw);
-      return Number.isFinite(val) ? val : null;
-    }
-
-    function isClose(userValue, correctValue, tolerance) {
-      return userValue !== null && Math.abs(userValue - correctValue) <= tolerance;
-    }
-
-    function toFixedPoint(value, digits = 2) {
-      return Number(value).toFixed(digits);
-    }
-
-    function dmsToDecimal(deg, min, sec) {
-      return Number(deg) + Number(min) / 60 + Number(sec) / 3600;
-    }
-
-    function getAngleInput(prefix) {
-      const deg = getNumericValue(`${prefix}_g`);
-      const min = getNumericValue(`${prefix}_m`);
-      const sec = getNumericValue(`${prefix}_s`);
-      if (deg === null || min === null || sec === null) return null;
-      return { deg, min, sec };
-    }
-
-    function markAngleInputs(prefix, isCorrect) {
-      ["g", "m", "s"].forEach(part => {
-        const input = document.getElementById(`${prefix}_${part}`);
-        input.classList.add(isCorrect ? "correct" : "incorrect");
+          <div class="feedback"></div>
+        `;
+        div.addEventListener('click', () => handleAnswer(i));
+        optionsEl.appendChild(div);
       });
-    }
 
-    function showAngleFeedback(prefix, correctDMS) {
-      const box = document.getElementById(`ans_angle_${prefix}`);
-      box.style.display = "block";
-      box.innerHTML = `<strong>Correcto:</strong> ${correctDMS.deg}° ${String(correctDMS.min).padStart(2, "0")}' ${String(correctDMS.sec).padStart(2, "0")}"`;
-    }
-
-    function showNumericFeedback(id, isCorrect, correctValue) {
-      const input = document.getElementById(id);
-      const box = document.getElementById(`ans_${id}`);
-      input.classList.add(isCorrect ? "correct" : "incorrect");
-      box.style.display = "block";
-      box.innerHTML = `<strong>Correcto:</strong> ${toFixedPoint(correctValue, 2)}`;
-    }
-
-    function getPerformanceMessage(scoreOver10) {
-      if (scoreOver10 >= 9) return "Excelente trabajo. Dominas muy bien el tema.";
-      if (scoreOver10 >= 7) return "Buen resultado. Hay una base sólida y pocos detalles para revisar.";
-      if (scoreOver10 >= 6) return "Aprobado justo. Conviene reforzar fórmulas y controles.";
-      return "Necesitas repasar el método, la fórmula de Herón y el cálculo de ángulos con arctangente.";
-    }
-
-    function getResultColor(scoreOver10) {
-      if (scoreOver10 >= 7) return "linear-gradient(135deg, #1e9e5a, #38b974)";
-      if (scoreOver10 >= 6) return "linear-gradient(135deg, #d48a00, #f0a91c)";
-      return "linear-gradient(135deg, #d64545, #ee6969)";
-    }
-
-    function buildFeedback(correctMcq, totalMcq, correctCalc, totalCalc, correctAngles, totalAngles) {
-      const items = [];
-
-      items.push({ ok: correctMcq >= 9, text: `Opción múltiple: acertaste ${correctMcq} de ${totalMcq}.` });
-      items.push({ ok: correctCalc >= 8, text: `Cálculos de p, S y r: acertaste ${correctCalc} de ${totalCalc}.` });
-      items.push({ ok: correctAngles >= 2, text: `Ángulos en grados, minutos y segundos: acertaste ${correctAngles} de ${totalAngles}.` });
-
-      if (correctMcq < totalMcq) {
-        items.push({ ok: false, text: "Revisa especialmente los conceptos de semiperímetro, fórmula de Herón y la identificación de las fórmulas de α, β y γ." });
+      if (state.answered[state.index]) {
+        revealCurrent(state.selectedByQ[state.index]);
       }
-
-      if (correctCalc < totalCalc) {
-        items.push({ ok: false, text: "En los cálculos numéricos conviene mantener más decimales internamente y redondear recién al final a 2 decimales." });
-      }
-
-      if (correctAngles < totalAngles) {
-        items.push({ ok: false, text: "En los ángulos, verifica bien la sustitución en α = 2 arctg(r/(p-a)), β = 2 arctg(r/(p-b)) y γ = 2 arctg(r/(p-c))." });
-      }
-
-      if (correctMcq === totalMcq && correctCalc === totalCalc && correctAngles === totalAngles) {
-        items.push({ ok: true, text: "Perfecto: resolviste correctamente toda la actividad." });
-      }
-
-      return items;
+      updateHeader();
     }
 
-    function resetVisualFeedback() {
-      document.querySelectorAll(".question").forEach(q => q.classList.remove("correct", "incorrect"));
-      document.querySelectorAll(".option").forEach(o => o.classList.remove("correct-option", "wrong-selected"));
-      document.querySelectorAll(".answer-reveal").forEach(a => a.style.display = "none");
-      document.querySelectorAll("input[type='number']").forEach(i => i.classList.remove("correct", "incorrect"));
-      document.querySelectorAll(".field-answer").forEach(a => {
-        a.style.display = "none";
-        a.textContent = "";
-      });
+    function handleAnswer(selectedIndex) {
+      if (state.answered[state.index]) return;
+      const q = quiz[state.index];
+      const isCorrect = q.options[selectedIndex].correct;
+      state.answered[state.index] = true;
+      state.selectedByQ[state.index] = selectedIndex;
+      state.correctByQ[state.index] = isCorrect;
+      if (isCorrect) state.score += 1;
+      revealCurrent(selectedIndex);
+      updateHeader();
     }
 
-    function gradeQuiz() {
-      resetVisualFeedback();
+    function revealCurrent(selectedIndex = null) {
+      const q = quiz[state.index];
+      const cards = [...optionsEl.querySelectorAll('.option')];
+      cards.forEach((card, i) => {
+        const opt = q.options[i];
+        const fb = card.querySelector('.feedback');
+        card.classList.add('locked');
+        card.style.pointerEvents = 'none';
 
-      let correctMcq = 0;
-      let correctCalc = 0;
-      let correctAngles = 0;
-
-      mcqData.forEach(q => {
-        const selected = getSelectedValue(q.id);
-        const questionBox = document.getElementById(`box_${q.id}`);
-        const answerBox = document.getElementById(`answer_${q.id}`);
-        answerBox.style.display = "block";
-
-        document.querySelectorAll(`.option[data-question='${q.id}']`).forEach(opt => {
-          const index = Number(opt.dataset.index);
-          if (index === q.correct) opt.classList.add("correct-option");
-          if (selected === index && selected !== q.correct) opt.classList.add("wrong-selected");
-        });
-
-        if (selected === q.correct) {
-          correctMcq++;
-          questionBox.classList.add("correct");
+        if (opt.correct) {
+          card.classList.add('correct');
+          fb.innerHTML = `<div class="status">✓ Respuesta correcta</div>${escapeHtml(opt.explanation)}`;
         } else {
-          questionBox.classList.add("incorrect");
+          card.classList.add('neutral');
+          if (selectedIndex === i) {
+            card.classList.remove('neutral');
+            card.classList.add('incorrect');
+            fb.innerHTML = `<div class="status">✕ No exactamente</div>${escapeHtml(opt.explanation)}`;
+          } else {
+            fb.innerHTML = `<div class="status">No correcta</div>${escapeHtml(opt.explanation)}`;
+          }
         }
       });
-
-      Object.keys(numericAnswerKey).forEach(id => {
-        const userValue = getNumericValue(id);
-        const ok = isClose(userValue, numericAnswerKey[id], numericTolerances[id]);
-        if (ok) correctCalc++;
-        showNumericFeedback(id, ok, numericAnswerKey[id]);
-      });
-
-      Object.keys(angleAnswerKey).forEach(prefix => {
-        const userAngle = getAngleInput(prefix);
-        const correctDMS = angleAnswerKey[prefix];
-        const expectedDecimal = dmsToDecimal(correctDMS.deg, correctDMS.min, correctDMS.sec);
-        let ok = false;
-
-        if (userAngle) {
-          const userDecimal = dmsToDecimal(userAngle.deg, userAngle.min, userAngle.sec);
-          ok = Math.abs(userDecimal - expectedDecimal) <= (1 / 3600);
-        }
-
-        if (ok) correctAngles++;
-        markAngleInputs(prefix, ok);
-        showAngleFeedback(prefix, correctDMS);
-      });
-
-      const totalMcq = mcqData.length;
-      const totalCalc = Object.keys(numericAnswerKey).length;
-      const totalAngles = Object.keys(angleAnswerKey).length;
-      const totalItems = totalMcq + totalCalc + totalAngles;
-      const totalCorrect = correctMcq + correctCalc + correctAngles;
-      const scoreOver10 = (totalCorrect / totalItems) * 10;
-      const percent = (totalCorrect / totalItems) * 100;
-
-      resultCard.style.display = "block";
-      scoreCircle.textContent = toFixedPoint(scoreOver10, 2);
-      scoreCircle.style.background = getResultColor(scoreOver10);
-      resultTitle.textContent = scoreOver10 >= 6 ? "Formulario corregido" : "Formulario corregido – revisar";
-      resultSummary.textContent = `Respuestas correctas: ${totalCorrect} de ${totalItems} · ${toFixedPoint(percent, 2)}% · Nota final: ${toFixedPoint(scoreOver10, 2)} / 10.`;
-      extraSummary.textContent = getPerformanceMessage(scoreOver10);
-
-      const feedback = buildFeedback(correctMcq, totalMcq, correctCalc, totalCalc, correctAngles, totalAngles);
-      feedbackList.innerHTML = feedback.map(item => `
-        <div class="feedback-item ${item.ok ? "ok" : "bad"}">${item.text}</div>
-      `).join("");
-
-      answersPanel.style.display = "block";
-      answersSummary.innerHTML = `
-        <li>Ejercicio A: 2p = 24.00, p = 12.00, S = 26.83, r = 2.24.</li>
-        <li>Ejercicio B: 2p = 18.00, p = 9.00, S = 14.70, r = 1.63.</li>
-        <li>Ejercicio C: α = 36° 52' 12", β = 53° 07' 48", γ = 90° 00' 00".</li>
-        <li>Tabla del triángulo D: p = 16.00, S = 48.00, r = 3.00.</li>
-      `;
-
-      resultCard.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    document.getElementById("gradeBtn").addEventListener("click", gradeQuiz);
+    function escapeHtml(text) {
+      return String(text)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
 
-    quizForm.addEventListener("reset", () => {
-      setTimeout(() => {
-        resetVisualFeedback();
-        resultCard.style.display = "none";
-        answersPanel.style.display = "none";
-      }, 0);
-    });
+    function next() {
+      if (!state.answered[state.index]) return;
+      if (state.index === quiz.length - 1) {
+        showSummary();
+        return;
+      }
+      state.index += 1;
+      renderQuestion();
+    }
 
-    renderMCQ();
+    function prev() {
+      if (state.index === 0) return;
+      state.index -= 1;
+      renderQuestion();
+    }
+
+    function showSummary() {
+      quizView.style.display = 'none';
+      summaryView.style.display = 'block';
+      scoreBox.textContent = `Puntaje: ${state.score} / ${quiz.length}`;
+      progressEl.style.width = '100%';
+      counterEl.textContent = `${quiz.length} / ${quiz.length}`;
+    }
+
+    function restart() {
+      state.index = 0;
+      state.score = 0;
+      state.answered = Array(quiz.length).fill(false);
+      state.correctByQ = Array(quiz.length).fill(false);
+      summaryView.style.display = 'none';
+      quizView.style.display = 'block';
+      renderQuestion();
+    }
+
+    prevBtn.addEventListener('click', prev);
+    nextBtn.addEventListener('click', next);
+    restartBtn.addEventListener('click', restart);
+
+    renderQuestion();
   </script>
 </body>
 </html>
