@@ -1,1033 +1,548 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cuestionario Práctico - Teodolito</title>
-  <style>
-    :root{
-      --bg:#0f172a;
-      --panel:#111827;
-      --panel-2:#1e293b;
-      --text:#e5e7eb;
-      --muted:#94a3b8;
-      --border:#243244;
-      --good:#22c55e;
-      --good-bg:#052e16;
-      --bad:#ef4444;
-      --bad-bg:#3f0a0a;
-      --accent:#4f46e5;
-      --accent-2:#6366f1;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: Inter, Arial, Helvetica, sans-serif;
-      background: radial-gradient(1200px 800px at 20% 0%, #172554 0%, var(--bg) 45%);
-      color:var(--text);
-      min-height:100vh;
-    }
-    .wrap{
-      max-width:1100px;
-      margin:0 auto;
-      padding:24px;
-    }
-    .topbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:18px;
-      gap:16px;
-    }
-    .title{
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-    }
-    .title h1{
-      margin:0;
-      font-size:28px;
-      line-height:1.1;
-      letter-spacing:-0.02em;
-    }
-    .title p{
-      margin:0;
-      color:var(--muted);
-      font-size:14px;
-    }
-    .pill{
-      background:#0b1220;
-      border:1px solid var(--border);
-      border-radius:999px;
-      padding:10px 14px;
-      color:var(--muted);
-      font-size:14px;
-    }
-    .grid{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:18px;
-    }
-    .card{
-      background:rgba(17,24,39,.88);
-      border:1px solid rgba(36,50,68,.8);
-      border-radius:20px;
-      box-shadow:0 20px 60px rgba(0,0,0,.30);
-      overflow:hidden;
-    }
-    .card-head{
-      padding:18px 20px 0 20px;
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:16px;
-    }
-    .qmeta{
-      color:var(--muted);
-      font-size:13px;
-      margin-bottom:8px;
-    }
-    .question{
-      margin:0;
-      font-size:22px;
-      line-height:1.35;
-      letter-spacing:-0.01em;
-    }
-    .progressbar{
-      height:10px;
-      width:100%;
-      background:#0b1220;
-      border-top:1px solid rgba(36,50,68,.8);
-      border-bottom:1px solid rgba(36,50,68,.8);
-      position:relative;
-      margin-top:18px;
-    }
-    .progressbar > div{
-      height:100%;
-      width:0%;
-      background:linear-gradient(90deg,var(--accent),var(--accent-2));
-      transition:width .25s ease;
-    }
-    .body{
-      padding:20px;
-    }
-    .options{
-      display:grid;
-      gap:12px;
-    }
-    .option{
-      background:var(--panel);
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:16px 16px 14px 16px;
-      cursor:pointer;
-      transition:transform .12s ease, background .12s ease, border-color .12s ease;
-      position:relative;
-      overflow:hidden;
-    }
-    .option:hover{ transform:translateY(-1px); background:#162033; }
-    .option .row{
-      display:flex;
-      align-items:flex-start;
-      gap:12px;
-    }
-    .badge{
-      min-width:28px;
-      height:28px;
-      border-radius:999px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:700;
-      background:#0b1220;
-      border:1px solid var(--border);
-      color:var(--text);
-      flex:0 0 auto;
-    }
-    .opt-text{
-      font-size:16px;
-      line-height:1.4;
-      margin-top:1px;
-      flex:1;
-    }
-    .feedback{
-      margin-top:12px;
-      padding-top:12px;
-      border-top:1px dashed rgba(148,163,184,.22);
-      color:#dbeafe;
-      display:none;
-      font-size:14px;
-      line-height:1.45;
-    }
-    .status{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      font-weight:700;
-      margin-bottom:6px;
-    }
-    .option.correct{
-      border-color:rgba(34,197,94,.85);
-      background:linear-gradient(180deg, rgba(5,46,22,.95), rgba(6,31,18,.95));
-    }
-    .option.correct .badge{ border-color:rgba(34,197,94,.85); color:#bbf7d0; background:rgba(34,197,94,.12); }
-    .option.correct .feedback{ display:block; color:#bbf7d0; }
-    .option.correct .status{ color:#86efac; }
-    .option.incorrect{
-      border-color:rgba(239,68,68,.85);
-      background:linear-gradient(180deg, rgba(63,10,10,.95), rgba(40,10,10,.95));
-    }
-    .option.incorrect .badge{ border-color:rgba(239,68,68,.85); color:#fecaca; background:rgba(239,68,68,.10); }
-    .option.incorrect .feedback{ display:block; color:#fecaca; }
-    .option.incorrect .status{ color:#fca5a5; }
-    .option.neutral{
-      opacity:.85;
-      background:#101826;
-    }
-    .option.neutral .feedback{ display:block; color:#cbd5e1; }
-    .option.neutral .status{ color:#cbd5e1; }
-    .option.locked{ cursor:default; }
-    .footer{
-      padding:18px 20px 20px 20px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      border-top:1px solid rgba(36,50,68,.8);
-      background:rgba(9,15,30,.55);
-      flex-wrap:wrap;
-    }
-    .btns{ display:flex; gap:10px; flex-wrap:wrap; }
-    button{
-      border:none;
-      border-radius:14px;
-      padding:12px 16px;
-      font-size:14px;
-      font-weight:700;
-      cursor:pointer;
-    }
-    .btn-primary{
-      background:linear-gradient(90deg,var(--accent),var(--accent-2));
-      color:white;
-    }
-    .btn-secondary{
-      background:#0b1220;
-      color:var(--text);
-      border:1px solid var(--border);
-    }
-    .btn-primary:disabled, .btn-secondary:disabled{
-      opacity:.55;
-      cursor:not-allowed;
-    }
-    .hint{
-      color:var(--muted);
-      font-size:13px;
-    }
-    .summary{
-      display:none;
-      padding:22px 20px 22px 20px;
-    }
-    .summary h2{ margin:0 0 8px 0; font-size:24px; }
-    .summary p{ margin:0; color:var(--muted); }
-    .score{
-      margin-top:14px;
-      padding:14px 16px;
-      border:1px solid var(--border);
-      border-radius:16px;
-      background:#0b1220;
-      font-size:16px;
-    }
-    @media (max-width:760px){
-      .title h1{ font-size:24px; }
-      .question{ font-size:20px; }
-      .card-head, .body, .footer, .summary{ padding-left:16px; padding-right:16px; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cuestionario de Autoevaluación - Topografía</title>
+<style>
+:root {
+  --bg: #f3f3ef;
+  --panel: #ffffff;
+  --panel-2: #f7f7f4;
+  --text: #111111;
+  --muted: #5a5a5a;
+  --line: #d9d9d3;
+  --line-strong: #1b1b1b;
+  --ok: #0f7a3b;
+  --bad: #a11b1b;
+  --soft-ok: #eef8f1;
+  --soft-bad: #fbeeee;
+  --accent: #111111;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.92), rgba(243,243,239,1) 48%);
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
+
+.shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 22px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.titleblock h1 {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: -0.03em;
+}
+.titleblock p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.progresswrap {
+  min-width: 220px;
+  text-align: right;
+}
+.progresstext {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.progressbar {
+  width: 220px;
+  height: 10px;
+  border-radius: 999px;
+  background: #e3e3dc;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+.progressbar > div {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #111, #444);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 280px 1fr 310px;
+  gap: 16px;
+  align-items: start;
+}
+
+.card {
+  background: rgba(255,255,255,0.85);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: 0 10px 32px rgba(0,0,0,0.05);
+  backdrop-filter: blur(6px);
+}
+
+.sidebar {
+  padding: 16px;
+  position: sticky;
+  top: 16px;
+}
+
+.sidebar h3, .studio h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+  letter-spacing: -0.02em;
+}
+
+.chapter {
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: transform .15s ease, border-color .15s ease, background .15s ease;
+}
+.chapter:hover { transform: translateY(-1px); border-color: #bdbdb4; }
+.chapter.active {
+  border-color: var(--line-strong);
+  background: #efefe9;
+}
+.chapter small {
+  display:block;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.main {
+  padding: 18px;
+}
+
+.qmeta {
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.badge {
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-size: 12px;
+  color: var(--muted);
+}
+.qcount {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.question {
+  font-size: 26px;
+  line-height: 1.22;
+  margin: 10px 0 18px;
+  letter-spacing: -0.03em;
+}
+
+.subtext {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.options {
+  display: grid;
+  gap: 12px;
+}
+
+.opt {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 15px 16px;
+  background: #fff;
+  cursor: pointer;
+  transition: transform .15s ease, border-color .15s ease, background .15s ease;
+  position: relative;
+}
+.opt:hover { transform: translateY(-1px); border-color: #aaaaa1; }
+.opt .label {
+  font-weight: 700;
+  margin-right: 10px;
+}
+.opt.correct {
+  border-color: var(--ok);
+  background: var(--soft-ok);
+}
+.opt.incorrect {
+  border-color: var(--bad);
+  background: var(--soft-bad);
+}
+.opt.locked {
+  cursor: default;
+}
+.mark {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.mark.ok { color: var(--ok); }
+.mark.bad { color: var(--bad); }
+
+.feedback {
+  margin-top: 14px;
+  border: 1px solid var(--line);
+  background: #fbfbf8;
+  padding: 14px 15px;
+  border-radius: 16px;
+  display:none;
+}
+.feedback.show { display:block; }
+.feedback h4 {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+.feedback p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.actions {
+  display:flex;
+  gap: 10px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+button {
+  border: 1px solid var(--line-strong);
+  background: #111;
+  color: #fff;
+  padding: 11px 15px;
+  border-radius: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+button.secondary {
+  background: #fff;
+  color: #111;
+  border-color: var(--line);
+}
+button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.inputbox {
+  width: 100%;
+  min-height: 54px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  padding: 14px 15px;
+  font-size: 16px;
+  outline: none;
+  background: #fff;
+  color: var(--text);
+}
+.inputbox:focus {
+  border-color: var(--line-strong);
+}
+.helper {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.studio {
+  padding: 16px;
+  position: sticky;
+  top: 16px;
+}
+.note {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px;
+  background: #fafafa;
+  margin-bottom: 10px;
+}
+.note strong {
+  display:block;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+.note span {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.footerline {
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+
+@media (max-width: 1100px) {
+  .grid { grid-template-columns: 1fr; }
+  .sidebar, .studio { position: static; }
+  .progresswrap { min-width: auto; text-align:left; }
+  .progressbar { width: 100%; }
+}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="topbar">
-      <div class="title">
-        <h1>Cuestionario práctico de topografía</h1>
-        <p>Teodolito · 45 preguntas · selección múltiple y verdadero/falso</p>
+  <div class="shell">
+    <div class="header">
+      <div class="titleblock">
+        <h1>CUESTIONARIO DE AUTOEVALUACIÓN</h1>
+        <p>Topografía · método práctico, respuesta inmediata y explicación al seleccionar.</p>
       </div>
-      <div class="pill" id="counter">1 / 45</div>
+      <div class="progresswrap">
+        <div class="progresstext" id="progressText">Pregunta 1 de 35</div>
+        <div class="progressbar"><div id="progressFill"></div></div>
+      </div>
     </div>
 
-    <div class="card">
-      <div id="quizView">
-        <div class="card-head">
-          <div>
-            <div class="qmeta" id="qMeta">Pregunta 1</div>
-            <h2 class="question" id="question"></h2>
-          </div>
+    <div class="grid">
+      <aside class="card sidebar">
+        <h3>Bloques</h3>
+        <div class="chapter active" data-block="0">
+          Método de Compensación
+          <small>Preguntas 1 a 13</small>
         </div>
-        <div class="progressbar"><div id="progress"></div></div>
-        <div class="body">
-          <div class="options" id="options"></div>
+        <div class="chapter" data-block="1">
+          Medición con cinta
+          <small>Preguntas 14 a 26</small>
         </div>
-        <div class="footer">
-          <div class="hint" id="hint">Elegí una opción para ver la corrección y la explicación.</div>
-          <div class="btns">
-            <button class="btn-secondary" id="prevBtn">Anterior</button>
-            <button class="btn-primary" id="nextBtn" disabled>Siguiente</button>
-          </div>
+        <div class="chapter" data-block="2">
+          Coordenadas y rumbos
+          <small>Preguntas 27 a 35</small>
         </div>
-      </div>
+        <div class="footerline">Diseño en blanco y negro elegante · estilo limpio de estudio.</div>
+      </aside>
 
-      <div class="summary" id="summaryView">
-        <h2>Terminaste el cuestionario 👏</h2>
-        <p>Podés volver a recorrerlo o reiniciar para practicar otra vez.</p>
-        <div class="score" id="scoreBox"></div>
-        <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
-          <button class="btn-primary" id="restartBtn">Reiniciar</button>
+      <main class="card main">
+        <div class="qmeta">
+          <div class="badge" id="typeBadge">V/F</div>
+          <div class="qcount" id="qcount">1 / 35</div>
         </div>
-      </div>
+        <div class="question" id="question"></div>
+        <div class="subtext" id="subtext">Elegí una opción o escribe tu respuesta cuando corresponda.</div>
+        <div id="body"></div>
+        <div class="feedback" id="feedback">
+          <h4 id="fbtitle"></h4>
+          <p id="fbtext"></p>
+        </div>
+        <div class="actions">
+          <button class="secondary" id="prevBtn">Anterior</button>
+          <button class="secondary" id="resetBtn">Reiniciar intento</button>
+          <button id="nextBtn">Siguiente</button>
+        </div>
+      </main>
+
+      <aside class="card studio">
+        <h3>Guía rápida</h3>
+        <div class="note"><strong>Cómo responde</strong><span>En preguntas de opción múltiple, al tocar una opción se marca la correcta, la incorrecta y aparece la explicación.</span></div>
+        <div class="note"><strong>Preguntas prácticas</strong><span>Las de cálculo o procedimiento se resuelven escribiendo la respuesta y luego presionando verificar.</span></div>
+        <div class="note"><strong>Estilo</strong><span>Se mantiene sobrio, claro y fácil de imprimir o estudiar.</span></div>
+      </aside>
     </div>
   </div>
 
-  <script>
-    const quiz = [
-      {
-        question: "Al centrar un teodolito con plomada óptica, después de atornillarlo al trípode, ¿cuál es el procedimiento correcto para hacer coincidir la plomada con la estaca?",
-        options: [
-          { text: "Calar inmediatamente el nivel tubular con los tornillos calantes.", correct: false, explanation: "No corresponde: el calado y la verticalización vienen después del centrado inicial." },
-          { text: "Levantar dos patas del trípode (dejando una clavada) y observar por la plomada óptica moviéndolas hasta centrar.", correct: true, explanation: "Correcto: se usa la ayuda de las patas del trípode para lograr el centrado sobre la estaca." },
-          { text: "Mover el tornillo de fijación central y arrastrar la plataforma.", correct: false, explanation: "Eso no es la técnica inicial; el deslizamiento solo se usa al final para afinar." }
-        ]
-      },
-      {
-        question: "Durante la verticalización, colocas el nivel de alidada paralelo a la línea de los tornillos calantes V1 y V2. ¿Cómo debes girar estos tornillos para centrar la burbuja?",
-        options: [
-          { text: "Ambos en el mismo sentido (horario).", correct: false, explanation: "No genera el efecto de palanca necesario para nivelar." },
-          { text: "Solo girar V1, dejando V2 fijo.", correct: false, explanation: "No permite un calado correcto de la plataforma." },
-          { text: "De forma simultánea y en sentido antagónico (contrario) de giro.", correct: true, explanation: "Correcto: el calado se hace con V1 y V2 en sentido contrario." }
-        ]
-      },
-      {
-        question: "Después de calar la burbuja con los tornillos V1 y V2, ¿qué paso sigue para utilizar el tornillo V3?",
-        options: [
-          { text: "Girar la alidada 180°.", correct: false, explanation: "Ese giro se usa luego como comprobación." },
-          { text: "Girar la alidada 90°.", correct: true, explanation: "Correcto: se gira 90° para calar el tercer tornillo en dirección perpendicular." },
-          { text: "Bajar las patas del trípode.", correct: false, explanation: "Las patas no se usan para este paso de nivelación fina." }
-        ]
-      },
-      {
-        question: "Giras la alidada 180° para verificar el calado y notas que la burbuja se desplaza de su centro. ¿Qué significa esto?",
-        options: [
-          { text: "Que el instrumento tiene un error de colimación.", correct: false, explanation: "La colimación afecta el apunte, no el comportamiento de la burbuja." },
-          { text: "Que actúan dos errores: el del nivel tubular y el de verticalidad.", correct: true, explanation: "Correcto: el desplazamiento refleja falta de paralelismo y error de verticalidad." },
-          { text: "Que el terreno ha cedido.", correct: false, explanation: "El desajuste observado corresponde a condiciones instrumentales y de estacionamiento." }
-        ]
-      },
-      {
-        question: "Estás en la posición de comprobación a 180° y la burbuja se ha desviado. Para corregir el error de verticalidad, ¿qué debes manipular?",
-        options: [
-          { text: "Los tornillos propios del nivel de alidada para corregir la mitad del desplazamiento.", correct: false, explanation: "Esos tornillos corrigen el nivel tubular, no la verticalidad del eje." },
-          { text: "Los tornillos calantes V1 y V2 para corregir la mitad del desplazamiento.", correct: true, explanation: "Correcto: V1 y V2 corrigen la mitad del desplazamiento para lograr verticalidad." },
-          { text: "Los tornillos calantes V1 y V2 para llevar la burbuja totalmente al centro.", correct: false, explanation: "No se corrige todo el desplazamiento con ellos; solo la mitad." }
-        ]
-      },
-      {
-        question: "Para que las mediciones no tengan error de colimación, el eje de colimación (C) debe cumplir una condición fundamental de fábrica. ¿Cuál es?",
-        options: [
-          { text: "Ser perpendicular al eje vertical (C ⟂ V).", correct: false, explanation: "No es la condición correcta del eje de colimación." },
-          { text: "Ser paralelo al eje horizontal (C ≡ H).", correct: false, explanation: "No es la relación geométrica adecuada." },
-          { text: "Ser perpendicular al eje horizontal (C ⟂ H).", correct: true, explanation: "Correcto: el eje de colimación debe ser perpendicular al eje horizontal." }
-        ]
-      },
-      {
-        question: "Quieres verificar en campo si tu teodolito sufre error de colimación. ¿Qué tipo de punto debes elegir para apuntar en Posición I y II?",
-        options: [
-          { text: "Un punto elevado a unos 45° sobre el horizonte.", correct: false, explanation: "Eso se usa para detectar el error de inclinación." },
-          { text: "Un punto de fácil ubicación sobre el horizonte (elevación cercana a 0°).", correct: true, explanation: "Correcto: sobre el horizonte se anula la influencia de la inclinación." },
-          { text: "Un punto en el piso (nadir).", correct: false, explanation: "No sirve para comprobar la colimación geométrica del anteojo." }
-        ]
-      },
-      {
-        question: "Tras apuntar a un punto en el horizonte en Posición I y Posición II, calculas la diferencia entre ambas lecturas y le restas 180°. ¿Qué resultado numérico obtienes?",
-        options: [
-          { text: "El rumbo correcto libre de error.", correct: false, explanation: "No, esa diferencia no entrega directamente el rumbo correcto." },
-          { text: "El error de colimación exacto (c).", correct: false, explanation: "La diferencia da el doble del error, no el error simple." },
-          { text: "El doble del error de colimación (2c).", correct: true, explanation: "Correcto: al restar 180° se obtiene el doble del error de colimación." }
-        ]
-      },
-      {
-        question: "Has calculado el rumbo correcto (LI) sin influencia de colimación y lo impones en el limbo. Al mirar por el anteojo, el punto ha quedado desapuntado. ¿Cómo corriges mecánicamente el aparato?",
-        options: [
-          { text: "Moviendo los montantes del anteojo.", correct: false, explanation: "Eso corrige el error de inclinación, no la colimación." },
-          { text: "Desplazando la cruz de hilos del retículo para provocar nuevamente el apunte.", correct: true, explanation: "Correcto: se ajusta el retículo para materializar el nuevo eje de colimación." },
-          { text: "Girando el teodolito desde la plataforma base.", correct: false, explanation: "Eso arruina el estacionamiento y la lectura." }
-        ]
-      },
-      {
-        question: "¿Qué ejes deben ser estrictamente perpendiculares entre sí para evitar el error de inclinación?",
-        options: [
-          { text: "El eje horizontal y el eje vertical (H ⟂ V).", correct: true, explanation: "Correcto: si no se cumple H ⟂ V aparece el error de inclinación." },
-          { text: "El eje de colimación y el eje vertical (C ⟂ V).", correct: false, explanation: "No es la condición primaria que define la inclinación." },
-          { text: "El eje del nivel esférico y la plomada.", correct: false, explanation: "No corresponde a las condiciones instrumentales del teodolito." }
-        ]
-      },
-      {
-        question: "A diferencia de la colimación, para verificar la influencia del error de inclinación necesitas apuntar a:",
-        options: [
-          { text: "Un punto sobre la línea del horizonte (h = 0°).", correct: false, explanation: "Ahí la tangente es cero y el error de inclinación se anula." },
-          { text: "Un punto con una elevación cercana a 45° sobre el horizonte.", correct: true, explanation: "Correcto: a 45° la tangente vale 1 y el error aparece en su verdadera magnitud." },
-          { text: "Un punto situado a más de 1 km de distancia, sin importar su altura.", correct: false, explanation: "La distancia no reemplaza a la altura angular, que es la variable crítica." }
-        ]
-      },
-      {
-        question: "Una vez impuesto el rumbo correcto (LI) para eliminar el error de inclinación, observas el objetivo elevado desapuntado. ¿Cómo reajustas el apunte mecánicamente?",
-        options: [
-          { text: "Ajustando los tornillos calantes V1 y V2.", correct: false, explanation: "Eso altera la verticalización, no la inclinación del anteojo." },
-          { text: "Desplazando la cruz de hilos del retículo.", correct: false, explanation: "Eso modifica la colimación, no la inclinación." },
-          { text: "Desplazando los montantes del anteojo.", correct: true, explanation: "Correcto: los montantes corrigen físicamente el error de inclinación." }
-        ]
-      },
-      {
-        question: "Tienes un teodolito descalibrado. ¿En qué orden exacto debes realizar la verificación y corrección de ejes?",
-        options: [
-          { text: "Primero Inclinación, luego Colimación.", correct: false, explanation: "Incorrecto: así las lecturas en altura quedarían viciadas." },
-          { text: "Primero Colimación, luego Inclinación.", correct: true, explanation: "Correcto: primero colimación y luego inclinación para aislar correctamente los errores." },
-          { text: "Es indistinto, ambos son independientes y no interfieren.", correct: false, explanation: "Sí interfieren; el orden importa." }
-        ]
-      },
-      {
-        question: "Según el material, los errores de verticalidad y centración se encuadran como errores de tipo:",
-        options: [
-          { text: "Instrumentales.", correct: false, explanation: "No dependen de una falla del mecanismo interno." },
-          { text: "Naturales.", correct: false, explanation: "No son provocados por el ambiente." },
-          { text: "Personales.", correct: true, explanation: "Correcto: dependen del cuidado y atención del operador." }
-        ]
-      },
-      {
-        question: "Verdadero o Falso: Si notas un error de centración sistemático, puedes corregirlo ajustando permanentemente los tornillos del teodolito.",
-        options: [
-          { text: "Verdadero.", correct: false, explanation: "Falso: la centración no se corrige permanentemente con tornillos del instrumento." },
-          { text: "Falso.", correct: true, explanation: "Correcto: solo se puede centrar y verticalizar con precisión durante el estacionamiento." }
-        ]
-      },
-      {
-        question: "¿A qué concepto corresponde la definición: 'la menor división que el operador puede individualizar con certeza dentro de la menor división del sistema de lectura'?",
-        options: [
-          { text: "Apreciación angular.", correct: false, explanation: "La apreciación es una relación mecánica fija del instrumento." },
-          { text: "Estimación angular.", correct: true, explanation: "Correcto: depende de la agudeza visual del operario." },
-          { text: "Precisión de nonio.", correct: false, explanation: "Es un distractor que mezcla términos distintos." }
-        ]
-      },
-      {
-        question: "¿Cuál es la principal característica y función del limbo?",
-        options: [
-          { text: "Es la plataforma inferior con patas extensibles.", correct: false, explanation: "Eso corresponde al trípode o a la base, no al limbo." },
-          { text: "Es un disco grabado y graduado de 0° a 360° para leer ángulos.", correct: true, explanation: "Correcto: el limbo es el disco graduado que permite obtener el valor angular horizontal." },
-          { text: "Es la lente frontal biconvexa del anteojo.", correct: false, explanation: "Eso es el objetivo, no el limbo." }
-        ]
-      },
-      {
-        question: "Al mirar por el anteojo, además de la cruz filar principal ves dos hilos cortos paralelos al hilo horizontal. ¿Qué son y para qué sirven?",
-        options: [
-          { text: "Hilos estadimétricos, sirven para determinar distancias indirectamente.", correct: true, explanation: "Correcto: son los hilos estadimétricos usados para cálculo de distancias." },
-          { text: "Guías de colimación, sirven para apuntar el nadir.", correct: false, explanation: "No es su función real." },
-          { text: "Hilos de nivelación, sirven para verificar la inclinación.", correct: false, explanation: "No corresponden a esa función." }
-        ]
-      },
-      {
-        question: "Estás apuntando a un jalón muy distante y lo ves borroso. Para mejorar la nitidez del jalón específicamente, debes operar:",
-        options: [
-          { text: "El anillo de ajuste de la visual (junto al ojo).", correct: false, explanation: "Ese ajuste es para acomodar el ojo del operador, no el objeto." },
-          { text: "El tornillo de enfoque del anteojo (tornillo ranurado).", correct: true, explanation: "Correcto: ese tornillo sirve para enfocar el objeto según su distancia." },
-          { text: "Los tornillos de micrometría óptica.", correct: false, explanation: "Esos pertenecen al sistema de lectura angular." }
-        ]
-      },
-      {
-        question: "En el uso del trípode para un teodolito moderno con plomada óptica, para realizar el centrado, la indicación práctica inicial es:",
-        options: [
-          { text: "Clavar las 3 patas simultáneamente sobre la estaca y luego mirar por la plomada.", correct: false, explanation: "Dificulta el centrado preciso sobre la estaca." },
-          { text: "Clavar solo 1 pata, dejar 2 levantadas y mover el conjunto mirándolo por la plomada óptica hasta centrar.", correct: true, explanation: "Correcto: se centra primero con una pata firme y dos levantadas, luego se terminan de clavar." },
-          { text: "Clavar 2 patas y dejar 1 floja para moverla si la burbuja se sale.", correct: false, explanation: "No es el procedimiento descrito para el centrado inicial." }
-        ]
-      },
-      {
-        question: "¿Cuál de los siguientes niveles se corrige usando las patas extensibles del trípode (subiendo o bajando la longitud)?",
-        options: [
-          { text: "El nivel tubular de la alidada.", correct: false, explanation: "Ese se corrige con los tornillos calantes, no con las patas." },
-          { text: "El nivel de anteojo.", correct: false, explanation: "No corresponde a esta fase de estacionamiento." },
-          { text: "El nivel esférico de la plataforma.", correct: true, explanation: "Correcto: el nivel esférico se corrige ajustando las patas del trípode." }
-        ]
-      },
-      {
-        question: "Según las condiciones de fábrica, el eje vertical (V) es aquel que:",
-        options: [
-          { text: "Pasa por el centro focal de la lente y los hilos filares.", correct: false, explanation: "Eso describe el eje de colimación, no el vertical." },
-          { text: "Atraviesa el centro de la alidada y el limbo extendiéndose del cenit al nadir.", correct: true, explanation: "Correcto: ese es el eje vertical del instrumento." },
-          { text: "Es el eje de rotación (basculación) del lente telescópico.", correct: false, explanation: "Eso corresponde al eje horizontal." }
-        ]
-      },
-      {
-        question: "Estás rindiendo el examen y tu teodolito tiene un claro error de inclinación, pero no tienes permitido ajustarle los montantes. ¿Cómo consigues un rumbo válido para aprobar tu lectura?",
-        options: [
-          { text: "Apunto siempre a nivel del horizonte (h = 0°).", correct: false, explanation: "Eso no resuelve el problema para puntos elevados." },
-          { text: "Tomo lectura en I Posición y en II Posición (vuelta de campana) sobre el mismo punto y promedio los resultados de minutos y segundos.", correct: true, explanation: "Correcto: al promediar ambas posiciones se anula la influencia del error de inclinación." },
-          { text: "Multiplico la lectura por la tangente de 45°.", correct: false, explanation: "Eso no aplica como corrección práctica del rumbo." }
-        ]
-      },
-      {
-        question: "El teodolito se utiliza en topografía para planimetría de precisión. Esto significa que primordialmente su objetivo es obtener:",
-        options: [
-          { text: "Exclusivamente distancias por método de alineación a pasos.", correct: false, explanation: "Eso no define la planimetría de precisión." },
-          { text: "La proyección horizontal de los puntos en el terreno.", correct: true, explanation: "Correcto: la planimetría busca la proyección horizontal de los puntos." },
-          { text: "Diferencias de altitud a nivel del mar.", correct: false, explanation: "Eso corresponde a la altimetría." }
-        ]
-      },
-      {
-        question: "El teodolito posee tornillos de freno (fijación) y de movimientos lentos. ¿Cuándo debes usar el tornillo de movimientos lentos?",
-        options: [
-          { text: "Solo cuando el teodolito se descala durante la medición.", correct: false, explanation: "Si se descala, hay que reestacionar, no usar el movimiento lento." },
-          { text: "Después de aflojar el freno, para dar vuelta de campana al anteojo.", correct: false, explanation: "La vuelta de campana se hace con el freno liberado, no con el movimiento lento." },
-          { text: "Después de haber bloqueado el tornillo de fijación, para realizar un apunte preciso al milímetro en la cruz filar.", correct: true, explanation: "Correcto: primero se bloquea y luego se usa el movimiento lento para el ajuste fino." }
-        ]
-      },
-      {
-            "question": "El nivel del teodolito contiene un líquido que debe cumplir ciertas propiedades físicas para funcionar correctamente. ¿Cuál de las siguientes condiciones es indispensable?",
-            "options": [
-                  {
-                        "text": "Debe ser un líquido viscoso para que la burbuja se mueva lentamente y permita mayor precisión.",
-                        "correct": false,
-                        "explanation": "Incorrecta: si fuera viscoso, la burbuja no reaccionaría con agilidad a los cambios de nivel."
-                  },
-                  {
-                        "text": "Debe ser móvil, no viscoso y no congelarse, dejando una gota de aire que adopte la posición más alta.",
-                        "correct": true,
-                        "explanation": "Correcto: el líquido debe ser móvil, no viscoso, no congelarse y no atacar el vidrio, dejando una burbuja indicadora."
-                  },
-                  {
-                        "text": "Debe atacar levemente el vidrio para crear fricción y mantener la burbuja estable frente al viento.",
-                        "correct": false,
-                        "explanation": "Incorrecta: el líquido no debe atacar el vidrio para no dañar el nivel."
-                  }
-            ]
-      },
-      {
-            "question": "Al instalar el trípode en un terreno natural, el operador debe pisar con fuerza una parte específica para fijar las patas al suelo. ¿Cómo se llama la punta metálica inferior diseñada para esto?",
-            "options": [
-                  {
-                        "text": "Azuche.",
-                        "correct": true,
-                        "explanation": "Correcto: el azuche es la punta metálica inferior con la que se fijan las patas al terreno."
-                  },
-                  {
-                        "text": "Cabeza del trípode.",
-                        "correct": false,
-                        "explanation": "Incorrecta: la cabeza es la plataforma superior donde se apoya el instrumento."
-                  },
-                  {
-                        "text": "Tornillo calante.",
-                        "correct": false,
-                        "explanation": "Incorrecta: los tornillos calantes están en la plataforma del teodolito, no en el trípode."
-                  }
-            ]
-      },
-      {
-            "question": "El anteojo telescópico posee dos lentes principales con funciones distintas. ¿Cuál es la diferencia entre el \"Objetivo\" y el \"Ocular\"?",
-            "options": [
-                  {
-                        "text": "El objetivo es por donde mira el operador y el ocular es la lente frontal que apunta al prisma.",
-                        "correct": false,
-                        "explanation": "Incorrecta: están invertidas las funciones de ambos componentes."
-                  },
-                  {
-                        "text": "El objetivo proyecta los hilos del retículo y el ocular enfoca la distancia.",
-                        "correct": false,
-                        "explanation": "Incorrecta: el enfoque de distancia se hace con el tornillo de enfoque y los hilos pertenecen al retículo."
-                  },
-                  {
-                        "text": "El objetivo es la lente biconvexa frontal que apunta al objeto, y el ocular es la lente de aumento por donde el operador mira.",
-                        "correct": true,
-                        "explanation": "Correcto: el objetivo mira al objeto y el ocular es la lente de aumento cercana al ojo."
-                  }
-            ]
-      },
-      {
-            "question": "Vas a iniciar la medición y notas que la cruz filar (los hilos del retículo) se ve borrosa, aunque el objeto a lo lejos se ve nítido. ¿Qué comando debes operar?",
-            "options": [
-                  {
-                        "text": "El anillo de ajuste de la visual.",
-                        "correct": true,
-                        "explanation": "Correcto: el anillo del ocular permite enfocar la cruz filar según la visión del operador."
-                  },
-                  {
-                        "text": "El tornillo de enfoque del anteojo (tornillo ranurado).",
-                        "correct": false,
-                        "explanation": "Incorrecta: ese tornillo enfoca el objeto, no los hilos."
-                  },
-                  {
-                        "text": "Los tornillos de micrometría.",
-                        "correct": false,
-                        "explanation": "Incorrecta: la micrometría se usa en sistemas de lectura angular."
-                  }
-            ]
-      },
-      {
-            "question": "Estás rindiendo la parte teórica y te piden definir la \"Apreciación Angular\" del instrumento que estás usando. ¿A qué se refiere este término?",
-            "options": [
-                  {
-                        "text": "A la menor división que el ojo humano puede estimar a simple vista.",
-                        "correct": false,
-                        "explanation": "Incorrecta: eso define la estimación angular, que depende del operador."
-                  },
-                  {
-                        "text": "A la relación entre la menor división del limbo y el número de divisiones del nonio.",
-                        "correct": true,
-                        "explanation": "Correcto: la apreciación angular es una relación mecánica fija del instrumento."
-                  },
-                  {
-                        "text": "Al proceso de acercar la visual mediante el anillo micrométrico.",
-                        "correct": false,
-                        "explanation": "Incorrecta: no corresponde a la definición topográfica del término."
-                  }
-            ]
-      },
-      {
-            "question": "Durante el estacionamiento, ya atornillaste el teodolito al trípode, pero al mirar por la plomada óptica ves que la estaca está desplazada un par de milímetros del centro. ¿Cuál es la forma correcta de hacer este ajuste fino final?",
-            "options": [
-                  {
-                        "text": "Desclavar todas las patas y mover el trípode completo.",
-                        "correct": false,
-                        "explanation": "Incorrecta: eso deshace el centrado y la nivelación previos."
-                  },
-                  {
-                        "text": "Aflojar el tornillo central de sujeción, desplazar levemente el aparato sobre la plataforma del trípode hasta centrar, y volver a ajustar.",
-                        "correct": true,
-                        "explanation": "Correcto: el ajuste fino final se hace deslizándolo levemente sobre la plataforma y luego fijándolo otra vez."
-                  },
-                  {
-                        "text": "Usar los tres tornillos calantes para inclinar la visual de la plomada hacia la estaca.",
-                        "correct": false,
-                        "explanation": "Incorrecta: los tornillos calantes se usan para verticalizar, no para centrar planimétricamente."
-                  }
-            ]
-      },
-      {
-            "question": "Sabes que tu medición tiene \"Error de Colimación\" y \"Error de Inclinación\". Según su origen, ¿en qué categoría se encuadran estos dos errores?",
-            "options": [
-                  {
-                        "text": "Errores personales (dependen del operador).",
-                        "correct": false,
-                        "explanation": "Incorrecta: los errores personales corresponden al estacionamiento, como centración y verticalidad."
-                  },
-                  {
-                        "text": "Errores naturales (dependen del viento o la temperatura).",
-                        "correct": false,
-                        "explanation": "Incorrecta: no están relacionados con el ambiente."
-                  },
-                  {
-                        "text": "Errores instrumentales (dependen del aparato).",
-                        "correct": true,
-                        "explanation": "Correcto: colimación e inclinación son errores del instrumento, ligados a la geometría de sus ejes."
-                  }
-            ]
-      },
-      {
-            "question": "Tomas lectura de un rumbo en Posición I y luego das \"vuelta de campana\" para tomar lectura en Posición II. Promedias los minutos y segundos de ambas lecturas. ¿Qué logras con esto matemáticamente?",
-            "options": [
-                  {
-                        "text": "Obtener un rumbo completamente libre de la influencia del error de colimación o inclinación.",
-                        "correct": true,
-                        "explanation": "Correcto: al promediar ambas posiciones, la influencia del error se cancela."
-                  },
-                  {
-                        "text": "Duplicar el error para poder medirlo mecánicamente.",
-                        "correct": false,
-                        "explanation": "Incorrecta: el error se duplica al restar 180°, no al promediar."
-                  },
-                  {
-                        "text": "Compensar el error de verticalidad del aparato.",
-                        "correct": false,
-                        "explanation": "Incorrecta: la verticalidad se corrige estacionando bien el equipo."
-                  }
-            ]
-      },
-      {
-            "question": "¿Cómo se materializa o define geométricamente el Eje de Colimación (C) o Eje del Anteojo en el teodolito?",
-            "options": [
-                  {
-                        "text": "Uniendo el centro de la alidada con el centro del limbo.",
-                        "correct": false,
-                        "explanation": "Incorrecta: eso corresponde al eje vertical."
-                  },
-                  {
-                        "text": "Uniendo el centro focal del objetivo con el centro de la cruz de hilos del retículo.",
-                        "correct": true,
-                        "explanation": "Correcto: el eje de colimación une el retículo con el centro focal del objetivo."
-                  },
-                  {
-                        "text": "Pasando por los montantes a través de los cuales bascula el anteojo.",
-                        "correct": false,
-                        "explanation": "Incorrecta: eso define el eje horizontal."
-                  }
-            ]
-      },
-      {
-            "question": "Cuando lees un rumbo en el sistema de lectura, estás observando una proyección del \"Limbo\". ¿Cómo está grabado este disco?",
-            "options": [
-                  {
-                        "text": "De 0° a 360° en sentido antihorario (levógiro).",
-                        "correct": false,
-                        "explanation": "Incorrecta: la graduación clásica del limbo va en sentido horario."
-                  },
-                  {
-                        "text": "De 0° a 360° en el sentido de las agujas del reloj (dextrógiro).",
-                        "correct": true,
-                        "explanation": "Correcto: el limbo está graduado de 0° a 360° en sentido horario."
-                  },
-                  {
-                        "text": "De 0° a 100° para mediciones centesimales.",
-                        "correct": false,
-                        "explanation": "Incorrecta: el material referido trabaja en sistema sexagesimal de 0° a 360°."
-                  }
-            ]
-      },
-      {
-            "question": "Dentro del tubo del anteojo, el retículo no flota mágicamente. ¿Cómo está sostenido y ajustado mecánicamente?",
-            "options": [
-                  {
-                        "text": "Por una gota de resina inyectada al vacío.",
-                        "correct": false,
-                        "explanation": "Incorrecta: no existe ese sostén en el retículo."
-                  },
-                  {
-                        "text": "Por un eje metálico central que atraviesa el anteojo.",
-                        "correct": false,
-                        "explanation": "Incorrecta: el retículo se sostiene de otra manera."
-                  },
-                  {
-                        "text": "Es una placa de cristal sostenida por 4 tornillos que constituyen un diafragma.",
-                        "correct": true,
-                        "explanation": "Correcto: el retículo es una placa de cristal ajustada por cuatro tornillos del diafragma."
-                  }
-            ]
-      },
-      {
-            "question": "En un examen práctico, el profesor te pregunta: \"¿Por qué surge el Error de Inclinación en este aparato?\". Tú debes responder:",
-            "options": [
-                  {
-                        "text": "Porque el operador no niveló correctamente la burbuja tubular.",
-                        "correct": false,
-                        "explanation": "Incorrecta: eso describe un error personal de verticalidad, no el error instrumental de inclinación."
-                  },
-                  {
-                        "text": "Porque el Eje Horizontal no es perfectamente perpendicular al Eje Vertical (H ⟂ V).",
-                        "correct": true,
-                        "explanation": "Correcto: la inclinación aparece cuando no se cumple la perpendicularidad de fábrica entre H y V."
-                  },
-                  {
-                        "text": "Porque el Eje Vertical no coincide con la vertical del lugar (plomada).",
-                        "correct": false,
-                        "explanation": "Incorrecta: eso corresponde al error de verticalidad y centración."
-                  }
-            ]
-      },
-      {
-            "question": "Para comprobar el error de colimación, es imperativo apuntar a un objeto en el horizonte (h = 0°). Analíticamente, ¿por qué se exige que la altura angular sea cero?",
-            "options": [
-                  {
-                        "text": "Porque el seno de 0° es 1, lo que anula la refracción atmosférica.",
-                        "correct": false,
-                        "explanation": "Incorrecta: el seno de 0° es 0 y la refracción no es el motivo."
-                  },
-                  {
-                        "text": "Porque la tangente de 0° es 0, anulando así cualquier influencia del error de inclinación simultáneo.",
-                        "correct": true,
-                        "explanation": "Correcto: con h = 0° la inclinación no interviene y se mide solo la colimación."
-                  },
-                  {
-                        "text": "Porque el anteojo no puede girar verticalmente durante esta prueba.",
-                        "correct": false,
-                        "explanation": "Incorrecta: sí puede girar, pero se lo coloca intencionalmente en 0°."
-                  }
-            ]
-      },
-      {
-            "question": "A diferencia de la colimación, para verificar la Inclinación eliges un punto elevado a 45°. Matemáticamente, ¿qué ocurre en la fórmula I = i·tan(h)?",
-            "options": [
-                  {
-                        "text": "La tangente de 45° toma el valor 1, de modo que la influencia visual (I) es igual a la magnitud real del error mecánico (i).",
-                        "correct": true,
-                        "explanation": "Correcto: a 45° la tangente vale 1 y el error se muestra en su verdadera magnitud."
-                  },
-                  {
-                        "text": "El coseno de 45° anula el error de colimación remanente.",
-                        "correct": false,
-                        "explanation": "Incorrecta: la colimación se corrige aparte y no se anula con ese coseno."
-                  },
-                  {
-                        "text": "La tangente de 45° vale 0, haciendo que el error desaparezca.",
-                        "correct": false,
-                        "explanation": "Incorrecta: la tangente de 45° es 1, no 0."
-                  }
-            ]
-      },
-      {
-            "question": "De los diferentes niveles que posee un teodolito, ¿cuál es el que \"trabaja directamente con el círculo o limbo vertical\"?",
-            "options": [
-                  {
-                        "text": "El nivel tubular de alidada.",
-                        "correct": false,
-                        "explanation": "Incorrecta: ese se usa para verticalizar el instrumento."
-                  },
-                  {
-                        "text": "El nivel esférico.",
-                        "correct": false,
-                        "explanation": "Incorrecta: sirve para el calado grueso de la plataforma."
-                  },
-                  {
-                        "text": "El nivel de índice.",
-                        "correct": true,
-                        "explanation": "Correcto: el nivel de índice trabaja con el círculo vertical."
-                  }
-            ]
-      },
-      {
-            "question": "Has utilizado cintas, escuadras y jalones. Ahora pasas a usar el teodolito. Según la teoría topográfica, ¿qué límite acabas de cruzar?",
-            "options": [
-                  {
-                        "text": "Pasaste de planimetría de precisión a planimetría estelar.",
-                        "correct": false,
-                        "explanation": "Incorrecta: ese no es el nombre de las categorías del temario."
-                  },
-                  {
-                        "text": "Pasaste de realizar Planimetría Sencilla a realizar Planimetría de Precisión.",
-                        "correct": true,
-                        "explanation": "Correcto: el teodolito marca el paso a la planimetría de precisión."
-                  },
-                  {
-                        "text": "Pasaste de planimetría a altimetría pura.",
-                        "correct": false,
-                        "explanation": "Incorrecta: el teodolito sigue vinculándose a la proyección horizontal."
-                  }
-            ]
-      },
-      {
-            "question": "Estás verticalizando. Giras la alidada 180° como paso de verificación. Si la burbuja se descala, el nivel tubular está \"descorregido\". ¿Es posible trabajar con el equipo en este estado sin enviarlo a fábrica?",
-            "options": [
-                  {
-                        "text": "No, se debe suspender la medición.",
-                        "correct": false,
-                        "explanation": "Incorrecta: el procedimiento incluye corrección manual en campaña."
-                  },
-                  {
-                        "text": "Sí, realizando el procedimiento de desplazar la burbuja la mitad con los calantes y la otra mitad con los tornillos propios del nivel.",
-                        "correct": true,
-                        "explanation": "Correcto: se corrige in situ con calantes y tornillos del nivel."
-                  },
-                  {
-                        "text": "Sí, pero se debe usar el nivel esférico como reemplazo.",
-                        "correct": false,
-                        "explanation": "Incorrecta: el nivel esférico no alcanza la precisión requerida."
-                  }
-            ]
-      },
-      {
-            "question": "El procedimiento para verificar errores requiere apuntar en Posición I y luego en Posición II. ¿Qué movimiento físico implica pasar a la Posición II?",
-            "options": [
-                  {
-                        "text": "Girar solo la alidada horizontal 180°.",
-                        "correct": false,
-                        "explanation": "Incorrecta: eso no da vuelta de campana al anteojo."
-                  },
-                  {
-                        "text": "Bascular el anteojo 180° sobre su eje horizontal (vuelta de campana) y girar la alidada horizontal 180°.",
-                        "correct": true,
-                        "explanation": "Correcto: la Posición II implica la vuelta de campana y el giro correspondiente para volver a apuntar al mismo lugar."
-                  },
-                  {
-                        "text": "Invertir las patas del trípode.",
-                        "correct": false,
-                        "explanation": "Incorrecta: eso destruiría la estación."
-                  }
-            ]
-      },
-      {
-            "question": "Verdadero o Falso: Para usar la plomada óptica correctamente, debes pegar el ojo al ocular de la plomada mientras levantas dos patas del trípode en el aire y lo mueves hasta que la estaca esté en la cruz filar.",
-            "options": [
-                  {
-                        "text": "Verdadero.",
-                        "correct": true,
-                        "explanation": "Correcto: ese es el método de centrado inicial indicado con una pata clavada y dos levantadas."
-                  },
-                  {
-                        "text": "Falso.",
-                        "correct": false,
-                        "explanation": "Incorrecta: negar esta técnica contradice el procedimiento de campo."
-                  }
-            ]
-      },
-      {
-            "question": "El teodolito posee ejes cónicos en sus bloques principales. ¿Cómo se relacionan mecánicamente la Alidada y el Limbo?",
-            "options": [
-                  {
-                        "text": "No se tocan, están separados por la plataforma.",
-                        "correct": false,
-                        "explanation": "Incorrecta: en realidad encajan de forma concéntrica."
-                  },
-                  {
-                        "text": "El Limbo posee un eje cónico exterior y la Alidada posee un eje cónico interior que encaja directamente con el del limbo, permitiendo el movimiento relativo horizontal.",
-                        "correct": true,
-                        "explanation": "Correcto: la alidada encaja con el limbo para permitir el movimiento horizontal del sistema."
-                  },
-                  {
-                        "text": "Se acoplan a través del anteojo telescópico.",
-                        "correct": false,
-                        "explanation": "Incorrecta: el anteojo no forma parte del acople horizontal entre limbo y alidada."
-                  }
-            ]
-      }
-    ];
+<script>
+const quiz = [{"type": "vf", "prompt": "El Método de Compensación de ángulos horizontales exige medir exclusivamente el ángulo poligonal requerido en I Posición y II Posición del anteojo para considerar cerrada la estación.", "answer": "Falso", "explanation": "No alcanza con medir un solo ángulo: se mide el ángulo y su explemento, y luego se compensa la estación."}, {"type": "mcq", "prompt": "¿Qué maniobra mecánica específica debe realizar el operador para pasar el teodolito de la I Posición a la II Posición y continuar el método?", "options": ["Girar la alidada horizontal 180° sin alterar el lente.", "Dar vuelta de campana al anteojo.", "Desajustar los tornillos calantes y rotar el limbo."], "answer_index": 1, "explanation": "Para pasar de I a II Posición se da vuelta de campana al anteojo."}, {"type": "mcq", "prompt": "Una vez apuntada la estación de referencia en I Posición, se procede a barrer el ángulo hacia el siguiente punto. ¿En qué sentido estricto debe girarse la alidada en este primer paso?", "options": ["De derecha a izquierda (sentido antihorario).", "De izquierda a derecha (sentido horario).", "Es indistinto siempre y cuando se lea correctamente el nonio."], "answer_index": 1, "explanation": "El barrido inicial del ángulo poligonal se hace de izquierda a derecha, en sentido horario."}, {"type": "vf", "prompt": "El error instrumental de 'Arrastre' se elimina al medir en las dos posiciones del anteojo (I y II posición).", "answer": "Falso", "explanation": "La reiteración de I y II ayuda, pero el arrastre no se elimina por completo solo por repetir la lectura."}, {"type": "mcq", "prompt": "Indique cuáles de los siguientes errores no se eliminan con este método, sino que únicamente se disminuye su influencia por la reiteración.", "options": ["Colimación e Inclinación.", "Apunte y Lectura.", "Excentricidad de alidada y Giro de Trípode."], "answer_index": 1, "explanation": "Con el método se reduce la influencia de los errores de apunte y lectura."}, {"type": "vf", "prompt": "El error de Verticalidad de la estación se elimina analíticamente al aplicar la fórmula de corrección angular del Método de Compensación.", "answer": "Falso", "explanation": "La verticalidad no se compensa con la fórmula: se corrige estacionando y verticalizando bien."}, {"type": "mcq", "prompt": "La fórmula exacta utilizada para calcular el error de cierre de estación (Δ) tras sumar el ángulo y su explemento es:", "options": ["Δ = 360°00'00\" - Σ ángulos", "Δ = Σ ángulos - 180°00'00\"", "Δ = Σ ángulos - 360°00'00\""], "answer_index": 2, "explanation": "El cierre se calcula como la suma observada menos 360°00'00\"."}, {"type": "input", "prompt": "En una estación topográfica con 2 visuales, la sumatoria del ángulo AOB y su explemento (BOA) resulta en 360°00'20\". Calcule, con su signo matemático estricto, la corrección total que le corresponde a cada ángulo.", "answer_text": "-10\"", "answer_alts": ["-10", "-10 segundos"], "explanation": "Δ = +20\". La corrección por ángulo es -Δ/2 = -10\"."}, {"type": "vf", "prompt": "El 'rumbo izquierdo' del explemento coincide físicamente con la visual que ofició de 'rumbo derecho' del ángulo poligonal original.", "answer": "Verdadero", "explanation": "En el método, el rumbo izquierdo del explemento corresponde al derecho del ángulo original."}, {"type": "mcq", "prompt": "Si la corrección a aplicar en una estación con 4 visuales arroja un número con fracción decimal (ej. 2,5\"), la cátedra exige que procedamos a:", "options": ["Utilizar los decimales en todos los cálculos para no perder precisión.", "Redondear al par más próximo para trabajar exclusivamente con números enteros de segundos.", "Descartar la lectura por ser inválida."], "answer_index": 1, "explanation": "Se redondea al par más próximo para trabajar con segundos enteros."}, {"type": "mcq", "prompt": "Al medir un ángulo por el Método de Compensación en la II Posición, el barrido entre las dos visuales debe hacerse estrictamente:", "options": ["De derecha a izquierda.", "De izquierda a derecha.", "En el mismo sentido que en la I Posición."], "answer_index": 0, "explanation": "En II Posición el barrido se hace en sentido inverso al de I Posición."}, {"type": "input", "prompt": "Se tienen los siguientes rumbos promediados: Visual OA = 70°37'10\" y Visual OB = 100°25'40\". Calcule analíticamente el ángulo poligonal AOB.", "answer_text": "29°48'30\"", "answer_alts": ["29 48 30", "29°48'30"], "explanation": "AOB = RB - RI = 100°25'40\" - 70°37'10\" = 29°48'30\"."}, {"type": "input", "prompt": "Suponga un error de cierre de estación Δ = -24\" en un levantamiento con 3 visuales. ¿Cuál es el valor exacto y el signo de la corrección a aplicar a cada ángulo medido?", "answer_text": "+8\"", "answer_alts": ["+8", "8\""], "explanation": "Corrección = -Δ/3 = -(-24\")/3 = +8\"."}, {"type": "vf", "prompt": "El error provocado por la influencia de la Fuerza Tirante es de carácter sistemático, porque se ejerce una tracción constante en toda la jornada.", "answer": "Falso", "explanation": "En el material se clasifica como error accidental."}, {"type": "mcq", "prompt": "Según las especificaciones de fábrica, la longitud nominal garantizada (l0) de una cinta es válida únicamente bajo condiciones de:", "options": ["20°C, 5 kg de fuerza tirante, y suspendida en el aire.", "20°C, 5 kg de fuerza tirante, y totalmente apoyada en el piso.", "25°C, 10 kg de fuerza tirante, apoyada en el piso."], "answer_index": 1, "explanation": "La referencia de fábrica se toma a 20°C, 5 kg de fuerza tirante y apoyada en el piso."}, {"type": "mcq", "prompt": "La influencia del 'Espesor de la Agarradera' en la medición provoca que:", "options": ["La cinta avance, y por ende, se mida de menos.", "La cinta retroceda en cada cintada, por lo que siempre se medirá de más.", "La longitud se acorte temporalmente por compresión mecánica."], "answer_index": 1, "explanation": "Cada cintada agrega un pequeño exceso, por eso se mide de más."}, {"type": "vf", "prompt": "El error por 'Flexión' (catenaria) al medir una distancia en el aire, intentando salvar una depresión sin apoyar la cinta, es un error accidental porque depende del pulso del operario.", "answer": "Falso", "explanation": "La flexión se clasifica como error sistemático."}, {"type": "mcq", "prompt": "El error producido por la falta de verticalidad de una ficha topográfica al clavar un punto intermedio, está categorizado según la cátedra como:", "options": ["Sistemático y Natural.", "Accidental y Personal.", "Sistemático e Instrumental."], "answer_index": 1, "explanation": "La ficha inclinada se clasifica como error accidental y personal."}, {"type": "input", "prompt": "La temperatura de la cinta fue de 35°C. La cinta es de 50 metros y su α = 0,000011 °C⁻¹. Calcule la diferencia de longitud por temperatura (ΔLt) en esa cintada.", "answer_text": "0.00825 m", "answer_alts": ["0,00825 m", "0.00825", "0,00825"], "explanation": "ΔLt = 50 × 0,000011 × (35-20) = 0,00825 m."}, {"type": "vf", "prompt": "Si durante una cintada existe una desviación o 'Falta de Alineación', la distancia registrada será menor a la longitud real l0.", "answer": "Falso", "explanation": "La falta de alineación hace que se mida de más."}, {"type": "mcq", "prompt": "La medición con cinta con aplicación de la ecuación de la cinta, y realizando mediciones en ida y vuelta, nos permite aspirar a un error relativo de tolerancia máxima equivalente a:", "options": ["1 / 5.000", "1 / 10.000", "1 / 2.000"], "answer_index": 1, "explanation": "La tolerancia máxima indicada es 1/10.000."}, {"type": "input", "prompt": "En una cinta de 50 m, el operador realizó un levantamiento totalizando 4 tiradas, 3 cintadas y un resto de 10,50 m. Exprese la cantidad final en metros, asumiendo que 1 tirada = 10 longitudes de cinta.", "answer_text": "2160.50 m", "answer_alts": ["2160,50 m", "2160.5 m", "2160,5 m", "2160.50"], "explanation": "4 tiradas = 2000 m, 3 cintadas = 150 m, más 10,50 m: total 2160,50 m."}, {"type": "mcq", "prompt": "En un levantamiento donde el terreno posee pendiente, si se desea calcular la distancia topográfica proyectada al horizonte habiendo medido la distancia geométrica sobre el relieve, el dato indispensable a medir en terreno es:", "options": ["El azimut magnético de la línea.", "El ángulo vertical (α) o altura del horizonte.", "La temperatura y la fuerza tirante exclusivamente."], "answer_index": 1, "explanation": "Para proyectar al horizonte se necesita el ángulo vertical."}, {"type": "vf", "prompt": "El error de 'Plomada' se evita en topografía midiendo con la cinta suspendida y aplicando luego la corrección analítica de flexión.", "answer": "Falso", "explanation": "Ese error no se resuelve así; la cátedra indica evitar esa situación."}, {"type": "input", "prompt": "Para el término termodinámico de la ecuación de la cinta, si la temperatura en campo (t) es de 10°C, ¿qué signo poseerá la corrección total por temperatura Δt, asumiendo la longitud nominal garantizada por el fabricante?", "answer_text": "negativo", "answer_alts": ["-", "menor que cero"], "explanation": "Como 10°C es menor que 20°C, la corrección por temperatura es negativa."}, {"type": "mcq", "prompt": "De la siguiente lista de errores de cinta, indique cuál es el ÚNICO de carácter Sistemático Instrumental:", "options": ["Falta de Alineación.", "Influencia de la Fuerza Tirante.", "Longitud Inexacta de la cinta."], "answer_index": 2, "explanation": "La longitud inexacta de la cinta es el error sistemático instrumental."}, {"type": "mcq", "prompt": "Según las definiciones teóricas de Planimetría en Topografía de la cátedra, el Eje X corresponde a:", "options": ["El eje Horizontal.", "El eje Vertical.", "El eje de Altimetría (Z)."], "answer_index": 1, "explanation": "En la convención del material, X corresponde al eje vertical."}, {"type": "vf", "prompt": "El plano coordenado (X-Y-Z) corresponde únicamente a las mediciones de Planimetría pura.", "answer": "Falso", "explanation": "X-Y-Z corresponde a una lectura tridimensional; la planimetría pura no usa las tres componentes."}, {"type": "mcq", "prompt": "La definición exacta de 'Rumbo' dictada en el curso es:", "options": ["El ángulo vertical medido desde el plano horizontal hasta el objeto.", "El ángulo horizontal formado entre una dirección de referencia y una dirección cualquiera.", "La proyección de la distancia inclinada sobre el meridiano astronómico."], "answer_index": 1, "explanation": "Rumbo es un ángulo horizontal entre una referencia y una dirección."}, {"type": "vf", "prompt": "Si la dirección de referencia horizontal que se adopta en el teodolito es el Norte Magnético, el ángulo obtenido pasa a llamarse automáticamente Acimut.", "answer": "Falso", "explanation": "Si la referencia es Norte Magnético, se habla de rumbo magnético."}, {"type": "mcq", "prompt": "En los cálculos analíticos de rumbos conjugados, si observamos un jalón en Posición I y obtenemos un Rumbo, al observarlo en Posición II el nuevo Rumbo deberá diferir matemáticamente del primero en:", "options": ["90°", "180°", "360°"], "answer_index": 1, "explanation": "En I y II posición las lecturas difieren en 180°."}, {"type": "input", "prompt": "Está parado en el centro del sistema de coordenadas de la cátedra, con X hacia arriba y Y hacia la derecha. Si observa un punto ubicado en el primer cuadrante (Noreste), ¿qué convención de signos espera para el componente en X y el componente en Y?", "answer_text": "+ / +", "answer_alts": ["+,+", "positivo positivo", "positivos"], "explanation": "En el primer cuadrante ambos componentes son positivos."}, {"type": "mcq", "prompt": "Usted lee un ángulo en el limbo calculado como (Rumbo_Derecho - Rumbo_Izquierdo). Si este resultado fuera matemáticamente negativo durante una tabulación, el operario debería:", "options": ["Mantener el ángulo negativo, pues refleja un giro levógiro.", "Sumarle 360° puesto que en topografía no se miden ángulos horizontales negativos.", "Multiplicarlo por -1 sin mayores ajustes."], "answer_index": 1, "explanation": "En topografía no se dejan ángulos horizontales negativos: se suma 360°."}, {"type": "vf", "prompt": "Para lograr determinar planimétricamente la proyección horizontal de un punto A hacia un punto B situado sobre un terreno con desnivel, la variable conocida como 'Distancia Verdadera o Proyectada' equivale directamente a la distancia geométrica (inclinada) uniendo A y B leída sobre la cinta apoyada.", "answer": "Falso", "explanation": "La distancia proyectada al horizonte no es la misma que la geométrica inclinada."}, {"type": "input", "prompt": "Tras medir la estación compensada (O), obtiene los rumbos definitivos: Rumbo Corregido (OC) = 158°42'15\" y Rumbo Corregido (OD) = 253°32'10\". Determine el valor del ángulo horizontal CÔD.", "answer_text": "94°49'55\"", "answer_alts": ["94°49'55"], "explanation": "CÔD = OD - OC = 253°32'10\" - 158°42'15\" = 94°49'55\"."}];
 
-    const letters = ["A", "B", "C", "D"];
-    const state = {
-      index: 0,
-      answered: Array(quiz.length).fill(false),
-      selectedByQ: Array(quiz.length).fill(null),
-      score: 0,
-      correctByQ: Array(quiz.length).fill(false)
-    };
+let idx = 0;
+const state = Array.from({length: quiz.length}, () => ({answered:false, correct:null, selected:null, input:""}));
 
-    const questionEl = document.getElementById('question');
-    const optionsEl = document.getElementById('options');
-    const counterEl = document.getElementById('counter');
-    const qMetaEl = document.getElementById('qMeta');
-    const progressEl = document.getElementById('progress');
-    const hintEl = document.getElementById('hint');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const quizView = document.getElementById('quizView');
-    const summaryView = document.getElementById('summaryView');
-    const scoreBox = document.getElementById('scoreBox');
-    const restartBtn = document.getElementById('restartBtn');
+const questionEl = document.getElementById('question');
+const bodyEl = document.getElementById('body');
+const feedbackEl = document.getElementById('feedback');
+const fbTitle = document.getElementById('fbtitle');
+const fbText = document.getElementById('fbtext');
+const qcountEl = document.getElementById('qcount');
+const progressText = document.getElementById('progressText');
+const progressFill = document.getElementById('progressFill');
+const typeBadge = document.getElementById('typeBadge');
 
-    function updateHeader() {
-      counterEl.textContent = `${state.index + 1} / ${quiz.length}`;
-      qMetaEl.textContent = `Pregunta ${state.index + 1}`;
-      progressEl.style.width = `${((state.index) / quiz.length) * 100}%`;
-      prevBtn.disabled = state.index === 0;
-      nextBtn.disabled = !state.answered[state.index];
-      nextBtn.textContent = state.index === quiz.length - 1 ? 'Finalizar' : 'Siguiente';
-      hintEl.textContent = state.answered[state.index]
-        ? 'Ya elegiste una respuesta. Podés pasar a la siguiente pregunta.'
-        : 'Elegí una opción para ver si es correcta y revisar la explicación de cada alternativa.';
+document.getElementById('prevBtn').addEventListener('click', () => {
+  if (idx > 0) {
+    idx--;
+    render();
+  }
+});
+document.getElementById('nextBtn').addEventListener('click', () => {
+  if (idx < quiz.length - 1) {
+    idx++;
+    render();
+  }
+});
+document.getElementById('resetBtn').addEventListener('click', () => {
+  state[idx] = {answered:false, correct:null, selected:null, input:""};
+  render();
+});
+
+document.querySelectorAll('.chapter').forEach(ch => {
+  ch.addEventListener('click', () => {
+    const block = Number(ch.dataset.block);
+    if (block === 0) idx = 0;
+    if (block === 1) idx = 13;
+    if (block === 2) idx = 26;
+    render();
+  });
+});
+
+function escapeHTML(str) {
+  return String(str)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#039;');
+}
+
+function normalize(s) {
+  return String(s || '')
+    .toLowerCase()
+    .replace(/\s+/g,'')
+    .replace(/[°º]/g,'')
+    .replace(/,/g,'.')
+    .replace(/\u2212/g,'-')
+    .replace(/[^0-9a-z+\-\.]/g,'');
+}
+
+function render() {
+  const q = quiz[idx];
+  const st = state[idx];
+
+  qcountEl.textContent = `${idx + 1} / ${quiz.length}`;
+  progressText.textContent = `Pregunta ${idx + 1} de ${quiz.length}`;
+  progressFill.style.width = `${((idx + 1) / quiz.length) * 100}%`;
+
+  document.querySelectorAll('.chapter').forEach(ch => ch.classList.remove('active'));
+  if (idx <= 12) document.querySelector('.chapter[data-block="0"]').classList.add('active');
+  else if (idx <= 25) document.querySelector('.chapter[data-block="1"]').classList.add('active');
+  else document.querySelector('.chapter[data-block="2"]').classList.add('active');
+
+  typeBadge.textContent = q.type === 'vf' ? 'V/F' : (q.type === 'mcq' ? 'Opción múltiple' : 'Práctico');
+  questionEl.textContent = q.prompt;
+  feedbackEl.classList.remove('show');
+  fbTitle.textContent = '';
+  fbText.textContent = '';
+
+  if (q.type === 'mcq' || q.type === 'vf') {
+    bodyEl.innerHTML = '';
+    const options = q.type === 'vf' ? ['Verdadero','Falso'] : q.options;
+    options.forEach((opt, i) => {
+      const div = document.createElement('div');
+      div.className = 'opt';
+      div.innerHTML = `<span class="label">${String.fromCharCode(65+i)}.</span> ${escapeHTML(opt)}`;
+      div.addEventListener('click', () => handleMCQ(i));
+      bodyEl.appendChild(div);
+    });
+    if (st.answered) {
+      showMCQResult(st.selected);
     }
-
-    function renderQuestion() {
-      const q = quiz[state.index];
-      questionEl.textContent = q.question;
-      optionsEl.innerHTML = '';
-      q.options.forEach((opt, i) => {
-        const div = document.createElement('div');
-        div.className = 'option';
-        div.dataset.index = i;
-        div.innerHTML = `
-          <div class="row">
-            <div class="badge">${letters[i] || String(i+1)}</div>
-            <div class="opt-text">${opt.text}</div>
-          </div>
-          <div class="feedback"></div>
-        `;
-        div.addEventListener('click', () => handleAnswer(i));
-        optionsEl.appendChild(div);
-      });
-
-      if (state.answered[state.index]) {
-        revealCurrent(state.selectedByQ[state.index]);
-      }
-      updateHeader();
+  } else {
+    bodyEl.innerHTML = `
+      <input id="answerInput" class="inputbox" placeholder="Escribe tu respuesta aquí..." value="${escapeHTML(st.input)}" />
+      <div class="helper">Escribe la respuesta final con números, signos y unidades si corresponde. Luego presiona Verificar.</div>
+    `;
+    const input = document.getElementById('answerInput');
+    input.addEventListener('input', e => { st.input = e.target.value; });
+    const verify = document.createElement('button');
+    verify.textContent = 'Verificar';
+    verify.style.marginTop = '14px';
+    verify.addEventListener('click', () => handleInput());
+    bodyEl.appendChild(verify);
+    if (st.answered) {
+      feedbackEl.classList.add('show');
+      fbTitle.textContent = st.correct ? 'Respuesta correcta' : 'Respuesta no exacta';
+      fbText.textContent = q.explanation + (q.answer_text ? ` Respuesta esperada: ${q.answer_text}.` : '');
+      const inputEl = document.getElementById('answerInput');
+      if (inputEl) inputEl.style.borderColor = st.correct ? 'var(--ok)' : 'var(--bad)';
     }
+  }
 
-    function handleAnswer(selectedIndex) {
-      if (state.answered[state.index]) return;
-      const q = quiz[state.index];
-      const isCorrect = q.options[selectedIndex].correct;
-      state.answered[state.index] = true;
-      state.selectedByQ[state.index] = selectedIndex;
-      state.correctByQ[state.index] = isCorrect;
-      if (isCorrect) state.score += 1;
-      revealCurrent(selectedIndex);
-      updateHeader();
+  document.getElementById('prevBtn').disabled = idx === 0;
+  document.getElementById('nextBtn').disabled = idx === quiz.length - 1;
+}
+
+function clearMarks() {
+  document.querySelectorAll('.opt').forEach(o => {
+    o.classList.remove('correct','incorrect','locked');
+    const mark = o.querySelector('.mark');
+    if (mark) mark.remove();
+  });
+}
+
+function showMCQResult(selectedIndex) {
+  const q = quiz[idx];
+  clearMarks();
+  const opts = document.querySelectorAll('.opt');
+  const correctIndex = q.type === 'vf' ? (q.answer === 'Verdadero' ? 0 : 1) : q.answer_index;
+
+  opts.forEach((o, i) => {
+    o.classList.add('locked');
+    if (i === correctIndex) {
+      o.classList.add('correct');
+      o.insertAdjacentHTML('beforeend', '<span class="mark ok">Correcta</span>');
     }
-
-    function revealCurrent(selectedIndex = null) {
-      const q = quiz[state.index];
-      const cards = [...optionsEl.querySelectorAll('.option')];
-      cards.forEach((card, i) => {
-        const opt = q.options[i];
-        const fb = card.querySelector('.feedback');
-        card.classList.add('locked');
-        card.style.pointerEvents = 'none';
-
-        if (opt.correct) {
-          card.classList.add('correct');
-          fb.innerHTML = `<div class="status">✓ Respuesta correcta</div>${escapeHtml(opt.explanation)}`;
-        } else {
-          card.classList.add('neutral');
-          if (selectedIndex === i) {
-            card.classList.remove('neutral');
-            card.classList.add('incorrect');
-            fb.innerHTML = `<div class="status">✕ No exactamente</div>${escapeHtml(opt.explanation)}`;
-          } else {
-            fb.innerHTML = `<div class="status">No correcta</div>${escapeHtml(opt.explanation)}`;
-          }
-        }
-      });
+    if (i === selectedIndex && i !== correctIndex) {
+      o.classList.add('incorrect');
+      o.insertAdjacentHTML('beforeend', '<span class="mark bad">Elegida</span>');
     }
+  });
 
-    function escapeHtml(text) {
-      return String(text)
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#39;');
-    }
+  feedbackEl.classList.add('show');
+  fbTitle.textContent = selectedIndex === correctIndex ? 'Respuesta correcta' : 'Respuesta incorrecta';
+  fbText.textContent = q.explanation;
+}
 
-    function next() {
-      if (!state.answered[state.index]) return;
-      if (state.index === quiz.length - 1) {
-        showSummary();
-        return;
-      }
-      state.index += 1;
-      renderQuestion();
-    }
+function handleMCQ(i) {
+  const q = quiz[idx];
+  const st = state[idx];
+  const correctIndex = q.type === 'vf' ? (q.answer === 'Verdadero' ? 0 : 1) : q.answer_index;
+  st.answered = true;
+  st.selected = i;
+  st.correct = i === correctIndex;
+  showMCQResult(i);
+}
 
-    function prev() {
-      if (state.index === 0) return;
-      state.index -= 1;
-      renderQuestion();
-    }
+function handleInput() {
+  const q = quiz[idx];
+  const st = state[idx];
+  const value = normalize(st.input);
+  const target = normalize(q.answer_text);
+  const alt = q.answer_alts ? q.answer_alts.map(normalize) : [];
+  const ok = value === target || alt.includes(value);
+  st.answered = true;
+  st.correct = ok;
+  feedbackEl.classList.add('show');
+  fbTitle.textContent = ok ? 'Respuesta correcta' : 'Respuesta no exacta';
+  fbText.textContent = q.explanation + (q.answer_text ? ` Respuesta esperada: ${q.answer_text}.` : '');
+  render();
+}
 
-    function showSummary() {
-      quizView.style.display = 'none';
-      summaryView.style.display = 'block';
-      scoreBox.textContent = `Puntaje: ${state.score} / ${quiz.length}`;
-      progressEl.style.width = '100%';
-      counterEl.textContent = `${quiz.length} / ${quiz.length}`;
-    }
-
-    function restart() {
-      state.index = 0;
-      state.score = 0;
-      state.answered = Array(quiz.length).fill(false);
-      state.correctByQ = Array(quiz.length).fill(false);
-      summaryView.style.display = 'none';
-      quizView.style.display = 'block';
-      renderQuestion();
-    }
-
-    prevBtn.addEventListener('click', prev);
-    nextBtn.addEventListener('click', next);
-    restartBtn.addEventListener('click', restart);
-
-    renderQuestion();
-  </script>
+render();
+</script>
 </body>
 </html>
