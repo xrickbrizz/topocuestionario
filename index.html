@@ -3,544 +3,641 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Cuestionario de Autoevaluación - Topografía</title>
+<title>Cuestionario de Autoevaluación - Método de Rumbos</title>
 <style>
-:root {
-  --bg: #f3f3ef;
-  --panel: #ffffff;
-  --panel-2: #f7f7f4;
-  --text: #111111;
-  --muted: #5a5a5a;
-  --line: #d9d9d3;
-  --line-strong: #1b1b1b;
-  --ok: #0f7a3b;
-  --bad: #a11b1b;
-  --soft-ok: #eef8f1;
-  --soft-bad: #fbeeee;
-  --accent: #111111;
-}
+  :root{
+    --bg:#f4f4f2;
+    --card:#ffffff;
+    --text:#111111;
+    --muted:#5a5a5a;
+    --line:#d9d9d6;
+    --soft:#f7f7f6;
+    --soft2:#ededeb;
+    --shadow: 0 18px 45px rgba(0,0,0,.08);
+    --radius: 22px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(0,0,0,.04), transparent 34%),
+      linear-gradient(180deg, #fbfbfa 0%, #f3f3f1 100%);
+    color:var(--text);
+  }
+  .wrap{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 34px 18px 48px;
+  }
+  .hero{
+    display:flex;
+    justify-content:space-between;
+    gap:18px;
+    align-items:end;
+    margin-bottom:18px;
+    flex-wrap:wrap;
+  }
+  .title{
+    font-size: clamp(28px, 3.8vw, 44px);
+    line-height:1.02;
+    letter-spacing:-0.04em;
+    margin:0;
+    font-weight:800;
+  }
+  .subtitle{
+    margin:10px 0 0;
+    color:var(--muted);
+    font-size:15px;
+    max-width: 760px;
+  }
+  .meta{
+    text-align:right;
+    min-width: 220px;
+  }
+  .chiprow{display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap;}
+  .chip{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    background:rgba(255,255,255,.8);
+    font-size:13px;
+    color:#222;
+    box-shadow:0 6px 18px rgba(0,0,0,.04);
+    backdrop-filter: blur(6px);
+  }
+  .progress{
+    margin-top:10px;
+    width:100%;
+    height:10px;
+    background:var(--soft2);
+    border-radius:999px;
+    overflow:hidden;
+    border:1px solid #ddd;
+  }
+  .bar{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, #111 0%, #444 100%);
+    border-radius:inherit;
+    transition:width .35s ease;
+  }
 
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  background:
-    radial-gradient(circle at top, rgba(255,255,255,0.92), rgba(243,243,239,1) 48%);
-  color: var(--text);
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-}
-
-.shell {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 22px;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
-  gap: 16px;
-  margin-bottom: 18px;
-}
-
-.titleblock h1 {
-  margin: 0;
-  font-size: 28px;
-  letter-spacing: -0.03em;
-}
-.titleblock p {
-  margin: 6px 0 0;
-  color: var(--muted);
-  font-size: 14px;
-}
-
-.progresswrap {
-  min-width: 220px;
-  text-align: right;
-}
-.progresstext {
-  font-size: 13px;
-  color: var(--muted);
-  margin-bottom: 8px;
-}
-.progressbar {
-  width: 220px;
-  height: 10px;
-  border-radius: 999px;
-  background: #e3e3dc;
-  overflow: hidden;
-  border: 1px solid var(--line);
-}
-.progressbar > div {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, #111, #444);
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 280px 1fr 310px;
-  gap: 16px;
-  align-items: start;
-}
-
-.card {
-  background: rgba(255,255,255,0.85);
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  box-shadow: 0 10px 32px rgba(0,0,0,0.05);
-  backdrop-filter: blur(6px);
-}
-
-.sidebar {
-  padding: 16px;
-  position: sticky;
-  top: 16px;
-}
-
-.sidebar h3, .studio h3 {
-  margin: 0 0 12px;
-  font-size: 16px;
-  letter-spacing: -0.02em;
-}
-
-.chapter {
-  padding: 12px 12px;
-  border-radius: 14px;
-  border: 1px solid var(--line);
-  background: var(--panel-2);
-  margin-bottom: 10px;
-  cursor: pointer;
-  transition: transform .15s ease, border-color .15s ease, background .15s ease;
-}
-.chapter:hover { transform: translateY(-1px); border-color: #bdbdb4; }
-.chapter.active {
-  border-color: var(--line-strong);
-  background: #efefe9;
-}
-.chapter small {
-  display:block;
-  color: var(--muted);
-  margin-top: 2px;
-}
-
-.main {
-  padding: 18px;
-}
-
-.qmeta {
-  display:flex;
-  justify-content: space-between;
-  align-items:center;
-  gap: 12px;
-  margin-bottom: 10px;
-}
-.badge {
-  display:inline-flex;
-  align-items:center;
-  gap: 8px;
-  padding: 7px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: #fff;
-  font-size: 12px;
-  color: var(--muted);
-}
-.qcount {
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.question {
-  font-size: 26px;
-  line-height: 1.22;
-  margin: 10px 0 18px;
-  letter-spacing: -0.03em;
-}
-
-.subtext {
-  color: var(--muted);
-  font-size: 14px;
-  margin-bottom: 18px;
-}
-
-.options {
-  display: grid;
-  gap: 12px;
-}
-
-.opt {
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 15px 16px;
-  background: #fff;
-  cursor: pointer;
-  transition: transform .15s ease, border-color .15s ease, background .15s ease;
-  position: relative;
-}
-.opt:hover { transform: translateY(-1px); border-color: #aaaaa1; }
-.opt .label {
-  font-weight: 700;
-  margin-right: 10px;
-}
-.opt.correct {
-  border-color: var(--ok);
-  background: var(--soft-ok);
-}
-.opt.incorrect {
-  border-color: var(--bad);
-  background: var(--soft-bad);
-}
-.opt.locked {
-  cursor: default;
-}
-.mark {
-  position: absolute;
-  right: 14px;
-  top: 14px;
-  font-size: 13px;
-  font-weight: 700;
-}
-.mark.ok { color: var(--ok); }
-.mark.bad { color: var(--bad); }
-
-.feedback {
-  margin-top: 14px;
-  border: 1px solid var(--line);
-  background: #fbfbf8;
-  padding: 14px 15px;
-  border-radius: 16px;
-  display:none;
-}
-.feedback.show { display:block; }
-.feedback h4 {
-  margin: 0 0 8px;
-  font-size: 14px;
-}
-.feedback p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.45;
-}
-
-.actions {
-  display:flex;
-  gap: 10px;
-  margin-top: 18px;
-  flex-wrap: wrap;
-}
-button {
-  border: 1px solid var(--line-strong);
-  background: #111;
-  color: #fff;
-  padding: 11px 15px;
-  border-radius: 14px;
-  font-weight: 700;
-  cursor: pointer;
-}
-button.secondary {
-  background: #fff;
-  color: #111;
-  border-color: var(--line);
-}
-button:disabled {
-  opacity: .45;
-  cursor: not-allowed;
-}
-
-.inputbox {
-  width: 100%;
-  min-height: 54px;
-  border-radius: 16px;
-  border: 1px solid var(--line);
-  padding: 14px 15px;
-  font-size: 16px;
-  outline: none;
-  background: #fff;
-  color: var(--text);
-}
-.inputbox:focus {
-  border-color: var(--line-strong);
-}
-.helper {
-  margin-top: 10px;
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.studio {
-  padding: 16px;
-  position: sticky;
-  top: 16px;
-}
-.note {
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 14px;
-  background: #fafafa;
-  margin-bottom: 10px;
-}
-.note strong {
-  display:block;
-  font-size: 13px;
-  margin-bottom: 4px;
-}
-.note span {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.4;
-}
-
-.footerline {
-  margin-top: 18px;
-  color: var(--muted);
-  font-size: 12px;
-  border-top: 1px solid var(--line);
-  padding-top: 12px;
-}
-
-@media (max-width: 1100px) {
-  .grid { grid-template-columns: 1fr; }
-  .sidebar, .studio { position: static; }
-  .progresswrap { min-width: auto; text-align:left; }
-  .progressbar { width: 100%; }
-}
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow:hidden;
+  }
+  .cardHead{
+    padding:24px 24px 0;
+  }
+  .qtype{
+    display:inline-flex;
+    padding:6px 10px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    font-size:12px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:#333;
+    background:var(--soft);
+    margin-bottom:14px;
+  }
+  .question{
+    font-size: clamp(20px, 2.4vw, 30px);
+    line-height:1.25;
+    letter-spacing:-0.03em;
+    margin:0 0 10px;
+    font-weight:800;
+  }
+  .questionSmall{
+    color:var(--muted);
+    margin:0 0 18px;
+    line-height:1.6;
+    font-size:15px;
+  }
+  .content{
+    padding: 0 24px 22px;
+  }
+  .options{
+    display:grid;
+    gap:12px;
+  }
+  .option{
+    border:1.5px solid var(--line);
+    background:linear-gradient(180deg, #fff 0%, #fafafa 100%);
+    border-radius:18px;
+    padding:16px 16px 14px;
+    cursor:pointer;
+    transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease, background .16s ease;
+    position:relative;
+  }
+  .option:hover{ transform: translateY(-1px); border-color:#bdbdbd; box-shadow:0 10px 22px rgba(0,0,0,.06);}
+  .option.locked{cursor:default}
+  .optTop{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+  }
+  .badge{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:#fff;
+    display:grid;
+    place-items:center;
+    font-weight:700;
+    font-size:13px;
+    flex:0 0 auto;
+  }
+  .optText{
+    font-size:16px;
+    line-height:1.45;
+    color:#111;
+    font-weight:600;
+    flex:1;
+  }
+  .optFeedback{
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1px dashed var(--line);
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.55;
+    display:none;
+  }
+  .option.correct{
+    background: #111;
+    border-color:#111;
+    box-shadow:0 12px 26px rgba(0,0,0,.12);
+  }
+  .option.correct .badge,
+  .option.correct .optText,
+  .option.correct .optFeedback{
+    color:#fff;
+  }
+  .option.correct .badge{
+    background:#fff;
+    color:#111;
+    border-color:#fff;
+  }
+  .option.correct .optFeedback{
+    border-top:1px solid rgba(255,255,255,.18);
+  }
+  .option.incorrect{
+    background:#f2f2f1;
+    border-color:#bdbdbd;
+  }
+  .option.incorrect .badge{
+    background:#fff;
+    color:#222;
+  }
+  .option.incorrect .optFeedback{
+    display:block;
+  }
+  .option.correct .optFeedback,
+  .option.show .optFeedback{
+    display:block;
+  }
+  .option.selected{
+    outline:2px solid rgba(0,0,0,.06);
+  }
+  .summary{
+    margin-top:16px;
+    border:1px solid var(--line);
+    border-radius:18px;
+    background:var(--soft);
+    padding:16px;
+    display:none;
+  }
+  .summary strong{display:block; margin-bottom:6px;}
+  .summary p{margin:0; color:#333; line-height:1.55;}
+  .footer{
+    display:flex;
+    gap:12px;
+    justify-content:space-between;
+    align-items:center;
+    padding: 0 24px 24px;
+    flex-wrap:wrap;
+  }
+  .btns{display:flex; gap:10px; flex-wrap:wrap;}
+  button{
+    border:1px solid var(--line);
+    background:#fff;
+    color:#111;
+    border-radius:14px;
+    padding:12px 16px;
+    font-weight:700;
+    cursor:pointer;
+    transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+    box-shadow:0 8px 18px rgba(0,0,0,.05);
+  }
+  button:hover{transform: translateY(-1px); background:#fafafa;}
+  button.primary{
+    background:#111;
+    color:#fff;
+    border-color:#111;
+  }
+  button.primary:hover{background:#222;}
+  .small{
+    color:var(--muted);
+    font-size:13px;
+  }
+  .finish{
+    text-align:center;
+    padding: 42px 24px;
+  }
+  .finish h2{
+    margin:0 0 10px;
+    font-size:32px;
+    letter-spacing:-.03em;
+  }
+  .finish p{ margin:0; color:var(--muted); line-height:1.6; }
+  .score{
+    font-weight:800;
+    color:#111;
+  }
+  @media (max-width: 720px){
+    .meta{width:100%; text-align:left}
+    .chiprow{justify-content:flex-start}
+    .cardHead,.content,.footer{padding-left:16px; padding-right:16px;}
+    .question{font-size:24px;}
+  }
 </style>
 </head>
 <body>
-  <div class="shell">
-    <div class="header">
-      <div class="titleblock">
-        <h1>CUESTIONARIO DE AUTOEVALUACIÓN</h1>
-        <p>Topografía · método práctico, respuesta inmediata y explicación al seleccionar.</p>
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <h1 class="title">Cuestionario de Autoevaluación</h1>
+        <p class="subtitle">Método de Rumbos — formato práctico, con corrección inmediata, explicación y cierre visual elegante en blanco y negro.</p>
       </div>
-      <div class="progresswrap">
-        <div class="progresstext" id="progressText">Pregunta 1 de 35</div>
-        <div class="progressbar"><div id="progressFill"></div></div>
+      <div class="meta">
+        <div class="chiprow">
+          <div class="chip" id="chipProgress">Pregunta 1 de 20</div>
+          <div class="chip" id="chipScore">Aciertos: 0</div>
+        </div>
+        <div class="progress"><div class="bar" id="bar"></div></div>
       </div>
     </div>
 
-    <div class="grid">
-      <aside class="card sidebar">
-        <h3>Bloques</h3>
-        <div class="chapter active" data-block="0">
-          Método de Compensación
-          <small>Preguntas 1 a 13</small>
+    <div class="card" id="quizCard">
+      <div class="cardHead">
+        <div class="qtype" id="qtype">Opción múltiple</div>
+        <h2 class="question" id="question"></h2>
+        <p class="questionSmall" id="questionSmall"></p>
+      </div>
+      <div class="content">
+        <div class="options" id="options"></div>
+        <div class="summary" id="summary"></div>
+      </div>
+      <div class="footer">
+        <div class="small" id="smallNote">Elegí una opción para ver la corrección y la explicación.</div>
+        <div class="btns">
+          <button id="prevBtn" type="button">Anterior</button>
+          <button id="nextBtn" class="primary" type="button">Siguiente</button>
+          <button id="restartBtn" type="button" style="display:none;">Reiniciar</button>
         </div>
-        <div class="chapter" data-block="1">
-          Medición con cinta
-          <small>Preguntas 14 a 26</small>
-        </div>
-        <div class="chapter" data-block="2">
-          Coordenadas y rumbos
-          <small>Preguntas 27 a 35</small>
-        </div>
-        <div class="footerline">Diseño en blanco y negro elegante · estilo limpio de estudio.</div>
-      </aside>
-
-      <main class="card main">
-        <div class="qmeta">
-          <div class="badge" id="typeBadge">V/F</div>
-          <div class="qcount" id="qcount">1 / 35</div>
-        </div>
-        <div class="question" id="question"></div>
-        <div class="subtext" id="subtext">Elegí una opción o escribe tu respuesta cuando corresponda.</div>
-        <div id="body"></div>
-        <div class="feedback" id="feedback">
-          <h4 id="fbtitle"></h4>
-          <p id="fbtext"></p>
-        </div>
-        <div class="actions">
-          <button class="secondary" id="prevBtn">Anterior</button>
-          <button class="secondary" id="resetBtn">Reiniciar intento</button>
-          <button id="nextBtn">Siguiente</button>
-        </div>
-      </main>
-
-      <aside class="card studio">
-        <h3>Guía rápida</h3>
-        <div class="note"><strong>Cómo responde</strong><span>En preguntas de opción múltiple, al tocar una opción se marca la correcta, la incorrecta y aparece la explicación.</span></div>
-        <div class="note"><strong>Preguntas prácticas</strong><span>Las de cálculo o procedimiento se resuelven escribiendo la respuesta y luego presionando verificar.</span></div>
-        <div class="note"><strong>Estilo</strong><span>Se mantiene sobrio, claro y fácil de imprimir o estudiar.</span></div>
-      </aside>
+      </div>
     </div>
   </div>
 
 <script>
-const quiz = [{"type": "vf", "prompt": "El Método de Compensación de ángulos horizontales exige medir exclusivamente el ángulo poligonal requerido en I Posición y II Posición del anteojo para considerar cerrada la estación.", "answer": "Falso", "explanation": "No alcanza con medir un solo ángulo: se mide el ángulo y su explemento, y luego se compensa la estación."}, {"type": "mcq", "prompt": "¿Qué maniobra mecánica específica debe realizar el operador para pasar el teodolito de la I Posición a la II Posición y continuar el método?", "options": ["Girar la alidada horizontal 180° sin alterar el lente.", "Dar vuelta de campana al anteojo.", "Desajustar los tornillos calantes y rotar el limbo."], "answer_index": 1, "explanation": "Para pasar de I a II Posición se da vuelta de campana al anteojo."}, {"type": "mcq", "prompt": "Una vez apuntada la estación de referencia en I Posición, se procede a barrer el ángulo hacia el siguiente punto. ¿En qué sentido estricto debe girarse la alidada en este primer paso?", "options": ["De derecha a izquierda (sentido antihorario).", "De izquierda a derecha (sentido horario).", "Es indistinto siempre y cuando se lea correctamente el nonio."], "answer_index": 1, "explanation": "El barrido inicial del ángulo poligonal se hace de izquierda a derecha, en sentido horario."}, {"type": "vf", "prompt": "El error instrumental de 'Arrastre' se elimina al medir en las dos posiciones del anteojo (I y II posición).", "answer": "Falso", "explanation": "La reiteración de I y II ayuda, pero el arrastre no se elimina por completo solo por repetir la lectura."}, {"type": "mcq", "prompt": "Indique cuáles de los siguientes errores no se eliminan con este método, sino que únicamente se disminuye su influencia por la reiteración.", "options": ["Colimación e Inclinación.", "Apunte y Lectura.", "Excentricidad de alidada y Giro de Trípode."], "answer_index": 1, "explanation": "Con el método se reduce la influencia de los errores de apunte y lectura."}, {"type": "vf", "prompt": "El error de Verticalidad de la estación se elimina analíticamente al aplicar la fórmula de corrección angular del Método de Compensación.", "answer": "Falso", "explanation": "La verticalidad no se compensa con la fórmula: se corrige estacionando y verticalizando bien."}, {"type": "mcq", "prompt": "La fórmula exacta utilizada para calcular el error de cierre de estación (Δ) tras sumar el ángulo y su explemento es:", "options": ["Δ = 360°00'00\" - Σ ángulos", "Δ = Σ ángulos - 180°00'00\"", "Δ = Σ ángulos - 360°00'00\""], "answer_index": 2, "explanation": "El cierre se calcula como la suma observada menos 360°00'00\"."}, {"type": "input", "prompt": "En una estación topográfica con 2 visuales, la sumatoria del ángulo AOB y su explemento (BOA) resulta en 360°00'20\". Calcule, con su signo matemático estricto, la corrección total que le corresponde a cada ángulo.", "answer_text": "-10\"", "answer_alts": ["-10", "-10 segundos"], "explanation": "Δ = +20\". La corrección por ángulo es -Δ/2 = -10\"."}, {"type": "vf", "prompt": "El 'rumbo izquierdo' del explemento coincide físicamente con la visual que ofició de 'rumbo derecho' del ángulo poligonal original.", "answer": "Verdadero", "explanation": "En el método, el rumbo izquierdo del explemento corresponde al derecho del ángulo original."}, {"type": "mcq", "prompt": "Si la corrección a aplicar en una estación con 4 visuales arroja un número con fracción decimal (ej. 2,5\"), la cátedra exige que procedamos a:", "options": ["Utilizar los decimales en todos los cálculos para no perder precisión.", "Redondear al par más próximo para trabajar exclusivamente con números enteros de segundos.", "Descartar la lectura por ser inválida."], "answer_index": 1, "explanation": "Se redondea al par más próximo para trabajar con segundos enteros."}, {"type": "mcq", "prompt": "Al medir un ángulo por el Método de Compensación en la II Posición, el barrido entre las dos visuales debe hacerse estrictamente:", "options": ["De derecha a izquierda.", "De izquierda a derecha.", "En el mismo sentido que en la I Posición."], "answer_index": 0, "explanation": "En II Posición el barrido se hace en sentido inverso al de I Posición."}, {"type": "input", "prompt": "Se tienen los siguientes rumbos promediados: Visual OA = 70°37'10\" y Visual OB = 100°25'40\". Calcule analíticamente el ángulo poligonal AOB.", "answer_text": "29°48'30\"", "answer_alts": ["29 48 30", "29°48'30"], "explanation": "AOB = RB - RI = 100°25'40\" - 70°37'10\" = 29°48'30\"."}, {"type": "input", "prompt": "Suponga un error de cierre de estación Δ = -24\" en un levantamiento con 3 visuales. ¿Cuál es el valor exacto y el signo de la corrección a aplicar a cada ángulo medido?", "answer_text": "+8\"", "answer_alts": ["+8", "8\""], "explanation": "Corrección = -Δ/3 = -(-24\")/3 = +8\"."}, {"type": "vf", "prompt": "El error provocado por la influencia de la Fuerza Tirante es de carácter sistemático, porque se ejerce una tracción constante en toda la jornada.", "answer": "Falso", "explanation": "En el material se clasifica como error accidental."}, {"type": "mcq", "prompt": "Según las especificaciones de fábrica, la longitud nominal garantizada (l0) de una cinta es válida únicamente bajo condiciones de:", "options": ["20°C, 5 kg de fuerza tirante, y suspendida en el aire.", "20°C, 5 kg de fuerza tirante, y totalmente apoyada en el piso.", "25°C, 10 kg de fuerza tirante, apoyada en el piso."], "answer_index": 1, "explanation": "La referencia de fábrica se toma a 20°C, 5 kg de fuerza tirante y apoyada en el piso."}, {"type": "mcq", "prompt": "La influencia del 'Espesor de la Agarradera' en la medición provoca que:", "options": ["La cinta avance, y por ende, se mida de menos.", "La cinta retroceda en cada cintada, por lo que siempre se medirá de más.", "La longitud se acorte temporalmente por compresión mecánica."], "answer_index": 1, "explanation": "Cada cintada agrega un pequeño exceso, por eso se mide de más."}, {"type": "vf", "prompt": "El error por 'Flexión' (catenaria) al medir una distancia en el aire, intentando salvar una depresión sin apoyar la cinta, es un error accidental porque depende del pulso del operario.", "answer": "Falso", "explanation": "La flexión se clasifica como error sistemático."}, {"type": "mcq", "prompt": "El error producido por la falta de verticalidad de una ficha topográfica al clavar un punto intermedio, está categorizado según la cátedra como:", "options": ["Sistemático y Natural.", "Accidental y Personal.", "Sistemático e Instrumental."], "answer_index": 1, "explanation": "La ficha inclinada se clasifica como error accidental y personal."}, {"type": "input", "prompt": "La temperatura de la cinta fue de 35°C. La cinta es de 50 metros y su α = 0,000011 °C⁻¹. Calcule la diferencia de longitud por temperatura (ΔLt) en esa cintada.", "answer_text": "0.00825 m", "answer_alts": ["0,00825 m", "0.00825", "0,00825"], "explanation": "ΔLt = 50 × 0,000011 × (35-20) = 0,00825 m."}, {"type": "vf", "prompt": "Si durante una cintada existe una desviación o 'Falta de Alineación', la distancia registrada será menor a la longitud real l0.", "answer": "Falso", "explanation": "La falta de alineación hace que se mida de más."}, {"type": "mcq", "prompt": "La medición con cinta con aplicación de la ecuación de la cinta, y realizando mediciones en ida y vuelta, nos permite aspirar a un error relativo de tolerancia máxima equivalente a:", "options": ["1 / 5.000", "1 / 10.000", "1 / 2.000"], "answer_index": 1, "explanation": "La tolerancia máxima indicada es 1/10.000."}, {"type": "input", "prompt": "En una cinta de 50 m, el operador realizó un levantamiento totalizando 4 tiradas, 3 cintadas y un resto de 10,50 m. Exprese la cantidad final en metros, asumiendo que 1 tirada = 10 longitudes de cinta.", "answer_text": "2160.50 m", "answer_alts": ["2160,50 m", "2160.5 m", "2160,5 m", "2160.50"], "explanation": "4 tiradas = 2000 m, 3 cintadas = 150 m, más 10,50 m: total 2160,50 m."}, {"type": "mcq", "prompt": "En un levantamiento donde el terreno posee pendiente, si se desea calcular la distancia topográfica proyectada al horizonte habiendo medido la distancia geométrica sobre el relieve, el dato indispensable a medir en terreno es:", "options": ["El azimut magnético de la línea.", "El ángulo vertical (α) o altura del horizonte.", "La temperatura y la fuerza tirante exclusivamente."], "answer_index": 1, "explanation": "Para proyectar al horizonte se necesita el ángulo vertical."}, {"type": "vf", "prompt": "El error de 'Plomada' se evita en topografía midiendo con la cinta suspendida y aplicando luego la corrección analítica de flexión.", "answer": "Falso", "explanation": "Ese error no se resuelve así; la cátedra indica evitar esa situación."}, {"type": "input", "prompt": "Para el término termodinámico de la ecuación de la cinta, si la temperatura en campo (t) es de 10°C, ¿qué signo poseerá la corrección total por temperatura Δt, asumiendo la longitud nominal garantizada por el fabricante?", "answer_text": "negativo", "answer_alts": ["-", "menor que cero"], "explanation": "Como 10°C es menor que 20°C, la corrección por temperatura es negativa."}, {"type": "mcq", "prompt": "De la siguiente lista de errores de cinta, indique cuál es el ÚNICO de carácter Sistemático Instrumental:", "options": ["Falta de Alineación.", "Influencia de la Fuerza Tirante.", "Longitud Inexacta de la cinta."], "answer_index": 2, "explanation": "La longitud inexacta de la cinta es el error sistemático instrumental."}, {"type": "mcq", "prompt": "Según las definiciones teóricas de Planimetría en Topografía de la cátedra, el Eje X corresponde a:", "options": ["El eje Horizontal.", "El eje Vertical.", "El eje de Altimetría (Z)."], "answer_index": 1, "explanation": "En la convención del material, X corresponde al eje vertical."}, {"type": "vf", "prompt": "El plano coordenado (X-Y-Z) corresponde únicamente a las mediciones de Planimetría pura.", "answer": "Falso", "explanation": "X-Y-Z corresponde a una lectura tridimensional; la planimetría pura no usa las tres componentes."}, {"type": "mcq", "prompt": "La definición exacta de 'Rumbo' dictada en el curso es:", "options": ["El ángulo vertical medido desde el plano horizontal hasta el objeto.", "El ángulo horizontal formado entre una dirección de referencia y una dirección cualquiera.", "La proyección de la distancia inclinada sobre el meridiano astronómico."], "answer_index": 1, "explanation": "Rumbo es un ángulo horizontal entre una referencia y una dirección."}, {"type": "vf", "prompt": "Si la dirección de referencia horizontal que se adopta en el teodolito es el Norte Magnético, el ángulo obtenido pasa a llamarse automáticamente Acimut.", "answer": "Falso", "explanation": "Si la referencia es Norte Magnético, se habla de rumbo magnético."}, {"type": "mcq", "prompt": "En los cálculos analíticos de rumbos conjugados, si observamos un jalón en Posición I y obtenemos un Rumbo, al observarlo en Posición II el nuevo Rumbo deberá diferir matemáticamente del primero en:", "options": ["90°", "180°", "360°"], "answer_index": 1, "explanation": "En I y II posición las lecturas difieren en 180°."}, {"type": "input", "prompt": "Está parado en el centro del sistema de coordenadas de la cátedra, con X hacia arriba y Y hacia la derecha. Si observa un punto ubicado en el primer cuadrante (Noreste), ¿qué convención de signos espera para el componente en X y el componente en Y?", "answer_text": "+ / +", "answer_alts": ["+,+", "positivo positivo", "positivos"], "explanation": "En el primer cuadrante ambos componentes son positivos."}, {"type": "mcq", "prompt": "Usted lee un ángulo en el limbo calculado como (Rumbo_Derecho - Rumbo_Izquierdo). Si este resultado fuera matemáticamente negativo durante una tabulación, el operario debería:", "options": ["Mantener el ángulo negativo, pues refleja un giro levógiro.", "Sumarle 360° puesto que en topografía no se miden ángulos horizontales negativos.", "Multiplicarlo por -1 sin mayores ajustes."], "answer_index": 1, "explanation": "En topografía no se dejan ángulos horizontales negativos: se suma 360°."}, {"type": "vf", "prompt": "Para lograr determinar planimétricamente la proyección horizontal de un punto A hacia un punto B situado sobre un terreno con desnivel, la variable conocida como 'Distancia Verdadera o Proyectada' equivale directamente a la distancia geométrica (inclinada) uniendo A y B leída sobre la cinta apoyada.", "answer": "Falso", "explanation": "La distancia proyectada al horizonte no es la misma que la geométrica inclinada."}, {"type": "input", "prompt": "Tras medir la estación compensada (O), obtiene los rumbos definitivos: Rumbo Corregido (OC) = 158°42'15\" y Rumbo Corregido (OD) = 253°32'10\". Determine el valor del ángulo horizontal CÔD.", "answer_text": "94°49'55\"", "answer_alts": ["94°49'55"], "explanation": "CÔD = OD - OC = 253°32'10\" - 158°42'15\" = 94°49'55\"."}];
-
-let idx = 0;
-const state = Array.from({length: quiz.length}, () => ({answered:false, correct:null, selected:null, input:""}));
-
-const questionEl = document.getElementById('question');
-const bodyEl = document.getElementById('body');
-const feedbackEl = document.getElementById('feedback');
-const fbTitle = document.getElementById('fbtitle');
-const fbText = document.getElementById('fbtext');
-const qcountEl = document.getElementById('qcount');
-const progressText = document.getElementById('progressText');
-const progressFill = document.getElementById('progressFill');
-const typeBadge = document.getElementById('typeBadge');
-
-document.getElementById('prevBtn').addEventListener('click', () => {
-  if (idx > 0) {
-    idx--;
-    render();
+const quiz = [
+  {
+    type: "Opción múltiple",
+    question: "¿Cuándo es estrictamente necesario aplicar el Método de Rumbos según el apunte de la cátedra?",
+    note: "Busca la condición mínima de uso del método.",
+    options: [
+      { label: "A", text: "Cuando hay exactamente 2 visuales.", correct: false, info: "Incorrecta: con menos de tres visuales se emplean otros métodos como el sencillo o el de compensación." },
+      { label: "B", text: "Cuando tenemos tres o más visuales.", correct: true, info: "Correcta: el método de rumbos se usa específicamente cuando hay tres o más visuales desde una misma estación." },
+      { label: "C", text: "Solo en altimetría.", correct: false, info: "Incorrecta: es un método de planimetría para medir ángulos horizontales." }
+    ]
+  },
+  {
+    type: "Opción múltiple",
+    question: "Al estacionar el teodolito sobre el punto O, ¿hacia dónde debe apuntar obligatoriamente el rumbo instrumental 000°00'00" antes de iniciar?",
+    note: "Pensá en la condición de referencia inicial del limbo.",
+    options: [
+      { label: "A", text: "Al Norte Magnético.", correct: false, info: "Incorrecta: el método analítico de diferencias hace innecesario orientar el cero a un norte." },
+      { label: "B", text: "Al Norte Geográfico.", correct: false, info: "Incorrecta: tampoco hace falta orientarlo al norte geográfico." },
+      { label: "C", text: "A cualquier dirección, es indiferente.", correct: true, info: "Correcta: no es necesario orientar el cero del limbo a un norte particular; los ángulos se calculan por diferencia de rumbos." }
+    ]
+  },
+  {
+    type: "Opción múltiple",
+    question: "¿Qué criterio técnico rige la elección de la primera visual (Ai)?",
+    note: "La primera lectura es la referencia para todo el resto de la estación.",
+    options: [
+      { label: "A", text: "Debe ser la visual más lejana a la estación.", correct: false, info: "Incorrecta: la distancia no define esta elección." },
+      { label: "B", text: "Debe ser la visual que ofrezca las mejores condiciones de apunte.", correct: true, info: "Correcta: se elige la visual con mejores condiciones de apunte para usarla como referencia libre de error." },
+      { label: "C", text: "Debe ser la visual ubicada más a la izquierda del operador.", correct: false, info: "Incorrecta: el criterio es técnico, no solo posicional." }
+    ]
+  },
+  {
+    type: "Opción múltiple",
+    question: "Una vez tomada la lectura en la visual inicial (Ai) en I Posición, ¿en qué sentido estricto se debe girar la alidada para continuar midiendo?",
+    note: "La dirección del barrido importa para conservar el esquema de trabajo.",
+    options: [
+      { label: "A", text: "De izquierda a derecha (sentido horario).", correct: true, info: "Correcta: en I posición el barrido se realiza de izquierda a derecha." },
+      { label: "B", text: "De derecha a izquierda (sentido antihorario).", correct: false, info: "Incorrecta: ese es el barrido asociado a la II posición." },
+      { label: "C", text: "En cualquier sentido, siempre y cuando se regrese a Ai.", correct: false, info: "Incorrecta: cambiar el sentido rompe el procedimiento del método." }
+    ]
+  },
+  {
+    type: "Opción múltiple",
+    question: "¿Cómo verifica el operador mecánicamente que el teodolito se encuentra en Primera Posición (Posición I)?",
+    note: "Recordá la ubicación del círculo graduado vertical.",
+    options: [
+      { label: "A", text: "El círculo graduado vertical se encuentra a la izquierda del operador.", correct: true, info: "Correcta: así se define la primera posición del teodolito." },
+      { label: "B", text: "El círculo graduado vertical se encuentra a la derecha del operador.", correct: false, info: "Incorrecta: eso corresponde a la segunda posición." },
+      { label: "C", text: "La burbuja del nivel tubular está exactamente paralela al anteojo.", correct: false, info: "Incorrecta: eso forma parte del ajuste, no define la posición conjugada." }
+    ]
+  },
+  {
+    type: "Opción múltiple",
+    question: "Al finalizar el barrido en Posición I y leer por segunda vez la visual inicial (Af), ¿cómo se transiciona a la Posición II para continuar el método?",
+    note: "Buscá la maniobra clásica de cambio de posición.",
+    options: [
+      { label: "A", text: "Girando la alidada horizontal 180° y re-calando los niveles.", correct: false, info: "Incorrecta: no es el cambio de posición del método." },
+      { label: "B", text: "Mediante la vuelta de campana, basculando el anteojo para invertir el nivel.", correct: true, info: "Correcta: la vuelta de campana permite pasar de I a II posición." },
+      { label: "C", text: "Aflojando el freno general y rotando el limbo.", correct: false, info: "Incorrecta: eso alteraría el procedimiento." }
+    ]
+  },
+  {
+    type: "Opción múltiple",
+    question: "Al anotar las lecturas tomadas durante el barrido en II Posición, la cátedra indica una regla de simplificación. ¿Cuál es?",
+    note: "La idea es no duplicar información innecesaria.",
+    options: [
+      { label: "A", text: "Anotar los grados invirtiendo el cuadrante.", correct: false, info: "Incorrecta: no se hace esa inversión." },
+      { label: "B", text: "Anotar solamente los minutos y segundos leídos en el nonio.", correct: true, info: "Correcta: en II posición se registran minutos y segundos, asumiendo los grados difieren 180° respecto de la I posición." },
+      { label: "C", text: "Anotar únicamente las diferencias parciales de segundos.", correct: false, info: "Incorrecta: no es el formato indicado." }
+    ]
+  },
+  {
+    type: "Verdadero/Falso",
+    question: "Al promediar las lecturas I y II, tu visual inicial (Ai) arroja 45° 20' 10" y tu visual de retorno final (Af) arroja 45° 20' 16". ¿Cuál es tu error de cierre (Δ)?",
+    note: "Elegí la opción correcta según el signo matemático.",
+    options: [
+      { label: "A", text: "-06"", correct: false, info: "Incorrecta: el signo está invertido." },
+      { label: "B", text: "+06"", correct: true, info: "Correcta: Δ = Af - Ai = 45°20'16" - 45°20'10" = +06"." },
+      { label: "C", text: "00"", correct: false, info: "Incorrecta: sí hay diferencia real entre ambas lecturas." }
+    ]
+  },
+  {
+    type: "Opción múltiple",
+    question: "Has calculado el Δ de tu levantamiento. ¿Con qué parámetro técnico debes comparar este valor para saber si es tolerable?",
+    note: "Pensá en el criterio de aceptación de la lectura.",
+    options: [
+      { label: "A", text: "Con la apreciación del aparato (mínima división de lectura directa).", correct: true, info: "Correcta: el error de cierre se compara con la apreciación del instrumento." },
+      { label: "B", text: "Con el límite visual de estimación del operario.", correct: false, info: "Incorrecta: eso no fija la tolerancia de cierre." },
+      { label: "C", text: "Con el aumento de los lentes del anteojo.", correct: false, info: "Incorrecta: el aumento no es el parámetro de control." }
+    ]
+  },
+  {
+    type: "Opción múltiple",
+    question: "En un levantamiento de 4 visuales en total (A, B, C, D), se obtuvo un error de cierre Δ = -12". ¿Cuál es el valor y signo de la Corrección base (C)?",
+    note: "Aplicá la fórmula general con n = 4.",
+    options: [
+      { label: "A", text: "C = -03"", correct: false, info: "Incorrecta: el signo general no está aplicado correctamente." },
+      { label: "B", text: "C = +03"", correct: true, info: "Correcta: C = -Δ/n = -(-12")/4 = +03"." },
+      { label: "C", text: "C = +04"", correct: false, info: "Incorrecta: la división está mal calculada." }
+    ]
+  },
+  {
+    type: "Opción múltiple",
+    question: "Asume que tienes 4 visuales (A, B, C, D) y que tu corrección base es C = +02". Sabiendo que A es tu visual inicial (Ai), ¿cuántos segundos se le suman específicamente al promedio de la visual C (tercera visual)?",
+    note: "La corrección se acumula visual por visual.",
+    options: [
+      { label: "A", text: "+02"", correct: false, info: "Incorrecta: ese valor corresponde a la segunda visual (B)." },
+      { label: "B", text: "+04"", correct: true, info: "Correcta: a la visual C se le aplica dos veces la corrección base, o sea +04"." },
+      { label: "C", text: "+06"", correct: false, info: "Incorrecta: ese valor no corresponde a la tercera visual." }
+    ]
+  },
+  {
+    type: "Opción múltiple",
+    question: "Finalizado el proceso de cálculo de los Rumbos Corregidos, ¿qué condición matemática estricta debe evidenciarse entre Ai y Af?",
+    note: "Pensá en la verificación final del método.",
+    options: [
+      { label: "A", text: "Deben diferir exactamente en 180° por la vuelta de campana.", correct: false, info: "Incorrecta: eso solo describe la diferencia cruda entre posiciones." },
+      { label: "B", text: "Deben ser valores exactamente iguales.", correct: true, info: "Correcta: una vez corregidos, Ai y Af deben coincidir exactamente." },
+      { label: "C", text: "Su diferencia debe coincidir con el error de arrastre.", correct: false, info: "Incorrecta: el método está hecho para anular ese remanente." }
+    ]
+  },
+  {
+    type: "Opción múltiple",
+    question: "Al pasar de la columna de rumbos a la determinación de los ángulos reales del terreno, ¿cómo define operativamente la cátedra un ángulo horizontal?",
+    note: "Buscá la expresión de cálculo.",
+    options: [
+      { label: "A", text: "Como la diferencia entre el Rumbo Derecho y el Rumbo Izquierdo.", correct: true, info: "Correcta: ángulo horizontal = rumbo derecho - rumbo izquierdo." },
+      { label: "B", text: "Como el promedio ponderado de todos los rumbos de la estación.", correct: false, info: "Incorrecta: no se calcula así." },
+      { label: "C", text: "Como el rumbo corregido restado a 360°.", correct: false, info: "Incorrecta: esa no es la definición operativa." }
+    ]
+  },
+  {
+    type: "Opción múltiple",
+    question: "En tu libreta, tienes la visual izquierda (OB) con un rumbo corregido de 87° 41' 24", y la visual derecha (OC) con 158° 42' 15". ¿Cuál es el valor del ángulo β (BÔC)?",
+    note: "Hacé la resta con cuidado.",
+    options: [
+      { label: "A", text: "71° 00' 51"", correct: true, info: "Correcta: 158°42'15" - 87°41'24" = 71°00'51"." },
+      { label: "B", text: "-71° 00' 51"", correct: false, info: "Incorrecta: el signo surge de invertir el minuendo y el sustraendo." },
+      { label: "C", text: "246° 23' 39"", correct: false, info: "Incorrecta: eso resulta de sumar ambos rumbos." }
+    ]
+  },
+  {
+    type: "Opción múltiple",
+    question: "Luego de hallar analíticamente todos los ángulos individuales contenidos alrededor del punto de estación O, su sumatoria final (Σ) debe resultar en:",
+    note: "Pensá en el cierre completo del giro.",
+    options: [
+      { label: "A", text: "Exactamente 180° 00' 00".", correct: false, info: "Incorrecta: eso corresponde a un ángulo llano, no al cierre total." },
+      { label: "B", text: "Exactamente 360° 00' 00".", correct: true, info: "Correcta: el cierre general debe resultar en 360° 00' 00"." },
+      { label: "C", text: "360° más el residuo tolerado por el fabricante del anteojo.", correct: false, info: "Incorrecta: el residuo ya fue prorrateado antes." }
+    ]
+  },
+  {
+    type: "Opción múltiple",
+    question: "Analizando el cuadro de eliminación de errores del Método de Rumbos, ¿qué directiva operativa permite erradicar la influencia por Giro de trípode?",
+    note: "Pensá en el sentido del barrido.",
+    options: [
+      { label: "A", text: "Calar con exactitud el nivel esférico y tubular de la base.", correct: false, info: "Incorrecta: eso es estacionamiento, no elimina ese error por sí solo." },
+      { label: "B", text: "Realizar la vuelta de campana.", correct: false, info: "Incorrecta: eso corrige la conjugación de posiciones, no el giro de trípode." },
+      { label: "C", text: "Barrer las visuales en ambas direcciones.", correct: true, info: "Correcta: al medir en sentidos opuestos se elimina la influencia del giro de trípode." }
+    ]
+  },
+  {
+    type: "Opción múltiple",
+    question: "Según la teoría, el Método de Rumbos logra eliminar el Error de Arrastre en la alidada gracias a:",
+    note: "Buscá la idea de cierre angular.",
+    options: [
+      { label: "A", text: "Medir siempre con la precaución de desajustar el tornillo de micrometría.", correct: false, info: "Incorrecta: eso no tiene sentido operativo." },
+      { label: "B", text: "Medir los rumbos sucesivos para obtener los ángulos y cerrar su suma en 360°.", correct: true, info: "Correcta: al forzar el cierre en 360° se anula la influencia del arrastre." },
+      { label: "C", text: "Frotar mecánicamente el limbo antes de cada visual.", correct: false, info: "Incorrecta: no es un procedimiento técnico." }
+    ]
+  },
+  {
+    type: "Opción múltiple",
+    question: "¿De qué manera este método asegura que las lecturas queden purgadas de los errores de Colimación, Inclinación y Excentricidad de alidada?",
+    note: "Pensá en la repetición de observaciones conjugadas.",
+    options: [
+      { label: "A", text: "Realizando los promedios de las medidas obtenidas en las dos posiciones del anteojo (I y II).", correct: true, info: "Correcta: el promedio de I y II compensa sus influencias opuestas." },
+      { label: "B", text: "Apuntando exclusivamente a la base de los jalones.", correct: false, info: "Incorrecta: eso solo ayuda a minimizar visualmente, no elimina." },
+      { label: "C", text: "Girando los tornillos calantes compensadores durante el barrido.", correct: false, info: "Incorrecta: arruinaría la verticalización." }
+    ]
+  },
+  {
+    type: "Opción múltiple",
+    question: "El operador siempre tiene falencias de Apunte y de Lectura. Según la cátedra, en el Método de Rumbos, estos errores:",
+    note: "Buscá la palabra clave: repetición.",
+    options: [
+      { label: "A", text: "Se eliminan por completo gracias a la precisión del micrómetro.", correct: false, info: "Incorrecta: no se eliminan por completo." },
+      { label: "B", text: "No son afectados, permanecen intactos.", correct: false, info: "Incorrecta: sí disminuye su influencia." },
+      { label: "C", text: "Se disminuye su influencia por la repetición del apunte y la toma de lectura.", correct: true, info: "Correcta: son errores accidentales y personales, por lo que solo se reduce su influencia." }
+    ]
+  },
+  {
+    type: "Opción múltiple",
+    question: "Si cometes alguno de los dos siguientes errores operativos en el paso inicial de la práctica, ningún cálculo del Método de Rumbos podrá salvar tu trabajo. ¿Cuáles son?",
+    note: "Son errores de estación que no se compensan luego.",
+    options: [
+      { label: "A", text: "Errores de Centración y Verticalización.", correct: true, info: "Correcta: estos errores no se eliminan bajo ningún método; hay que centrar y verticalizar bien." },
+      { label: "B", text: "Errores de Colimación e Inclinación.", correct: false, info: "Incorrecta: esos sí se eliminan operativamente con el método." },
+      { label: "C", text: "Errores de Giro y Arrastre.", correct: false, info: "Incorrecta: esos sí pueden tratarse mediante el método de rumbos." }
+    ]
   }
-});
-document.getElementById('nextBtn').addEventListener('click', () => {
-  if (idx < quiz.length - 1) {
-    idx++;
-    render();
-  }
-});
-document.getElementById('resetBtn').addEventListener('click', () => {
-  state[idx] = {answered:false, correct:null, selected:null, input:""};
-  render();
-});
+];
 
-document.querySelectorAll('.chapter').forEach(ch => {
-  ch.addEventListener('click', () => {
-    const block = Number(ch.dataset.block);
-    if (block === 0) idx = 0;
-    if (block === 1) idx = 13;
-    if (block === 2) idx = 26;
-    render();
-  });
-});
+let current = 0;
+let score = 0;
+let answered = Array(quiz.length).fill(false);
 
-function escapeHTML(str) {
-  return String(str)
-    .replaceAll('&','&amp;')
-    .replaceAll('<','&lt;')
-    .replaceAll('>','&gt;')
-    .replaceAll('"','&quot;')
-    .replaceAll("'",'&#039;');
-}
-
-function normalize(s) {
-  return String(s || '')
-    .toLowerCase()
-    .replace(/\s+/g,'')
-    .replace(/[°º]/g,'')
-    .replace(/,/g,'.')
-    .replace(/\u2212/g,'-')
-    .replace(/[^0-9a-z+\-\.]/g,'');
-}
+const elQuestion = document.getElementById("question");
+const elQuestionSmall = document.getElementById("questionSmall");
+const elType = document.getElementById("qtype");
+const elOptions = document.getElementById("options");
+const elSummary = document.getElementById("summary");
+const elChipProgress = document.getElementById("chipProgress");
+const elChipScore = document.getElementById("chipScore");
+const elBar = document.getElementById("bar");
+const elSmallNote = document.getElementById("smallNote");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const restartBtn = document.getElementById("restartBtn");
+const quizCard = document.getElementById("quizCard");
 
 function render() {
-  const q = quiz[idx];
-  const st = state[idx];
+  const q = quiz[current];
+  elType.textContent = q.type;
+  elQuestion.textContent = `${current + 1}. ${q.question}`;
+  elQuestionSmall.textContent = q.note || "";
+  elChipProgress.textContent = `Pregunta ${current + 1} de ${quiz.length}`;
+  elChipScore.textContent = `Aciertos: ${score}`;
+  elBar.style.width = `${((current) / quiz.length) * 100}%`;
+  elSummary.style.display = "none";
+  elSummary.innerHTML = "";
+  elSmallNote.textContent = answered[current]
+    ? "Respuesta registrada."
+    : "Elegí una opción para ver la corrección y la explicación.";
+  prevBtn.disabled = current === 0;
+  nextBtn.style.display = current === quiz.length - 1 ? "none" : "inline-block";
+  restartBtn.style.display = current === quiz.length - 1 ? "inline-block" : "none";
 
-  qcountEl.textContent = `${idx + 1} / ${quiz.length}`;
-  progressText.textContent = `Pregunta ${idx + 1} de ${quiz.length}`;
-  progressFill.style.width = `${((idx + 1) / quiz.length) * 100}%`;
+  elOptions.innerHTML = "";
+  q.options.forEach((opt, idx) => {
+    const div = document.createElement("div");
+    div.className = "option";
+    div.dataset.index = idx;
 
-  document.querySelectorAll('.chapter').forEach(ch => ch.classList.remove('active'));
-  if (idx <= 12) document.querySelector('.chapter[data-block="0"]').classList.add('active');
-  else if (idx <= 25) document.querySelector('.chapter[data-block="1"]').classList.add('active');
-  else document.querySelector('.chapter[data-block="2"]').classList.add('active');
-
-  typeBadge.textContent = q.type === 'vf' ? 'V/F' : (q.type === 'mcq' ? 'Opción múltiple' : 'Práctico');
-  questionEl.textContent = q.prompt;
-  feedbackEl.classList.remove('show');
-  fbTitle.textContent = '';
-  fbText.textContent = '';
-
-  if (q.type === 'mcq' || q.type === 'vf') {
-    bodyEl.innerHTML = '';
-    const options = q.type === 'vf' ? ['Verdadero','Falso'] : q.options;
-    options.forEach((opt, i) => {
-      const div = document.createElement('div');
-      div.className = 'opt';
-      div.innerHTML = `<span class="label">${String.fromCharCode(65+i)}.</span> ${escapeHTML(opt)}`;
-      div.addEventListener('click', () => handleMCQ(i));
-      bodyEl.appendChild(div);
-    });
-    if (st.answered) {
-      showMCQResult(st.selected);
-    }
-  } else {
-    bodyEl.innerHTML = `
-      <input id="answerInput" class="inputbox" placeholder="Escribe tu respuesta aquí..." value="${escapeHTML(st.input)}" />
-      <div class="helper">Escribe la respuesta final con números, signos y unidades si corresponde. Luego presiona Verificar.</div>
+    div.innerHTML = `
+      <div class="optTop">
+        <div class="badge">${opt.label}</div>
+        <div class="optText">${opt.text}</div>
+      </div>
+      <div class="optFeedback"></div>
     `;
-    const input = document.getElementById('answerInput');
-    input.addEventListener('input', e => { st.input = e.target.value; });
-    const verify = document.createElement('button');
-    verify.textContent = 'Verificar';
-    verify.style.marginTop = '14px';
-    verify.addEventListener('click', () => handleInput());
-    bodyEl.appendChild(verify);
-    if (st.answered) {
-      feedbackEl.classList.add('show');
-      fbTitle.textContent = st.correct ? 'Respuesta correcta' : 'Respuesta no exacta';
-      fbText.textContent = q.explanation + (q.answer_text ? ` Respuesta esperada: ${q.answer_text}.` : '');
-      const inputEl = document.getElementById('answerInput');
-      if (inputEl) inputEl.style.borderColor = st.correct ? 'var(--ok)' : 'var(--bad)';
+
+    div.addEventListener("click", () => answer(idx));
+    elOptions.appendChild(div);
+  });
+
+  if (answered[current]) applyStates();
+}
+
+function answer(selectedIndex){
+  if(answered[current]) return;
+  const q = quiz[current];
+  answered[current] = true;
+  const selected = q.options[selectedIndex];
+  const isCorrect = !!selected.correct;
+  if (isCorrect) score++;
+  elChipScore.textContent = `Aciertos: ${score}`;
+  elSmallNote.textContent = isCorrect ? "Respuesta correcta registrada." : "Respuesta incorrecta registrada.";
+  applyStates(selectedIndex);
+  const correctOpt = q.options.find(o => o.correct);
+  elSummary.style.display = "block";
+  elSummary.innerHTML = `
+    <strong>${isCorrect ? "Bien hecho." : "Revisá esta parte."}</strong>
+    <p>${correctOpt.info}</p>
+  `;
+}
+
+function applyStates(selectedIndex = null){
+  const q = quiz[current];
+  const cards = [...elOptions.children];
+  cards.forEach((card, idx) => {
+    const opt = q.options[idx];
+    const fb = card.querySelector(".optFeedback");
+    card.classList.add("locked");
+    if(opt.correct){
+      card.classList.add("correct");
+    } else {
+      card.classList.add("incorrect");
     }
+    fb.textContent = opt.info;
+    fb.style.display = "block";
+    if(selectedIndex === idx) card.classList.add("selected");
+  });
+}
+
+function goNext(){
+  if(current < quiz.length - 1){
+    current++;
+    render();
+  } else finish();
+}
+function goPrev(){
+  if(current > 0){
+    current--;
+    render();
   }
-
-  document.getElementById('prevBtn').disabled = idx === 0;
-  document.getElementById('nextBtn').disabled = idx === quiz.length - 1;
+}
+function finish(){
+  elBar.style.width = "100%";
+  quizCard.innerHTML = `
+    <div class="finish">
+      <h2>Terminaste</h2>
+      <p class="score">Aciertos: ${score} / ${quiz.length}</p>
+      <p>Podés reiniciar el cuestionario para repasarlo de nuevo y volver a practicar el método de rumbos.</p>
+      <div style="margin-top:18px;">
+        <button class="primary" id="restartInline">Reiniciar</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("restartInline").addEventListener("click", restart);
 }
 
-function clearMarks() {
-  document.querySelectorAll('.opt').forEach(o => {
-    o.classList.remove('correct','incorrect','locked');
-    const mark = o.querySelector('.mark');
-    if (mark) mark.remove();
-  });
+function restart(){
+  location.reload();
 }
 
-function showMCQResult(selectedIndex) {
-  const q = quiz[idx];
-  clearMarks();
-  const opts = document.querySelectorAll('.opt');
-  const correctIndex = q.type === 'vf' ? (q.answer === 'Verdadero' ? 0 : 1) : q.answer_index;
-
-  opts.forEach((o, i) => {
-    o.classList.add('locked');
-    if (i === correctIndex) {
-      o.classList.add('correct');
-      o.insertAdjacentHTML('beforeend', '<span class="mark ok">Correcta</span>');
-    }
-    if (i === selectedIndex && i !== correctIndex) {
-      o.classList.add('incorrect');
-      o.insertAdjacentHTML('beforeend', '<span class="mark bad">Elegida</span>');
-    }
-  });
-
-  feedbackEl.classList.add('show');
-  fbTitle.textContent = selectedIndex === correctIndex ? 'Respuesta correcta' : 'Respuesta incorrecta';
-  fbText.textContent = q.explanation;
-}
-
-function handleMCQ(i) {
-  const q = quiz[idx];
-  const st = state[idx];
-  const correctIndex = q.type === 'vf' ? (q.answer === 'Verdadero' ? 0 : 1) : q.answer_index;
-  st.answered = true;
-  st.selected = i;
-  st.correct = i === correctIndex;
-  showMCQResult(i);
-}
-
-function handleInput() {
-  const q = quiz[idx];
-  const st = state[idx];
-  const value = normalize(st.input);
-  const target = normalize(q.answer_text);
-  const alt = q.answer_alts ? q.answer_alts.map(normalize) : [];
-  const ok = value === target || alt.includes(value);
-  st.answered = true;
-  st.correct = ok;
-  feedbackEl.classList.add('show');
-  fbTitle.textContent = ok ? 'Respuesta correcta' : 'Respuesta no exacta';
-  fbText.textContent = q.explanation + (q.answer_text ? ` Respuesta esperada: ${q.answer_text}.` : '');
-  render();
-}
+prevBtn.addEventListener("click", goPrev);
+nextBtn.addEventListener("click", goNext);
+restartBtn.addEventListener("click", restart);
 
 render();
 </script>
