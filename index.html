@@ -245,7 +245,7 @@ button:disabled{
   <header>
     <h1>Cuestionario de Autoevaluación</h1>
     <div class="subtitle">
-     ema trolo
+      Método de Rumbos — formato práctico, con corrección inmediata, explicación de cada alternativa y nota final sobre 100.
     </div>
     <div class="meta">
       <div class="pill" id="progressPill">Pregunta 1 de 20</div>
@@ -284,7 +284,527 @@ button:disabled{
 </div>
 
 <script>
-const questions = [{"type": "OPCIÓN MÚLTIPLE", "q": "¿Cuándo es estrictamente necesario aplicar el Método de Rumbos según el apunte de la cátedra?", "options": ["Cuando hay exactamente 2 visuales.", "Cuando tenemos tres o más visuales.", "Solo en altimetría."], "correct": 1, "reasons": ["Incorrecta. Para menos visuales suelen usarse otros métodos como el sencillo o el de compensación.", "Correcta. El método de rumbos se usa cuando hay tres o más visuales desde una misma estación.", "Incorrecta. Es un método para medir ángulos horizontales en planimetría."]}, {"type": "OPCIÓN MÚLTIPLE", "q": "Al estacionar el teodolito sobre el punto O, ¿hacia dónde debe apuntar obligatoriamente el rumbo instrumental 000°00'00\" antes de iniciar?", "options": ["Al Norte Magnético.", "Al Norte Geográfico.", "A cualquier dirección, es indiferente."], "correct": 2, "reasons": ["Incorrecta. El método no exige orientar el cero del limbo al Norte Magnético.", "Incorrecta. Tampoco hace falta orientar el cero al Norte Geográfico.", "Correcta. Los ángulos se calculan por diferencia de rumbos, así que el rumbo instrumental puede arrancar en cualquier dirección."]}, {"type": "OPCIÓN MÚLTIPLE", "q": "¿Qué criterio técnico rige la elección de la primera visual (Ai) a la que se apuntará en el terreno?", "options": ["Debe ser la visual más lejana a la estación.", "Debe ser la visual que ofrezca las mejores condiciones de apunte.", "Debe ser la visual ubicada más a la izquierda del operador."], "correct": 1, "reasons": ["Incorrecta. La distancia no define la visual inicial.", "Correcta. Se elige la visual con mejores condiciones de apunte porque será la referencia libre de error.", "Incorrecta. La posición izquierda/derecha no es el criterio de elección."]}, {"type": "OPCIÓN MÚLTIPLE", "q": "Una vez tomada la lectura en la visual inicial (Ai) en I Posición, ¿en qué sentido estricto se debe girar la alidada para continuar midiendo?", "options": ["De izquierda a derecha (sentido horario).", "De derecha a izquierda (sentido antihorario).", "En cualquier sentido, siempre y cuando se regrese a la visual Ai."], "correct": 0, "reasons": ["Correcta. En I posición el barrido se realiza de izquierda a derecha, en sentido horario.", "Incorrecta. Ese es el sentido de la II posición.", "Incorrecta. Alterar el sentido rompe el procedimiento del método."]}, {"type": "OPCIÓN MÚLTIPLE", "q": "¿Cómo verifica el operador mecánicamente que el teodolito se encuentra en Primera Posición (Posición I)?", "options": ["El círculo graduado vertical se encuentra a la izquierda del operador.", "El círculo graduado vertical se encuentra a la derecha del operador.", "La burbuja del nivel tubular está exactamente paralela al anteojo."], "correct": 0, "reasons": ["Correcta. La primera posición se identifica cuando el círculo graduado vertical está a la izquierda.", "Incorrecta. Esa configuración corresponde a la Segunda Posición.", "Incorrecta. Eso describe un ajuste general, no la posición conjugada."]}, {"type": "OPCIÓN MÚLTIPLE", "q": "Al finalizar el barrido en Posición I y leer por segunda vez la visual inicial (obteniendo Af), ¿cómo se transiciona a la Posición II para continuar el método?", "options": ["Girando la alidada horizontal 180° y re-calando los niveles.", "Mediante la vuelta de campana, basculando el anteojo para invertir el nivel.", "Aflojando el freno general y rotando el limbo."], "correct": 1, "reasons": ["Incorrecta. No se debe rearmar la estación ni recalzar los niveles para pasar a II posición.", "Correcta. Se pasa a Posición II con la vuelta de campana, invirtiendo el anteojo.", "Incorrecta. Rotar el limbo sin la maniobra correcta arruina el procedimiento."]}, {"type": "OPCIÓN MÚLTIPLE", "q": "Al anotar las lecturas tomadas durante el barrido en II Posición, la cátedra indica una regla de simplificación. ¿Cuál es?", "options": ["Anotar los grados invirtiendo el cuadrante.", "Anotar solamente los minutos y segundos leídos en el nonio.", "Anotar únicamente las diferencias parciales de segundos."], "correct": 1, "reasons": ["Incorrecta. No se invierte el cuadrante al registrar la II posición.", "Correcta. Se anotan minutos y segundos, asumiendo que los grados difieren exactamente 180° respecto de la I posición.", "Incorrecta. No se registran solo diferencias parciales."]}, {"type": "MINICASO PRÁCTICO", "q": "Al promediar las lecturas I y II, tu visual inicial (Ai) arroja 45° 20' 10\" y tu visual de retorno final (Af) arroja 45° 20' 16\". ¿Cuál es tu error de cierre (Δ)?", "options": ["-06\"", "+06\"", "00\""], "correct": 1, "reasons": ["Incorrecta. El signo está invertido.", "Correcta. Δ = Af - Ai = 45° 20' 16\" - 45° 20' 10\" = +06\".", "Incorrecta. Sí existe diferencia matemática entre las lecturas."]}, {"type": "OPCIÓN MÚLTIPLE", "q": "Has calculado el Δ de tu levantamiento. ¿Con qué parámetro técnico debes comparar este valor para saber si es tolerable?", "options": ["Con la apreciación del aparato (mínima división de lectura directa).", "Con el límite visual de estimación del operario.", "Con el aumento de los lentes del anteojo."], "correct": 0, "reasons": ["Correcta. El error de cierre debe ser menor que la apreciación del instrumento.", "Incorrecta. La estimación visual no define la tolerancia.", "Incorrecta. El aumento del lente no es el parámetro de control."]}, {"type": "OPCIÓN MÚLTIPLE", "q": "En un levantamiento compuesto por 4 visuales en total, se obtuvo un error de cierre Δ = -12\". ¿Cuál es el valor y signo de la corrección base (C)?", "options": ["C = -03\"", "C = +03\"", "C = +04\""], "correct": 1, "reasons": ["Incorrecta. Falta cambiar el signo general de la fórmula.", "Correcta. C = -Δ/n = -(-12\")/4 = +03\".", "Incorrecta. La división no da ese valor."]}, {"type": "OPCIÓN MÚLTIPLE", "q": "Asume que tienes 4 visuales (A, B, C, D) y que tu corrección base es C = +02\". Sabiendo que A es tu visual inicial (Ai), ¿cuántos segundos se le suman específicamente al promedio de la visual C (tercera visual)?", "options": ["+02\"", "+04\"", "+06\""], "correct": 1, "reasons": ["Incorrecta. Ese valor corresponde a la segunda visual.", "Correcta. La corrección es acumulativa: en C se aplican dos veces +02\", o sea +04\".", "Incorrecta. Ese valor correspondería a la cuarta visual."]}, {"type": "OPCIÓN MÚLTIPLE", "q": "Finalizado el proceso de cálculo de los Rumbos Corregidos para todas las filas de la libreta, ¿qué condición matemática estricta debe evidenciarse entre Ai y Af?", "options": ["Deben diferir exactamente en 180° por la vuelta de campana.", "Deben ser valores exactamente iguales.", "Su diferencia debe coincidir con el error de arrastre."], "correct": 1, "reasons": ["Incorrecta. Eso solo aplica a la diferencia cruda entre posiciones, no a la compensación final.", "Correcta. Una vez aplicadas las correcciones acumulativas, Ai y Af deben coincidir exactamente.", "Incorrecta. El método busca anular ese remanente."]}, {"type": "OPCIÓN MÚLTIPLE", "q": "Al pasar de la columna de rumbos a la determinación de los ángulos reales del terreno, ¿cómo define operativamente la cátedra un ángulo horizontal?", "options": ["Como la diferencia entre el Rumbo Derecho y el Rumbo Izquierdo.", "Como el promedio ponderado de todos los rumbos de la estación.", "Como el rumbo corregido restado a 360°."], "correct": 0, "reasons": ["Correcta. El ángulo horizontal se calcula como Rumbo Derecho menos Rumbo Izquierdo.", "Incorrecta. El promedio no define el ángulo entre dos visuales.", "Incorrecta. Restar a 360° no da la separación angular entre las visuales."]}, {"type": "MINICASO PRÁCTICO", "q": "En tu libreta, tienes la visual izquierda (OB) con un rumbo corregido de 87° 41' 24\" y la visual derecha (OC) con 158° 42' 15\". ¿Cuál es el valor del ángulo β (BÔC)?", "options": ["71° 00' 51\"", "-71° 00' 51\"", "246° 23' 39\""], "correct": 0, "reasons": ["Correcta. 158° 42' 15\" - 87° 41' 24\" = 71° 00' 51\".", "Incorrecta. Ese signo aparece si inviertes el orden de la resta.", "Incorrecta. Ese valor resulta de sumar ambos rumbos."]}, {"type": "OPCIÓN MÚLTIPLE", "q": "Luego de hallar analíticamente todos los ángulos individuales contenidos alrededor del punto O, su sumatoria final (Σ) debe resultar en:", "options": ["Exactamente 180° 00' 00\".", "Exactamente 360° 00' 00\".", "360° más el residuo tolerado por el fabricante del anteojo."], "correct": 1, "reasons": ["Incorrecta. 180° corresponde a otras configuraciones geométricas.", "Correcta. El cierre general debe resultar en 360° 00' 00\".", "Incorrecta. El residuo ya debió prorratearse antes."]}, {"type": "OPCIÓN MÚLTIPLE", "q": "Analizando el cuadro de eliminación de errores del Método de Rumbos, ¿qué directiva operativa permite erradicar la influencia por Giro de trípode?", "options": ["Calar con exactitud el nivel esférico y tubular de la base.", "Realizar la vuelta de campana.", "Barrer las visuales en ambas direcciones (de derecha a izquierda y de izquierda a derecha)."], "correct": 2, "reasons": ["Incorrecta. Eso es estacionamiento base, no elimina el giro posterior.", "Incorrecta. La vuelta de campana trata errores de ejes, no el giro de trípode.", "Correcta. Barrer en ambos sentidos compensa la posible torsión o giro del trípode."]}, {"type": "OPCIÓN MÚLTIPLE", "q": "Según la teoría, el Método de Rumbos logra eliminar el Error de Arrastre en la alidada gracias a:", "options": ["Medir siempre con la precaución de desajustar el tornillo de micrometría.", "Medir los rumbos para obtener el ángulo y los consiguientes para hacer el cierre de su suma en 360°.", "Frotar mecánicamente el limbo antes de tomar cada visual."], "correct": 1, "reasons": ["Incorrecta. No se manipula así el instrumento.", "Correcta. El cierre en 360° anula el remanente del arrastre.", "Incorrecta. Eso no forma parte del método."]}, {"type": "OPCIÓN MÚLTIPLE", "q": "¿De qué manera este método asegura que las lecturas queden purgadas de los errores de Colimación, Inclinación y Excentricidad de alidada?", "options": ["Realizando los promedios de las medidas obtenidas en las dos posiciones del anteojo (I y II).", "Apuntando exclusivamente a la base de los jalones (a nivel del suelo).", "Girando los tornillos calantes compensadores durante el barrido."], "correct": 0, "reasons": ["Correcta. La doble posición del anteojo y el promedio compensan esas influencias opuestas.", "Incorrecta. Es una práctica auxiliar, no la eliminación real.", "Incorrecta. Eso arruina la verticalización."]}, {"type": "OPCIÓN MÚLTIPLE", "q": "El operador siempre tiene falencias de Apunte y de Lectura (agudeza visual). Según la cátedra, en el Método de Rumbos, estos errores:", "options": ["Se eliminan por completo gracias a la precisión del micrómetro del teodolito.", "No son afectados, permanecen intactos.", "Se disminuye su influencia por la repetición del apunte y la toma de lectura en las diversas posiciones."], "correct": 2, "reasons": ["Incorrecta. No se eliminan por completo.", "Incorrecta. Sí se reduce su influencia.", "Correcta. Son errores accidentales y personales; el método solo disminuye su efecto."]}, {"type": "OPCIÓN MÚLTIPLE", "q": "Si cometes alguno de los dos siguientes errores operativos en el paso inicial de la práctica, ningún cálculo del Método de Rumbos podrá salvar tu trabajo. ¿Cuáles son?", "options": ["Errores de Centración y Verticalización.", "Errores de Colimación e Inclinación.", "Errores de Giro y Arrastre."], "correct": 0, "reasons": ["Correcta. Centración y Verticalización no se eliminan por el método; deben hacerse bien desde el inicio.", "Incorrecta. Esos sí se compensan operativamente con el método.", "Incorrecta. Son errores instrumentales que el procedimiento ayuda a eliminar."]}];
+const questions = [
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "¿Cuándo es estrictamente necesario aplicar el Método de Rumbos según el apunte de la cátedra?",
+    "options": [
+      "Cuando hay exactamente 2 visuales.",
+      "Cuando tenemos tres o más visuales.",
+      "Solo en altimetría."
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. Para menos visuales suelen usarse otros métodos como el sencillo o el de compensación.",
+      "Correcta. El método de rumbos se usa cuando hay tres o más visuales desde una misma estación.",
+      "Incorrecta. Es un método para medir ángulos horizontales en planimetría."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "Al estacionar el teodolito sobre el punto O, ¿hacia dónde debe apuntar obligatoriamente el rumbo instrumental 000°00'00\" antes de iniciar?",
+    "options": [
+      "Al Norte Magnético.",
+      "Al Norte Geográfico.",
+      "A cualquier dirección, es indiferente."
+    ],
+    "correct": 2,
+    "reasons": [
+      "Incorrecta. El método no exige orientar el cero del limbo al Norte Magnético.",
+      "Incorrecta. Tampoco hace falta orientar el cero al Norte Geográfico.",
+      "Correcta. Los ángulos se calculan por diferencia de rumbos, así que el rumbo instrumental puede arrancar en cualquier dirección."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "¿Qué criterio técnico rige la elección de la primera visual (Ai) a la que se apuntará en el terreno?",
+    "options": [
+      "Debe ser la visual más lejana a la estación.",
+      "Debe ser la visual que ofrezca las mejores condiciones de apunte.",
+      "Debe ser la visual ubicada más a la izquierda del operador."
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. La distancia no define la visual inicial.",
+      "Correcta. Se elige la visual con mejores condiciones de apunte porque será la referencia libre de error.",
+      "Incorrecta. La posición izquierda/derecha no es el criterio de elección."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "Una vez tomada la lectura en la visual inicial (Ai) en I Posición, ¿en qué sentido estricto se debe girar la alidada para continuar midiendo?",
+    "options": [
+      "De izquierda a derecha (sentido horario).",
+      "De derecha a izquierda (sentido antihorario).",
+      "En cualquier sentido, siempre y cuando se regrese a la visual Ai."
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. En I posición el barrido se realiza de izquierda a derecha, en sentido horario.",
+      "Incorrecta. Ese es el sentido de la II posición.",
+      "Incorrecta. Alterar el sentido rompe el procedimiento del método."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "¿Cómo verifica el operador mecánicamente que el teodolito se encuentra en Primera Posición (Posición I)?",
+    "options": [
+      "El círculo graduado vertical se encuentra a la izquierda del operador.",
+      "El círculo graduado vertical se encuentra a la derecha del operador.",
+      "La burbuja del nivel tubular está exactamente paralela al anteojo."
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. La primera posición se identifica cuando el círculo graduado vertical está a la izquierda.",
+      "Incorrecta. Esa configuración corresponde a la Segunda Posición.",
+      "Incorrecta. Eso describe un ajuste general, no la posición conjugada."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "Al finalizar el barrido en Posición I y leer por segunda vez la visual inicial (obteniendo Af), ¿cómo se transiciona a la Posición II para continuar el método?",
+    "options": [
+      "Girando la alidada horizontal 180° y re-calando los niveles.",
+      "Mediante la vuelta de campana, basculando el anteojo para invertir el nivel.",
+      "Aflojando el freno general y rotando el limbo."
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. No se debe rearmar la estación ni recalzar los niveles para pasar a II posición.",
+      "Correcta. Se pasa a Posición II con la vuelta de campana, invirtiendo el anteojo.",
+      "Incorrecta. Rotar el limbo sin la maniobra correcta arruina el procedimiento."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "Al anotar las lecturas tomadas durante el barrido en II Posición, la cátedra indica una regla de simplificación. ¿Cuál es?",
+    "options": [
+      "Anotar los grados invirtiendo el cuadrante.",
+      "Anotar solamente los minutos y segundos leídos en el nonio.",
+      "Anotar únicamente las diferencias parciales de segundos."
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. No se invierte el cuadrante al registrar la II posición.",
+      "Correcta. Se anotan minutos y segundos, asumiendo que los grados difieren exactamente 180° respecto de la I posición.",
+      "Incorrecta. No se registran solo diferencias parciales."
+    ]
+  },
+  {
+    "type": "MINICASO PRÁCTICO",
+    "q": "Al promediar las lecturas I y II, tu visual inicial (Ai) arroja 45° 20' 10\" y tu visual de retorno final (Af) arroja 45° 20' 16\". ¿Cuál es tu error de cierre (Δ)?",
+    "options": [
+      "-06\"",
+      "+06\"",
+      "00\""
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. El signo está invertido.",
+      "Correcta. Δ = Af - Ai = 45° 20' 16\" - 45° 20' 10\" = +06\".",
+      "Incorrecta. Sí existe diferencia matemática entre las lecturas."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "Has calculado el Δ de tu levantamiento. ¿Con qué parámetro técnico debes comparar este valor para saber si es tolerable?",
+    "options": [
+      "Con la apreciación del aparato (mínima división de lectura directa).",
+      "Con el límite visual de estimación del operario.",
+      "Con el aumento de los lentes del anteojo."
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. El error de cierre debe ser menor que la apreciación del instrumento.",
+      "Incorrecta. La estimación visual no define la tolerancia.",
+      "Incorrecta. El aumento del lente no es el parámetro de control."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "En un levantamiento compuesto por 4 visuales en total, se obtuvo un error de cierre Δ = -12\". ¿Cuál es el valor y signo de la corrección base (C)?",
+    "options": [
+      "C = -03\"",
+      "C = +03\"",
+      "C = +04\""
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. Falta cambiar el signo general de la fórmula.",
+      "Correcta. C = -Δ/n = -(-12\")/4 = +03\".",
+      "Incorrecta. La división no da ese valor."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "Asume que tienes 4 visuales (A, B, C, D) y que tu corrección base es C = +02\". Sabiendo que A es tu visual inicial (Ai), ¿cuántos segundos se le suman específicamente al promedio de la visual C (tercera visual)?",
+    "options": [
+      "+02\"",
+      "+04\"",
+      "+06\""
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. Ese valor corresponde a la segunda visual.",
+      "Correcta. La corrección es acumulativa: en C se aplican dos veces +02\", o sea +04\".",
+      "Incorrecta. Ese valor correspondería a la cuarta visual."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "Finalizado el proceso de cálculo de los Rumbos Corregidos para todas las filas de la libreta, ¿qué condición matemática estricta debe evidenciarse entre Ai y Af?",
+    "options": [
+      "Deben diferir exactamente en 180° por la vuelta de campana.",
+      "Deben ser valores exactamente iguales.",
+      "Su diferencia debe coincidir con el error de arrastre."
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. Eso solo aplica a la diferencia cruda entre posiciones, no a la compensación final.",
+      "Correcta. Una vez aplicadas las correcciones acumulativas, Ai y Af deben coincidir exactamente.",
+      "Incorrecta. El método busca anular ese remanente."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "Al pasar de la columna de rumbos a la determinación de los ángulos reales del terreno, ¿cómo define operativamente la cátedra un ángulo horizontal?",
+    "options": [
+      "Como la diferencia entre el Rumbo Derecho y el Rumbo Izquierdo.",
+      "Como el promedio ponderado de todos los rumbos de la estación.",
+      "Como el rumbo corregido restado a 360°."
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. El ángulo horizontal se calcula como Rumbo Derecho menos Rumbo Izquierdo.",
+      "Incorrecta. El promedio no define el ángulo entre dos visuales.",
+      "Incorrecta. Restar a 360° no da la separación angular entre las visuales."
+    ]
+  },
+  {
+    "type": "MINICASO PRÁCTICO",
+    "q": "En tu libreta, tienes la visual izquierda (OB) con un rumbo corregido de 87° 41' 24\" y la visual derecha (OC) con 158° 42' 15\". ¿Cuál es el valor del ángulo β (BÔC)?",
+    "options": [
+      "71° 00' 51\"",
+      "-71° 00' 51\"",
+      "246° 23' 39\""
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. 158° 42' 15\" - 87° 41' 24\" = 71° 00' 51\".",
+      "Incorrecta. Ese signo aparece si inviertes el orden de la resta.",
+      "Incorrecta. Ese valor resulta de sumar ambos rumbos."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "Luego de hallar analíticamente todos los ángulos individuales contenidos alrededor del punto O, su sumatoria final (Σ) debe resultar en:",
+    "options": [
+      "Exactamente 180° 00' 00\".",
+      "Exactamente 360° 00' 00\".",
+      "360° más el residuo tolerado por el fabricante del anteojo."
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. 180° corresponde a otras configuraciones geométricas.",
+      "Correcta. El cierre general debe resultar en 360° 00' 00\".",
+      "Incorrecta. El residuo ya debió prorratearse antes."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "Analizando el cuadro de eliminación de errores del Método de Rumbos, ¿qué directiva operativa permite erradicar la influencia por Giro de trípode?",
+    "options": [
+      "Calar con exactitud el nivel esférico y tubular de la base.",
+      "Realizar la vuelta de campana.",
+      "Barrer las visuales en ambas direcciones (de derecha a izquierda y de izquierda a derecha)."
+    ],
+    "correct": 2,
+    "reasons": [
+      "Incorrecta. Eso es estacionamiento base, no elimina el giro posterior.",
+      "Incorrecta. La vuelta de campana trata errores de ejes, no el giro de trípode.",
+      "Correcta. Barrer en ambos sentidos compensa la posible torsión o giro del trípode."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "Según la teoría, el Método de Rumbos logra eliminar el Error de Arrastre en la alidada gracias a:",
+    "options": [
+      "Medir siempre con la precaución de desajustar el tornillo de micrometría.",
+      "Medir los rumbos para obtener el ángulo y los consiguientes para hacer el cierre de su suma en 360°.",
+      "Frotar mecánicamente el limbo antes de tomar cada visual."
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. No se manipula así el instrumento.",
+      "Correcta. El cierre en 360° anula el remanente del arrastre.",
+      "Incorrecta. Eso no forma parte del método."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "¿De qué manera este método asegura que las lecturas queden purgadas de los errores de Colimación, Inclinación y Excentricidad de alidada?",
+    "options": [
+      "Realizando los promedios de las medidas obtenidas en las dos posiciones del anteojo (I y II).",
+      "Apuntando exclusivamente a la base de los jalones (a nivel del suelo).",
+      "Girando los tornillos calantes compensadores durante el barrido."
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. La doble posición del anteojo y el promedio compensan esas influencias opuestas.",
+      "Incorrecta. Es una práctica auxiliar, no la eliminación real.",
+      "Incorrecta. Eso arruina la verticalización."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "El operador siempre tiene falencias de Apunte y de Lectura (agudeza visual). Según la cátedra, en el Método de Rumbos, estos errores:",
+    "options": [
+      "Se eliminan por completo gracias a la precisión del micrómetro del teodolito.",
+      "No son afectados, permanecen intactos.",
+      "Se disminuye su influencia por la repetición del apunte y la toma de lectura en las diversas posiciones."
+    ],
+    "correct": 2,
+    "reasons": [
+      "Incorrecta. No se eliminan por completo.",
+      "Incorrecta. Sí se reduce su influencia.",
+      "Correcta. Son errores accidentales y personales; el método solo disminuye su efecto."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "Si cometes alguno de los dos siguientes errores operativos en el paso inicial de la práctica, ningún cálculo del Método de Rumbos podrá salvar tu trabajo. ¿Cuáles son?",
+    "options": [
+      "Errores de Centración y Verticalización.",
+      "Errores de Colimación e Inclinación.",
+      "Errores de Giro y Arrastre."
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. Centración y Verticalización no se eliminan por el método; deben hacerse bien desde el inicio.",
+      "Incorrecta. Esos sí se compensan operativamente con el método.",
+      "Incorrecta. Son errores instrumentales que el procedimiento ayuda a eliminar."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "Según la cátedra, ¿cuál es el objetivo fundamental de establecer un Sistema Geométrico de Apoyo en el terreno?",
+    "options": [
+      "Medir directamente el área de una parcela pequeña y transitable dividiéndola en triángulos.",
+      "Determinar puntos fijos con coordenadas planialtimétricas, que nos permitan efectuar a partir de ellos otras mediciones.",
+      "Compensar y eliminar los errores sistemáticos del teodolito y la cinta métrica antes de medir."
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. Eso corresponde al método de descomposición en triángulos para áreas pequeñas.",
+      "Correcta. El sistema de apoyo busca determinar puntos fijos con coordenadas planialtimétricas para relevar y replantear.",
+      "Incorrecta. Los sistemas de apoyo no corrigen errores del instrumental."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "Debes elegir el Sistema Geométrico de Apoyo adecuado según el tipo de terreno. ¿Cuál de las siguientes relaciones metodológicas es la correcta?",
+    "options": [
+      "En polígonos geométricos se miden todos los lados y todos los ángulos; en triangulaciones se mide solo un lado base y todos los ángulos.",
+      "En trilateraciones se miden todos los ángulos y ningún lado.",
+      "En triangulaciones se miden todos los lados y solo un ángulo inicial."
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. En terreno llano se usa polígono geométrico; en terreno abrupto, triangulación con una base y todos los ángulos.",
+      "Incorrecta. Eso es lo opuesto a la trilateración.",
+      "Incorrecta. Eso confunde triangulación con trilateración."
+    ]
+  },
+  {
+    "type": "MINICASO PRÁCTICO",
+    "q": "Estás operando en un terreno montañoso y decides realizar una Triangulación Topográfica. Has medido el lado base (b) y todos los ángulos internos (α, β, γ). ¿Qué expresión analítica debes utilizar para calcular los lados restantes?",
+    "options": [
+      "El Teorema del Coseno.",
+      "El Teorema del Seno.",
+      "El cálculo del semiperímetro."
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. El coseno se usa cuando se conocen los tres lados.",
+      "Correcta. Con un lado conocido y los ángulos, se aplica el Teorema del Seno.",
+      "Incorrecta. Eso corresponde al cálculo de áreas por descomposición en triángulos."
+    ]
+  },
+  {
+    "type": "MINICASO PRÁCTICO",
+    "q": "Tienes un levantamiento por el método de Trilateración, donde mediste exclusivamente las distancias de los lados y no mediste ningún ángulo. Para calcular analíticamente el ángulo interno α, la fórmula topográfica a aplicar es:",
+    "options": [
+      "cosα = (l1² + l2² - l3²) / (2·l1·l2).",
+      "α = 2·arctan((p-r)/s).",
+      "α = 180° - (β + γ)."
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. En trilateración se conocen los lados y se usa el Teorema del Coseno para hallar ángulos.",
+      "Incorrecta. Esa fórmula no corresponde al sistema de apoyo por trilateración.",
+      "Incorrecta. Esa relación solo sirve si ya conocieras los otros dos ángulos."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "Independientemente del sistema utilizado, para calcular las coordenadas X, Y de cada vértice necesitas tres datos iniciales obligatorios. ¿Cuáles son?",
+    "options": [
+      "Temperatura ambiente, tensión de la cinta y apreciación del teodolito.",
+      "Un rumbo inicial, una coordenada inicial y el sentido del levantamiento.",
+      "Superficie total, perímetro y error de cierre angular."
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. Son parámetros de medición, no datos de arranque del sistema.",
+      "Correcta. Esos son los tres datos semilla para orientar y vincular el cálculo con el espacio real.",
+      "Incorrecta. Son resultados o comprobaciones, no datos iniciales."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "Según las definiciones fundamentales de la cátedra, ¿qué es exactamente un Punto en el terreno cuando establecemos una red de apoyo?",
+    "options": [
+      "La intersección geométrica de dos visuales de teodolito.",
+      "La proyección de la vertical sobre el terreno.",
+      "El elemento físico de hormigón o madera que queda clavado permanentemente en el suelo."
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. Eso describe un cruce de visuales, no la definición de punto.",
+      "Correcta. Un punto es la proyección de la vertical sobre el terreno.",
+      "Incorrecta. Eso corresponde al elemento físico de materialización, no al concepto de punto."
+    ]
+  },
+  {
+    "type": "VERDADERO/FALSO",
+    "q": "Los términos Mojón y Señal son sinónimos topográficos que designan al elemento físico utilizado para fijar un punto en la tierra.",
+    "options": [
+      "Verdadero.",
+      "Falso."
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. No son sinónimos.",
+      "Correcta. El mojón materializa un punto; la señal lo visualiza o señaliza."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "En el diseño de las Triangulaciones Topográficas, la cátedra especifica un límite matemático para la forma de los triángulos. ¿Cuál de las siguientes configuraciones está terminantemente prohibida?",
+    "options": [
+      "Triángulos equiláteros perfectos.",
+      "Triángulos isósceles.",
+      "Triángulos que contengan algún ángulo interno menor a 30°."
+    ],
+    "correct": 2,
+    "reasons": [
+      "Incorrecta. Es una forma ideal.",
+      "Incorrecta. Está permitida.",
+      "Correcta. Ángulos menores a 30° multiplican los errores trigonométricos y están prohibidos."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "Usted realiza un trabajo de apoyo utilizando triángulos cuyos lados miden aproximadamente entre 5 y 10 km. Según su tamaño, este trabajo clasifica como:",
+    "options": [
+      "Triangulación de 2º Orden (Geodésica).",
+      "Triangulación de 3º Orden (Topográfica).",
+      "Triangulación de 4º Orden (Topográfica)."
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. Ese rango no corresponde al 2º orden.",
+      "Correcta. De 5 a 10 km corresponde al 3º orden topográfico.",
+      "Incorrecta. El 4º orden trabaja con distancias menores."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "¿Qué rango de distancias caracteriza a las Triangulaciones de 4º Orden?",
+    "options": [
+      "30 a 50 km.",
+      "10 a 30 km.",
+      "2 a 5 km."
+    ],
+    "correct": 2,
+    "reasons": [
+      "Incorrecta. Ese rango corresponde a un orden superior.",
+      "Incorrecta. Ese rango no corresponde al 4º orden.",
+      "Correcta. Las triangulaciones de 4º orden abarcan 2 a 5 km."
+    ]
+  },
+  {
+    "type": "VERDADERO/FALSO",
+    "q": "Los distintos Sistemas Geométricos de Apoyo son sistemas cerrados e incompatibles entre sí, por lo que nunca deben mezclarse en un mismo levantamiento.",
+    "options": [
+      "Verdadero.",
+      "Falso."
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. No son incompatibles.",
+      "Correcta. Son compatibles entre sí y pueden combinarse según el terreno y las necesidades del trabajo."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "En un Polígono Geométrico utilizado como sistema de apoyo en un terreno llano, la regla estricta de medición de campo indica que el operador debe medir obligatoriamente:",
+    "options": [
+      "Un lado base y todos los ángulos horizontales.",
+      "Todos los lados perimetrales y todos los ángulos horizontales.",
+      "Todos los lados, omitiendo los ángulos."
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. Eso no describe un polígono geométrico completo.",
+      "Correcta. En terreno llano se miden todos los lados y todos los ángulos.",
+      "Incorrecta. Los ángulos no se omiten."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "Para medir el único lado necesario (la Base) en una Triangulación Topográfica, ¿qué método de medición tradicional exige la cátedra si no se cuenta con equipo electrónico?",
+    "options": [
+      "Medición a pasos previamente calibrada.",
+      "Cinta métrica con aplicación de la ecuación de la cinta.",
+      "Compensación por rumbos conjugados."
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. Los pasos no tienen la precisión exigida.",
+      "Correcta. La base se mide con cinta y corrección analítica de la cinta.",
+      "Incorrecta. Eso pertenece al método angular, no a la base."
+    ]
+  },
+  {
+    "type": "VERDADERO/FALSO",
+    "q": "El objetivo final de todos los métodos de apoyo es el cálculo de las coordenadas X, Y de cada vértice, y los tres métodos exigen introducir siempre los mismos tres datos de arranque: Sentido, un Rumbo Inicial y una Coordenada Inicial.",
+    "options": [
+      "Verdadero.",
+      "Falso."
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. Ese es el bloque de arranque común para los tres métodos.",
+      "Incorrecta. La afirmación coincide con el esquema de la cátedra."
+    ]
+  },
+  {
+    "type": "OPCIÓN MÚLTIPLE",
+    "q": "Si se requiere establecer un sistema de apoyo en un terreno sumamente abrupto, el sistema geométrico estrictamente recomendado por el esquema de la cátedra es:",
+    "options": [
+      "Polígono Geométrico, porque compensa automáticamente los desniveles.",
+      "Triangulación, porque requiere medir la distancia de un solo lado y luego prioriza la medición óptica de ángulos.",
+      "Trilateración, porque evita los errores de colimación e inclinación al no requerir mediciones angulares."
+    ],
+    "correct": 1,
+    "reasons": [
+      "Incorrecta. El polígono geométrico se usa en terrenos llanos.",
+      "Correcta. En terrenos abruptos se recomienda triangulación con una base y todos los ángulos.",
+      "Incorrecta. La trilateración mide lados, pero no es la recomendación principal para este caso."
+    ]
+  }
+];
 
 let current = 0;
 const selected = Array(questions.length).fill(null);
