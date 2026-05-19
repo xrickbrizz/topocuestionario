@@ -289,14 +289,14 @@ const questions = [
     "type": "COORDENADAS — TEORÍA",
     "q": "¿Cuál es una utilidad directa de calcular coordenadas X e Y en topografía?",
     "options": [
-      "Representar gráficamente detalles del terreno y calcular distancias entre puntos.",
       "Eliminar automáticamente todos los errores de medición angular.",
+      "Representar gráficamente detalles del terreno y calcular distancias entre puntos.",
       "Reemplazar por completo el estacionamiento y la verticalización del equipo."
     ],
-    "correct": 0,
+    "correct": 1,
     "reasons": [
-      "Correcta. Las coordenadas permiten ubicar puntos, dibujar detalles del terreno y calcular distancias entre puntos aunque no se haya estacionado en ellos.",
       "Incorrecta. Las coordenadas no eliminan por sí solas los errores de medición; solo permiten calcular y representar posiciones.",
+      "Correcta. Las coordenadas permiten ubicar puntos, dibujar detalles del terreno y calcular distancias entre puntos aunque no se haya estacionado en ellos.",
       "Incorrecta. El estacionamiento y la verticalización siguen siendo necesarios en los trabajos de campo."
     ]
   },
@@ -304,15 +304,15 @@ const questions = [
     "type": "COORDENADAS — TEORÍA",
     "q": "Según el apunte, ¿qué tipo de coordenadas se trabaja en este curso?",
     "options": [
-      "Coordenadas planas X e Y.",
       "Coordenadas planialtimétricas completas X, Y y Z.",
-      "Solo coordenadas geográficas: latitud y longitud."
+      "Solo coordenadas geográficas: latitud y longitud.",
+      "Coordenadas planas X e Y."
     ],
-    "correct": 0,
+    "correct": 2,
     "reasons": [
-      "Correcta. El apunte aclara que se emplean coordenadas en el plano, dejando las planialtimétricas para Topografía II.",
       "Incorrecta. Las coordenadas planialtimétricas incluyen altura, pero no son el foco de este tema.",
-      "Incorrecta. El desarrollo se hace con ejes rectangulares X e Y, no con latitud y longitud."
+      "Incorrecta. El desarrollo se hace con ejes rectangulares X e Y, no con latitud y longitud.",
+      "Correcta. El apunte aclara que se emplean coordenadas en el plano, dejando las planialtimétricas para Topografía II."
     ]
   },
   {
@@ -334,14 +334,14 @@ const questions = [
     "type": "COORDENADAS — TEORÍA",
     "q": "En el sistema de coordenadas usado en Topografía I, ¿con qué dirección coincide el eje X?",
     "options": [
-      "Con la dirección Norte-Sur verdadero, tomando el Norte como referencia.",
       "Con la dirección Este-Oeste, tomando el Este como referencia.",
+      "Con la dirección Norte-Sur verdadero, tomando el Norte como referencia.",
       "Con la pendiente natural del terreno."
     ],
-    "correct": 0,
+    "correct": 1,
     "reasons": [
-      "Correcta. En topografía el eje X coincide con la dirección Norte-Sur verdadero; el eje Y es perpendicular.",
       "Incorrecta. En este apunte el eje Y es el perpendicular al eje X, no el eje principal Norte-Sur.",
+      "Correcta. En topografía el eje X coincide con la dirección Norte-Sur verdadero; el eje Y es perpendicular.",
       "Incorrecta. Los ejes del sistema no se definen por la pendiente del terreno."
     ]
   },
@@ -349,15 +349,15 @@ const questions = [
     "type": "COORDENADAS — TEORÍA",
     "q": "¿Qué es el rumbo verdadero de una línea AB?",
     "options": [
-      "El ángulo horizontal que forma la línea AB con una línea dirigida al Norte.",
       "La distancia inclinada entre A y B medida sobre el terreno natural.",
-      "La diferencia de cotas entre A y B."
+      "La diferencia de cotas entre A y B.",
+      "El ángulo horizontal que forma la línea AB con una línea dirigida al Norte."
     ],
-    "correct": 0,
+    "correct": 2,
     "reasons": [
-      "Correcta. El rumbo verdadero se define angularmente respecto de la dirección Norte.",
       "Incorrecta. La distancia inclinada es una longitud, no un rumbo.",
-      "Incorrecta. La diferencia de cotas pertenece a altimetría, no al rumbo horizontal."
+      "Incorrecta. La diferencia de cotas pertenece a altimetría, no al rumbo horizontal.",
+      "Correcta. El rumbo verdadero se define angularmente respecto de la dirección Norte."
     ]
   },
   {
@@ -379,29 +379,29 @@ const questions = [
     "type": "COORDENADAS — TEORÍA",
     "q": "Si se conoce la distancia AB y el rumbo (AB), ¿cuál expresión corresponde a la proyección ΔX?",
     "options": [
-      "ΔX = AB · cos(AB)",
       "ΔX = AB · sen(AB)",
-      "ΔX = ΔY · AB"
+      "ΔX = ΔY · AB",
+      "ΔX = AB · cos(AB)"
     ],
-    "correct": 0,
+    "correct": 2,
     "reasons": [
-      "Correcta. Como el rumbo se toma desde el eje Norte, la proyección sobre X se obtiene con el coseno.",
       "Incorrecta. Esa es la expresión de ΔY.",
-      "Incorrecta. Multiplicar ΔY por la distancia no tiene sentido dimensional para obtener ΔX."
+      "Incorrecta. Multiplicar ΔY por la distancia no tiene sentido dimensional para obtener ΔX.",
+      "Correcta. Como el rumbo se toma desde el eje Norte, la proyección sobre X se obtiene con el coseno."
     ]
   },
   {
     "type": "COORDENADAS — TEORÍA",
     "q": "Conocidos A(XA, YA), la distancia AB y el rumbo (AB), ¿cómo se obtiene la coordenada YB?",
     "options": [
-      "YB = YA + AB · sen(AB)",
       "YB = YA + AB · cos(AB)",
+      "YB = YA + AB · sen(AB)",
       "YB = XA + AB · sen(AB)"
     ],
-    "correct": 0,
+    "correct": 1,
     "reasons": [
-      "Correcta. Primero se calcula ΔY = AB·sen(AB), y luego se suma algebraicamente a YA.",
       "Incorrecta. El coseno se usa para la variación en X.",
+      "Correcta. Primero se calcula ΔY = AB·sen(AB), y luego se suma algebraicamente a YA.",
       "Incorrecta. La coordenada YB se obtiene a partir de YA, no de XA."
     ]
   },
@@ -424,29 +424,29 @@ const questions = [
     "type": "COORDENADAS — TEORÍA",
     "q": "Si se conocen las coordenadas de A y B, ¿qué relación permite calcular inicialmente el rumbo de AB?",
     "options": [
-      "tan(AB) = ΔY / ΔX",
       "tan(AB) = ΔX / ΔY",
-      "sen(AB) = ΔX / ΔY"
+      "sen(AB) = ΔX / ΔY",
+      "tan(AB) = ΔY / ΔX"
     ],
-    "correct": 0,
+    "correct": 2,
     "reasons": [
-      "Correcta. El rumbo se obtiene desde la tangente de la relación entre ΔY y ΔX, ajustando luego por cuadrante.",
       "Incorrecta. Invierte la relación y da un ángulo complementario incorrecto para este sistema.",
-      "Incorrecta. El seno no se plantea como ΔX/ΔY para obtener el rumbo."
+      "Incorrecta. El seno no se plantea como ΔX/ΔY para obtener el rumbo.",
+      "Correcta. El rumbo se obtiene desde la tangente de la relación entre ΔY y ΔX, ajustando luego por cuadrante."
     ]
   },
   {
     "type": "COORDENADAS — TEORÍA",
     "q": "Según el apunte, la fórmula de Pitágoras para AB = √(ΔX² + ΔY²) debe usarse principalmente como:",
     "options": [
-      "Control de cálculo.",
       "Única herramienta de cálculo de coordenadas.",
+      "Control de cálculo.",
       "Método para corregir errores angulares."
     ],
-    "correct": 0,
+    "correct": 1,
     "reasons": [
-      "Correcta. El apunte indica que Pitágoras otorga un tercer control y no debe reemplazar las expresiones topográficas principales.",
       "Incorrecta. Para coordenadas se usan las proyecciones con seno y coseno del rumbo.",
+      "Correcta. El apunte indica que Pitágoras otorga un tercer control y no debe reemplazar las expresiones topográficas principales.",
       "Incorrecta. Pitágoras no compensa ángulos."
     ]
   },
@@ -469,14 +469,14 @@ const questions = [
     "type": "COORDENADAS — TEORÍA",
     "q": "Si ΔX < 0 y ΔY > 0, ¿qué cuidado debe tomarse al calcular el rumbo?",
     "options": [
-      "Debe ajustarse al cuadrante II, porque el arctan directo entrega un ángulo negativo.",
       "Debe dejarse el resultado negativo, porque los rumbos topográficos pueden ser negativos.",
+      "Debe ajustarse al cuadrante II, porque el arctan directo entrega un ángulo negativo.",
       "Debe sumarse siempre 360°, sin considerar el cuadrante."
     ],
-    "correct": 0,
+    "correct": 1,
     "reasons": [
-      "Correcta. En cuadrante II, el cociente ΔY/ΔX es negativo y el rumbo se ajusta para quedar entre 90° y 180°.",
       "Incorrecta. Los rumbos se expresan normalmente entre 0° y 360°, no como negativos.",
+      "Correcta. En cuadrante II, el cociente ΔY/ΔX es negativo y el rumbo se ajusta para quedar entre 90° y 180°.",
       "Incorrecta. Sumar 360° al ángulo negativo lo llevaría al cuarto cuadrante, no al segundo."
     ]
   },
@@ -484,15 +484,15 @@ const questions = [
     "type": "COORDENADAS — TEORÍA",
     "q": "¿Qué relación existe entre el rumbo (AB) y el rumbo contrario (BA)?",
     "options": [
-      "Difieren en 180°.",
       "Siempre son exactamente iguales.",
-      "Difieren en 90° porque los ejes son perpendiculares."
+      "Difieren en 90° porque los ejes son perpendiculares.",
+      "Difieren en 180°."
     ],
-    "correct": 0,
+    "correct": 2,
     "reasons": [
-      "Correcta. Una misma línea puede arrumbarse desde A o desde B; los rumbos recíprocos difieren 180°.",
       "Incorrecta. El sentido de avance cambia el rumbo.",
-      "Incorrecta. La perpendicularidad de los ejes no define la diferencia entre rumbos recíprocos."
+      "Incorrecta. La perpendicularidad de los ejes no define la diferencia entre rumbos recíprocos.",
+      "Correcta. Una misma línea puede arrumbarse desde A o desde B; los rumbos recíprocos difieren 180°."
     ]
   },
   {
@@ -514,14 +514,14 @@ const questions = [
     "type": "MEDICIÓN ELECTRÓNICA",
     "q": "En medición electrónica de distancias, la distancia que entrega inicialmente el equipo suele ser:",
     "options": [
-      "La distancia geométrica o inclinada entre instrumento y prisma.",
       "La distancia horizontal ya reducida, sin necesidad de cálculo adicional.",
+      "La distancia geométrica o inclinada entre instrumento y prisma.",
       "La diferencia de nivel entre ambos puntos."
     ],
-    "correct": 0,
+    "correct": 1,
     "reasons": [
-      "Correcta. El aparato mide la línea inclinada; para obtener la horizontal se requiere reducción con el ángulo vertical o datos equivalentes.",
       "Incorrecta. No debe asumirse que la lectura es horizontal si existe desnivel.",
+      "Correcta. El aparato mide la línea inclinada; para obtener la horizontal se requiere reducción con el ángulo vertical o datos equivalentes.",
       "Incorrecta. La diferencia de nivel no es la distancia electrónica medida por el distanciómetro."
     ]
   },
@@ -529,15 +529,15 @@ const questions = [
     "type": "MEDICIÓN ELECTRÓNICA",
     "q": "¿Cuál de los siguientes errores corresponde a errores personales en medición electrónica de distancias?",
     "options": [
-      "Incorrecta centración del instrumento y del prisma, o equivocaciones en las lecturas.",
       "Pérdida de calibración del instrumento solamente.",
-      "Influencia de la presión atmosférica y la temperatura solamente."
+      "Influencia de la presión atmosférica y la temperatura solamente.",
+      "Incorrecta centración del instrumento y del prisma, o equivocaciones en las lecturas."
     ],
-    "correct": 0,
+    "correct": 2,
     "reasons": [
-      "Correcta. La centración incorrecta y las equivocaciones de lectura son errores personales del operador.",
       "Incorrecta. La pérdida de calibración es un error instrumental.",
-      "Incorrecta. La presión y la temperatura son errores naturales o atmosféricos."
+      "Incorrecta. La presión y la temperatura son errores naturales o atmosféricos.",
+      "Correcta. La centración incorrecta y las equivocaciones de lectura son errores personales del operador."
     ]
   },
   {
@@ -559,14 +559,14 @@ const questions = [
     "type": "REPLANTEO",
     "q": "En el método sencillo de replanteo de ángulos, si al apuntar a B se lee l1 y el ángulo de proyecto es α, ¿qué lectura se debe provocar?",
     "options": [
-      "l2 = l1 + α",
       "l2 = l1 - α",
+      "l2 = l1 + α",
       "l2 = α - 180°"
     ],
-    "correct": 0,
+    "correct": 1,
     "reasons": [
-      "Correcta. Se suma el ángulo conocido a la lectura inicial y se gira hasta provocar esa lectura.",
       "Incorrecta. Restar α replantearía el ángulo en el sentido contrario al procedimiento indicado.",
+      "Correcta. Se suma el ángulo conocido a la lectura inicial y se gira hasta provocar esa lectura.",
       "Incorrecta. Esa operación no corresponde al método sencillo."
     ]
   },
@@ -574,15 +574,15 @@ const questions = [
     "type": "REPLANTEO",
     "q": "¿Por qué al aumentar la distancia L conviene usar un mejor método de replanteo angular?",
     "options": [
-      "Porque para un mismo error angular dα, el error transversal dl crece proporcionalmente con L.",
       "Porque el ángulo de proyecto cambia de valor automáticamente con la distancia.",
-      "Porque a mayor distancia ya no se puede usar ningún jalón."
+      "Porque a mayor distancia ya no se puede usar ningún jalón.",
+      "Porque para un mismo error angular dα, el error transversal dl crece proporcionalmente con L."
     ],
-    "correct": 0,
+    "correct": 2,
     "reasons": [
-      "Correcta. El error transversal depende de la distancia; por eso, cuanto mayor es L, más exigente debe ser el método.",
       "Incorrecta. El ángulo de proyecto es dato y no cambia por la distancia.",
-      "Incorrecta. El uso de jalones depende de las condiciones de visibilidad, no de una prohibición por distancia."
+      "Incorrecta. El uso de jalones depende de las condiciones de visibilidad, no de una prohibición por distancia.",
+      "Correcta. El error transversal depende de la distancia; por eso, cuanto mayor es L, más exigente debe ser el método."
     ]
   },
   {
@@ -604,14 +604,14 @@ const questions = [
     "type": "MINICASO PRÁCTICO — COORDENADAS",
     "q": "A tiene coordenadas X=1200,00; Y=800,00 y B tiene X=1160,00; Y=880,00. ¿En qué cuadrante está AB y cuál es su rumbo aproximado?",
     "options": [
-      "Cuadrante II; rumbo ≈ 116°34'",
       "Cuadrante I; rumbo ≈ 63°26'",
+      "Cuadrante II; rumbo ≈ 116°34'",
       "Cuadrante IV; rumbo ≈ 296°34'"
     ],
-    "correct": 0,
+    "correct": 1,
     "reasons": [
-      "Correcta. ΔX=-40 y ΔY=+80, por lo tanto está en cuadrante II; el rumbo ajustado es aproximadamente 116°34'.",
       "Incorrecta. El cuadrante I exige ΔX y ΔY positivos.",
+      "Correcta. ΔX=-40 y ΔY=+80, por lo tanto está en cuadrante II; el rumbo ajustado es aproximadamente 116°34'.",
       "Incorrecta. El cuadrante IV exige ΔX positivo y ΔY negativo."
     ]
   },
@@ -619,15 +619,15 @@ const questions = [
     "type": "MINICASO PRÁCTICO — COORDENADAS",
     "q": "A tiene coordenadas X=500,00; Y=500,00 y B tiene X=450,00; Y=430,00. ¿Cuál es el rumbo aproximado de AB?",
     "options": [
-      "234°28'",
       "54°28'",
-      "305°32'"
+      "305°32'",
+      "234°28'"
     ],
-    "correct": 0,
+    "correct": 2,
     "reasons": [
-      "Correcta. ΔX=-50 y ΔY=-70; está en cuadrante III. β=arctan(70/50)=54°28', entonces rumbo≈180°+54°28'=234°28'.",
       "Incorrecta. Ese es solo el ángulo agudo, sin ajuste de cuadrante.",
-      "Incorrecta. Ese valor correspondería a otro cuadrante."
+      "Incorrecta. Ese valor correspondería a otro cuadrante.",
+      "Correcta. ΔX=-50 y ΔY=-70; está en cuadrante III. β=arctan(70/50)=54°28', entonces rumbo≈180°+54°28'=234°28'."
     ]
   },
   {
@@ -649,14 +649,14 @@ const questions = [
     "type": "MINICASO PRÁCTICO — COORDENADAS",
     "q": "A(X=1000,00; Y=1000,00) y B(X=1060,00; Y=1080,00). Usando ΔX y ΔY, ¿qué distancia AB y rumbo aproximado se obtienen como control?",
     "options": [
-      "AB = 100,00 m ; rumbo ≈ 53°08'",
       "AB = 140,00 m ; rumbo ≈ 36°52'",
+      "AB = 100,00 m ; rumbo ≈ 53°08'",
       "AB = 100,00 m ; rumbo ≈ 306°52'"
     ],
-    "correct": 0,
+    "correct": 1,
     "reasons": [
-      "Correcta. ΔX=60 y ΔY=80; AB=√(60²+80²)=100 m y rumbo=arctan(80/60)=53°08'.",
       "Incorrecta. La distancia no es la suma directa de las proyecciones.",
+      "Correcta. ΔX=60 y ΔY=80; AB=√(60²+80²)=100 m y rumbo=arctan(80/60)=53°08'.",
       "Incorrecta. Ese rumbo pertenece a otro cuadrante; aquí ΔX y ΔY son positivos."
     ]
   }
