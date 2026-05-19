@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cuestionario de Autoevaluación — Método de Rumbos</title>
+<title>Cuestionario de Autoevaluación — Coordenadas, Medición Electrónica y Replanteo</title>
 <style>
 :root{
   --bg:#f5f5f3;
@@ -39,7 +39,7 @@ h1{
   color:var(--muted);
   font-size: 16px;
   line-height: 1.5;
-  max-width: 860px;
+  max-width: 900px;
 }
 .meta{
   display:flex;
@@ -245,11 +245,11 @@ button:disabled{
   <header>
     <h1>Cuestionario de Autoevaluación</h1>
     <div class="subtitle">
-      Método de Rumbos y sistemas geometricos de apoyo (ya la actualice kjjj)
+      Coordenadas, Medición Electrónica de Distancias y Replanteo. Incluye teoría y minicasos prácticos para repasar antes del parcial.
     </div>
     <div class="meta">
-      <div class="pill" id="progressPill">Pregunta 1 de 20</div>
-      <div class="pill" id="scorePill">Aciertos: 0/20</div>
+      <div class="pill" id="progressPill">Pregunta 1 de 25</div>
+      <div class="pill" id="scorePill">Aciertos: 0/25</div>
       <div class="pill" id="statusPill">Sin responder</div>
     </div>
     <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
@@ -275,7 +275,7 @@ button:disabled{
       <h2>Evaluación final</h2>
       <div class="score" id="finalScore">0/100</div>
       <p id="finalText"></p>
-      <div class="pill" id="finalDetail" style="justify-content:center;">Aciertos: 0/20</div>
+      <div class="pill" id="finalDetail" style="justify-content:center;">Aciertos: 0/25</div>
       <div class="restart">
         <button class="btn-dark" onclick="restartQuiz()">Reiniciar cuestionario</button>
       </div>
@@ -286,522 +286,378 @@ button:disabled{
 <script>
 const questions = [
   {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "¿Cuándo es estrictamente necesario aplicar el Método de Rumbos según el apunte de la cátedra?",
+    "type": "COORDENADAS — TEORÍA",
+    "q": "¿Cuál es una utilidad directa de calcular coordenadas X e Y en topografía?",
     "options": [
-      "Cuando hay exactamente 2 visuales.",
-      "Cuando tenemos tres o más visuales.",
-      "Solo en altimetría."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. Para menos visuales suelen usarse otros métodos como el sencillo o el de compensación.",
-      "Correcta. El método de rumbos se usa cuando hay tres o más visuales desde una misma estación.",
-      "Incorrecta. Es un método para medir ángulos horizontales en planimetría."
-    ]
-  },
-  {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "Al estacionar el teodolito sobre el punto O, ¿hacia dónde debe apuntar obligatoriamente el rumbo instrumental 000°00'00\" antes de iniciar?",
-    "options": [
-      "Al Norte Magnético.",
-      "Al Norte Geográfico.",
-      "A cualquier dirección, es indiferente."
-    ],
-    "correct": 2,
-    "reasons": [
-      "Incorrecta. El método no exige orientar el cero del limbo al Norte Magnético.",
-      "Incorrecta. Tampoco hace falta orientar el cero al Norte Geográfico.",
-      "Correcta. Los ángulos se calculan por diferencia de rumbos, así que el rumbo instrumental puede arrancar en cualquier dirección."
-    ]
-  },
-  {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "¿Qué criterio técnico rige la elección de la primera visual (Ai) a la que se apuntará en el terreno?",
-    "options": [
-      "Debe ser la visual más lejana a la estación.",
-      "Debe ser la visual que ofrezca las mejores condiciones de apunte.",
-      "Debe ser la visual ubicada más a la izquierda del operador."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. La distancia no define la visual inicial.",
-      "Correcta. Se elige la visual con mejores condiciones de apunte porque será la referencia libre de error.",
-      "Incorrecta. La posición izquierda/derecha no es el criterio de elección."
-    ]
-  },
-  {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "Una vez tomada la lectura en la visual inicial (Ai) en I Posición, ¿en qué sentido estricto se debe girar la alidada para continuar midiendo?",
-    "options": [
-      "De izquierda a derecha (sentido horario).",
-      "De derecha a izquierda (sentido antihorario).",
-      "En cualquier sentido, siempre y cuando se regrese a la visual Ai."
+      "Representar gráficamente detalles del terreno y calcular distancias entre puntos.",
+      "Eliminar automáticamente todos los errores de medición angular.",
+      "Reemplazar por completo el estacionamiento y la verticalización del equipo."
     ],
     "correct": 0,
     "reasons": [
-      "Correcta. En I posición el barrido se realiza de izquierda a derecha, en sentido horario.",
-      "Incorrecta. Ese es el sentido de la II posición.",
-      "Incorrecta. Alterar el sentido rompe el procedimiento del método."
+      "Correcta. Las coordenadas permiten ubicar puntos, dibujar detalles del terreno y calcular distancias entre puntos aunque no se haya estacionado en ellos.",
+      "Incorrecta. Las coordenadas no eliminan por sí solas los errores de medición; solo permiten calcular y representar posiciones.",
+      "Incorrecta. El estacionamiento y la verticalización siguen siendo necesarios en los trabajos de campo."
     ]
   },
   {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "¿Cómo verifica el operador mecánicamente que el teodolito se encuentra en Primera Posición (Posición I)?",
+    "type": "COORDENADAS — TEORÍA",
+    "q": "Según el apunte, ¿qué tipo de coordenadas se trabaja en este curso?",
     "options": [
-      "El círculo graduado vertical se encuentra a la izquierda del operador.",
-      "El círculo graduado vertical se encuentra a la derecha del operador.",
-      "La burbuja del nivel tubular está exactamente paralela al anteojo."
+      "Coordenadas planas X e Y.",
+      "Coordenadas planialtimétricas completas X, Y y Z.",
+      "Solo coordenadas geográficas: latitud y longitud."
     ],
     "correct": 0,
     "reasons": [
-      "Correcta. La primera posición se identifica cuando el círculo graduado vertical está a la izquierda.",
-      "Incorrecta. Esa configuración corresponde a la Segunda Posición.",
-      "Incorrecta. Eso describe un ajuste general, no la posición conjugada."
+      "Correcta. El apunte aclara que se emplean coordenadas en el plano, dejando las planialtimétricas para Topografía II.",
+      "Incorrecta. Las coordenadas planialtimétricas incluyen altura, pero no son el foco de este tema.",
+      "Incorrecta. El desarrollo se hace con ejes rectangulares X e Y, no con latitud y longitud."
     ]
   },
   {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "Al finalizar el barrido en Posición I y leer por segunda vez la visual inicial (obteniendo Af), ¿cómo se transiciona a la Posición II para continuar el método?",
+    "type": "COORDENADAS — TEORÍA",
+    "q": "Topográficamente, ¿cómo se define un punto en el terreno?",
     "options": [
-      "Girando la alidada horizontal 180° y re-calando los niveles.",
-      "Mediante la vuelta de campana, basculando el anteojo para invertir el nivel.",
-      "Aflojando el freno general y rotando el limbo."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. No se debe rearmar la estación ni recalzar los niveles para pasar a II posición.",
-      "Correcta. Se pasa a Posición II con la vuelta de campana, invirtiendo el anteojo.",
-      "Incorrecta. Rotar el limbo sin la maniobra correcta arruina el procedimiento."
-    ]
-  },
-  {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "Al anotar las lecturas tomadas durante el barrido en II Posición, la cátedra indica una regla de simplificación. ¿Cuál es?",
-    "options": [
-      "Anotar los grados invirtiendo el cuadrante.",
-      "Anotar solamente los minutos y segundos leídos en el nonio.",
-      "Anotar únicamente las diferencias parciales de segundos."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. No se invierte el cuadrante al registrar la II posición.",
-      "Correcta. Se anotan minutos y segundos, asumiendo que los grados difieren exactamente 180° respecto de la I posición.",
-      "Incorrecta. No se registran solo diferencias parciales."
-    ]
-  },
-  {
-    "type": "MINICASO PRÁCTICO",
-    "q": "Al promediar las lecturas I y II, tu visual inicial (Ai) arroja 45° 20' 10\" y tu visual de retorno final (Af) arroja 45° 20' 16\". ¿Cuál es tu error de cierre (Δ)?",
-    "options": [
-      "-06\"",
-      "+06\"",
-      "00\""
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. El signo está invertido.",
-      "Correcta. Δ = Af - Ai = 45° 20' 16\" - 45° 20' 10\" = +06\".",
-      "Incorrecta. Sí existe diferencia matemática entre las lecturas."
-    ]
-  },
-  {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "Has calculado el Δ de tu levantamiento. ¿Con qué parámetro técnico debes comparar este valor para saber si es tolerable?",
-    "options": [
-      "Con la apreciación del aparato (mínima división de lectura directa).",
-      "Con el límite visual de estimación del operario.",
-      "Con el aumento de los lentes del anteojo."
+      "Como la proyección sobre el terreno de la dirección de la plomada, es decir, la vertical.",
+      "Como cualquier cruce dibujado entre dos rectas de un plano teórico.",
+      "Como la distancia horizontal entre dos mojones consecutivos."
     ],
     "correct": 0,
     "reasons": [
-      "Correcta. El error de cierre debe ser menor que la apreciación del instrumento.",
-      "Incorrecta. La estimación visual no define la tolerancia.",
-      "Incorrecta. El aumento del lente no es el parámetro de control."
+      "Correcta. En topografía el punto se entiende como la proyección de la vertical sobre el terreno, materializada por un mojón, antena, pararrayo, etc.",
+      "Incorrecta. Esa es una definición geométrica general, no la definición topográfica usada en el apunte.",
+      "Incorrecta. Eso describe una longitud, no un punto."
     ]
   },
   {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "En un levantamiento compuesto por 4 visuales en total, se obtuvo un error de cierre Δ = -12\". ¿Cuál es el valor y signo de la corrección base (C)?",
+    "type": "COORDENADAS — TEORÍA",
+    "q": "En el sistema de coordenadas usado en Topografía I, ¿con qué dirección coincide el eje X?",
     "options": [
-      "C = -03\"",
-      "C = +03\"",
-      "C = +04\""
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. Falta cambiar el signo general de la fórmula.",
-      "Correcta. C = -Δ/n = -(-12\")/4 = +03\".",
-      "Incorrecta. La división no da ese valor."
-    ]
-  },
-  {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "Asume que tienes 4 visuales (A, B, C, D) y que tu corrección base es C = +02\". Sabiendo que A es tu visual inicial (Ai), ¿cuántos segundos se le suman específicamente al promedio de la visual C (tercera visual)?",
-    "options": [
-      "+02\"",
-      "+04\"",
-      "+06\""
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. Ese valor corresponde a la segunda visual.",
-      "Correcta. La corrección es acumulativa: en C se aplican dos veces +02\", o sea +04\".",
-      "Incorrecta. Ese valor correspondería a la cuarta visual."
-    ]
-  },
-  {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "Finalizado el proceso de cálculo de los Rumbos Corregidos para todas las filas de la libreta, ¿qué condición matemática estricta debe evidenciarse entre Ai y Af?",
-    "options": [
-      "Deben diferir exactamente en 180° por la vuelta de campana.",
-      "Deben ser valores exactamente iguales.",
-      "Su diferencia debe coincidir con el error de arrastre."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. Eso solo aplica a la diferencia cruda entre posiciones, no a la compensación final.",
-      "Correcta. Una vez aplicadas las correcciones acumulativas, Ai y Af deben coincidir exactamente.",
-      "Incorrecta. El método busca anular ese remanente."
-    ]
-  },
-  {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "Al pasar de la columna de rumbos a la determinación de los ángulos reales del terreno, ¿cómo define operativamente la cátedra un ángulo horizontal?",
-    "options": [
-      "Como la diferencia entre el Rumbo Derecho y el Rumbo Izquierdo.",
-      "Como el promedio ponderado de todos los rumbos de la estación.",
-      "Como el rumbo corregido restado a 360°."
+      "Con la dirección Norte-Sur verdadero, tomando el Norte como referencia.",
+      "Con la dirección Este-Oeste, tomando el Este como referencia.",
+      "Con la pendiente natural del terreno."
     ],
     "correct": 0,
     "reasons": [
-      "Correcta. El ángulo horizontal se calcula como Rumbo Derecho menos Rumbo Izquierdo.",
-      "Incorrecta. El promedio no define el ángulo entre dos visuales.",
-      "Incorrecta. Restar a 360° no da la separación angular entre las visuales."
+      "Correcta. En topografía el eje X coincide con la dirección Norte-Sur verdadero; el eje Y es perpendicular.",
+      "Incorrecta. En este apunte el eje Y es el perpendicular al eje X, no el eje principal Norte-Sur.",
+      "Incorrecta. Los ejes del sistema no se definen por la pendiente del terreno."
     ]
   },
   {
-    "type": "MINICASO PRÁCTICO",
-    "q": "En tu libreta, tienes la visual izquierda (OB) con un rumbo corregido de 87° 41' 24\" y la visual derecha (OC) con 158° 42' 15\". ¿Cuál es el valor del ángulo β (BÔC)?",
+    "type": "COORDENADAS — TEORÍA",
+    "q": "¿Qué es el rumbo verdadero de una línea AB?",
     "options": [
-      "71° 00' 51\"",
-      "-71° 00' 51\"",
-      "246° 23' 39\""
+      "El ángulo horizontal que forma la línea AB con una línea dirigida al Norte.",
+      "La distancia inclinada entre A y B medida sobre el terreno natural.",
+      "La diferencia de cotas entre A y B."
     ],
     "correct": 0,
     "reasons": [
-      "Correcta. 158° 42' 15\" - 87° 41' 24\" = 71° 00' 51\".",
-      "Incorrecta. Ese signo aparece si inviertes el orden de la resta.",
-      "Incorrecta. Ese valor resulta de sumar ambos rumbos."
+      "Correcta. El rumbo verdadero se define angularmente respecto de la dirección Norte.",
+      "Incorrecta. La distancia inclinada es una longitud, no un rumbo.",
+      "Incorrecta. La diferencia de cotas pertenece a altimetría, no al rumbo horizontal."
     ]
   },
   {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "Luego de hallar analíticamente todos los ángulos individuales contenidos alrededor del punto O, su sumatoria final (Σ) debe resultar en:",
+    "type": "COORDENADAS — TEORÍA",
+    "q": "Si se conoce la distancia AB y el rumbo (AB), ¿cuál expresión corresponde a la proyección ΔY?",
     "options": [
-      "Exactamente 180° 00' 00\".",
-      "Exactamente 360° 00' 00\".",
-      "360° más el residuo tolerado por el fabricante del anteojo."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. 180° corresponde a otras configuraciones geométricas.",
-      "Correcta. El cierre general debe resultar en 360° 00' 00\".",
-      "Incorrecta. El residuo ya debió prorratearse antes."
-    ]
-  },
-  {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "Analizando el cuadro de eliminación de errores del Método de Rumbos, ¿qué directiva operativa permite erradicar la influencia por Giro de trípode?",
-    "options": [
-      "Calar con exactitud el nivel esférico y tubular de la base.",
-      "Realizar la vuelta de campana.",
-      "Barrer las visuales en ambas direcciones (de derecha a izquierda y de izquierda a derecha)."
-    ],
-    "correct": 2,
-    "reasons": [
-      "Incorrecta. Eso es estacionamiento base, no elimina el giro posterior.",
-      "Incorrecta. La vuelta de campana trata errores de ejes, no el giro de trípode.",
-      "Correcta. Barrer en ambos sentidos compensa la posible torsión o giro del trípode."
-    ]
-  },
-  {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "Según la teoría, el Método de Rumbos logra eliminar el Error de Arrastre en la alidada gracias a:",
-    "options": [
-      "Medir siempre con la precaución de desajustar el tornillo de micrometría.",
-      "Medir los rumbos para obtener el ángulo y los consiguientes para hacer el cierre de su suma en 360°.",
-      "Frotar mecánicamente el limbo antes de tomar cada visual."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. No se manipula así el instrumento.",
-      "Correcta. El cierre en 360° anula el remanente del arrastre.",
-      "Incorrecta. Eso no forma parte del método."
-    ]
-  },
-  {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "¿De qué manera este método asegura que las lecturas queden purgadas de los errores de Colimación, Inclinación y Excentricidad de alidada?",
-    "options": [
-      "Realizando los promedios de las medidas obtenidas en las dos posiciones del anteojo (I y II).",
-      "Apuntando exclusivamente a la base de los jalones (a nivel del suelo).",
-      "Girando los tornillos calantes compensadores durante el barrido."
+      "ΔY = AB · sen(AB)",
+      "ΔY = AB · cos(AB)",
+      "ΔY = AB / tan(AB)"
     ],
     "correct": 0,
     "reasons": [
-      "Correcta. La doble posición del anteojo y el promedio compensan esas influencias opuestas.",
-      "Incorrecta. Es una práctica auxiliar, no la eliminación real.",
-      "Incorrecta. Eso arruina la verticalización."
+      "Correcta. En el esquema del apunte, la proyección sobre Y se obtiene con el seno del rumbo.",
+      "Incorrecta. Esa expresión corresponde a ΔX.",
+      "Incorrecta. Dividir por la tangente no es la fórmula directa de la proyección Y."
     ]
   },
   {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "El operador siempre tiene falencias de Apunte y de Lectura (agudeza visual). Según la cátedra, en el Método de Rumbos, estos errores:",
+    "type": "COORDENADAS — TEORÍA",
+    "q": "Si se conoce la distancia AB y el rumbo (AB), ¿cuál expresión corresponde a la proyección ΔX?",
     "options": [
-      "Se eliminan por completo gracias a la precisión del micrómetro del teodolito.",
-      "No son afectados, permanecen intactos.",
-      "Se disminuye su influencia por la repetición del apunte y la toma de lectura en las diversas posiciones."
-    ],
-    "correct": 2,
-    "reasons": [
-      "Incorrecta. No se eliminan por completo.",
-      "Incorrecta. Sí se reduce su influencia.",
-      "Correcta. Son errores accidentales y personales; el método solo disminuye su efecto."
-    ]
-  },
-  {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "Si cometes alguno de los dos siguientes errores operativos en el paso inicial de la práctica, ningún cálculo del Método de Rumbos podrá salvar tu trabajo. ¿Cuáles son?",
-    "options": [
-      "Errores de Centración y Verticalización.",
-      "Errores de Colimación e Inclinación.",
-      "Errores de Giro y Arrastre."
+      "ΔX = AB · cos(AB)",
+      "ΔX = AB · sen(AB)",
+      "ΔX = ΔY · AB"
     ],
     "correct": 0,
     "reasons": [
-      "Correcta. Centración y Verticalización no se eliminan por el método; deben hacerse bien desde el inicio.",
-      "Incorrecta. Esos sí se compensan operativamente con el método.",
-      "Incorrecta. Son errores instrumentales que el procedimiento ayuda a eliminar."
+      "Correcta. Como el rumbo se toma desde el eje Norte, la proyección sobre X se obtiene con el coseno.",
+      "Incorrecta. Esa es la expresión de ΔY.",
+      "Incorrecta. Multiplicar ΔY por la distancia no tiene sentido dimensional para obtener ΔX."
     ]
   },
   {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "Según la cátedra, ¿cuál es el objetivo fundamental de establecer un Sistema Geométrico de Apoyo en el terreno?",
+    "type": "COORDENADAS — TEORÍA",
+    "q": "Conocidos A(XA, YA), la distancia AB y el rumbo (AB), ¿cómo se obtiene la coordenada YB?",
     "options": [
-      "Medir directamente el área de una parcela pequeña y transitable dividiéndola en triángulos.",
-      "Determinar puntos fijos con coordenadas planialtimétricas, que nos permitan efectuar a partir de ellos otras mediciones.",
-      "Compensar y eliminar los errores sistemáticos del teodolito y la cinta métrica antes de medir."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. Eso corresponde al método de descomposición en triángulos para áreas pequeñas.",
-      "Correcta. El sistema de apoyo busca determinar puntos fijos con coordenadas planialtimétricas para relevar y replantear.",
-      "Incorrecta. Los sistemas de apoyo no corrigen errores del instrumental."
-    ]
-  },
-  {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "Debes elegir el Sistema Geométrico de Apoyo adecuado según el tipo de terreno. ¿Cuál de las siguientes relaciones metodológicas es la correcta?",
-    "options": [
-      "En polígonos geométricos se miden todos los lados y todos los ángulos; en triangulaciones se mide solo un lado base y todos los ángulos.",
-      "En trilateraciones se miden todos los ángulos y ningún lado.",
-      "En triangulaciones se miden todos los lados y solo un ángulo inicial."
+      "YB = YA + AB · sen(AB)",
+      "YB = YA + AB · cos(AB)",
+      "YB = XA + AB · sen(AB)"
     ],
     "correct": 0,
     "reasons": [
-      "Correcta. En terreno llano se usa polígono geométrico; en terreno abrupto, triangulación con una base y todos los ángulos.",
-      "Incorrecta. Eso es lo opuesto a la trilateración.",
-      "Incorrecta. Eso confunde triangulación con trilateración."
+      "Correcta. Primero se calcula ΔY = AB·sen(AB), y luego se suma algebraicamente a YA.",
+      "Incorrecta. El coseno se usa para la variación en X.",
+      "Incorrecta. La coordenada YB se obtiene a partir de YA, no de XA."
     ]
   },
   {
-    "type": "MINICASO PRÁCTICO",
-    "q": "Estás operando en un terreno montañoso y decides realizar una Triangulación Topográfica. Has medido el lado base (b) y todos los ángulos internos (α, β, γ). ¿Qué expresión analítica debes utilizar para calcular los lados restantes?",
+    "type": "COORDENADAS — TEORÍA",
+    "q": "Conocidos A(XA, YA), la distancia AB y el rumbo (AB), ¿cómo se obtiene la coordenada XB?",
     "options": [
-      "El Teorema del Coseno.",
-      "El Teorema del Seno.",
-      "El cálculo del semiperímetro."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. El coseno se usa cuando se conocen los tres lados.",
-      "Correcta. Con un lado conocido y los ángulos, se aplica el Teorema del Seno.",
-      "Incorrecta. Eso corresponde al cálculo de áreas por descomposición en triángulos."
-    ]
-  },
-  {
-    "type": "MINICASO PRÁCTICO",
-    "q": "Tienes un levantamiento por el método de Trilateración, donde mediste exclusivamente las distancias de los lados y no mediste ningún ángulo. Para calcular analíticamente el ángulo interno α, la fórmula topográfica a aplicar es:",
-    "options": [
-      "cosα = (l1² + l2² - l3²) / (2·l1·l2).",
-      "α = 2·arctan((p-r)/s).",
-      "α = 180° - (β + γ)."
+      "XB = XA + AB · cos(AB)",
+      "XB = YA + AB · cos(AB)",
+      "XB = XA + AB · sen(AB)"
     ],
     "correct": 0,
     "reasons": [
-      "Correcta. En trilateración se conocen los lados y se usa el Teorema del Coseno para hallar ángulos.",
-      "Incorrecta. Esa fórmula no corresponde al sistema de apoyo por trilateración.",
-      "Incorrecta. Esa relación solo sirve si ya conocieras los otros dos ángulos."
+      "Correcta. La variación ΔX se calcula con el coseno del rumbo y se suma algebraicamente a XA.",
+      "Incorrecta. Para calcular XB se parte de XA, no de YA.",
+      "Incorrecta. El seno corresponde a la proyección ΔY."
     ]
   },
   {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "Independientemente del sistema utilizado, para calcular las coordenadas X, Y de cada vértice necesitas tres datos iniciales obligatorios. ¿Cuáles son?",
+    "type": "COORDENADAS — TEORÍA",
+    "q": "Si se conocen las coordenadas de A y B, ¿qué relación permite calcular inicialmente el rumbo de AB?",
     "options": [
-      "Temperatura ambiente, tensión de la cinta y apreciación del teodolito.",
-      "Un rumbo inicial, una coordenada inicial y el sentido del levantamiento.",
-      "Superficie total, perímetro y error de cierre angular."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. Son parámetros de medición, no datos de arranque del sistema.",
-      "Correcta. Esos son los tres datos semilla para orientar y vincular el cálculo con el espacio real.",
-      "Incorrecta. Son resultados o comprobaciones, no datos iniciales."
-    ]
-  },
-  {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "Según las definiciones fundamentales de la cátedra, ¿qué es exactamente un Punto en el terreno cuando establecemos una red de apoyo?",
-    "options": [
-      "La intersección geométrica de dos visuales de teodolito.",
-      "La proyección de la vertical sobre el terreno.",
-      "El elemento físico de hormigón o madera que queda clavado permanentemente en el suelo."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. Eso describe un cruce de visuales, no la definición de punto.",
-      "Correcta. Un punto es la proyección de la vertical sobre el terreno.",
-      "Incorrecta. Eso corresponde al elemento físico de materialización, no al concepto de punto."
-    ]
-  },
-  {
-    "type": "VERDADERO/FALSO",
-    "q": "Los términos Mojón y Señal son sinónimos topográficos que designan al elemento físico utilizado para fijar un punto en la tierra.",
-    "options": [
-      "Verdadero.",
-      "Falso."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. No son sinónimos.",
-      "Correcta. El mojón materializa un punto; la señal lo visualiza o señaliza."
-    ]
-  },
-  {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "En el diseño de las Triangulaciones Topográficas, la cátedra especifica un límite matemático para la forma de los triángulos. ¿Cuál de las siguientes configuraciones está terminantemente prohibida?",
-    "options": [
-      "Triángulos equiláteros perfectos.",
-      "Triángulos isósceles.",
-      "Triángulos que contengan algún ángulo interno menor a 30°."
-    ],
-    "correct": 2,
-    "reasons": [
-      "Incorrecta. Es una forma ideal.",
-      "Incorrecta. Está permitida.",
-      "Correcta. Ángulos menores a 30° multiplican los errores trigonométricos y están prohibidos."
-    ]
-  },
-  {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "Usted realiza un trabajo de apoyo utilizando triángulos cuyos lados miden aproximadamente entre 5 y 10 km. Según su tamaño, este trabajo clasifica como:",
-    "options": [
-      "Triangulación de 2º Orden (Geodésica).",
-      "Triangulación de 3º Orden (Topográfica).",
-      "Triangulación de 4º Orden (Topográfica)."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. Ese rango no corresponde al 2º orden.",
-      "Correcta. De 5 a 10 km corresponde al 3º orden topográfico.",
-      "Incorrecta. El 4º orden trabaja con distancias menores."
-    ]
-  },
-  {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "¿Qué rango de distancias caracteriza a las Triangulaciones de 4º Orden?",
-    "options": [
-      "30 a 50 km.",
-      "10 a 30 km.",
-      "2 a 5 km."
-    ],
-    "correct": 2,
-    "reasons": [
-      "Incorrecta. Ese rango corresponde a un orden superior.",
-      "Incorrecta. Ese rango no corresponde al 4º orden.",
-      "Correcta. Las triangulaciones de 4º orden abarcan 2 a 5 km."
-    ]
-  },
-  {
-    "type": "VERDADERO/FALSO",
-    "q": "Los distintos Sistemas Geométricos de Apoyo son sistemas cerrados e incompatibles entre sí, por lo que nunca deben mezclarse en un mismo levantamiento.",
-    "options": [
-      "Verdadero.",
-      "Falso."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. No son incompatibles.",
-      "Correcta. Son compatibles entre sí y pueden combinarse según el terreno y las necesidades del trabajo."
-    ]
-  },
-  {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "En un Polígono Geométrico utilizado como sistema de apoyo en un terreno llano, la regla estricta de medición de campo indica que el operador debe medir obligatoriamente:",
-    "options": [
-      "Un lado base y todos los ángulos horizontales.",
-      "Todos los lados perimetrales y todos los ángulos horizontales.",
-      "Todos los lados, omitiendo los ángulos."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. Eso no describe un polígono geométrico completo.",
-      "Correcta. En terreno llano se miden todos los lados y todos los ángulos.",
-      "Incorrecta. Los ángulos no se omiten."
-    ]
-  },
-  {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "Para medir el único lado necesario (la Base) en una Triangulación Topográfica, ¿qué método de medición tradicional exige la cátedra si no se cuenta con equipo electrónico?",
-    "options": [
-      "Medición a pasos previamente calibrada.",
-      "Cinta métrica con aplicación de la ecuación de la cinta.",
-      "Compensación por rumbos conjugados."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. Los pasos no tienen la precisión exigida.",
-      "Correcta. La base se mide con cinta y corrección analítica de la cinta.",
-      "Incorrecta. Eso pertenece al método angular, no a la base."
-    ]
-  },
-  {
-    "type": "VERDADERO/FALSO",
-    "q": "El objetivo final de todos los métodos de apoyo es el cálculo de las coordenadas X, Y de cada vértice, y los tres métodos exigen introducir siempre los mismos tres datos de arranque: Sentido, un Rumbo Inicial y una Coordenada Inicial.",
-    "options": [
-      "Verdadero.",
-      "Falso."
+      "tan(AB) = ΔY / ΔX",
+      "tan(AB) = ΔX / ΔY",
+      "sen(AB) = ΔX / ΔY"
     ],
     "correct": 0,
     "reasons": [
-      "Correcta. Ese es el bloque de arranque común para los tres métodos.",
-      "Incorrecta. La afirmación coincide con el esquema de la cátedra."
+      "Correcta. El rumbo se obtiene desde la tangente de la relación entre ΔY y ΔX, ajustando luego por cuadrante.",
+      "Incorrecta. Invierte la relación y da un ángulo complementario incorrecto para este sistema.",
+      "Incorrecta. El seno no se plantea como ΔX/ΔY para obtener el rumbo."
     ]
   },
   {
-    "type": "OPCIÓN MÚLTIPLE",
-    "q": "Si se requiere establecer un sistema de apoyo en un terreno sumamente abrupto, el sistema geométrico estrictamente recomendado por el esquema de la cátedra es:",
+    "type": "COORDENADAS — TEORÍA",
+    "q": "Según el apunte, la fórmula de Pitágoras para AB = √(ΔX² + ΔY²) debe usarse principalmente como:",
     "options": [
-      "Polígono Geométrico, porque compensa automáticamente los desniveles.",
-      "Triangulación, porque requiere medir la distancia de un solo lado y luego prioriza la medición óptica de ángulos.",
-      "Trilateración, porque evita los errores de colimación e inclinación al no requerir mediciones angulares."
+      "Control de cálculo.",
+      "Única herramienta de cálculo de coordenadas.",
+      "Método para corregir errores angulares."
     ],
-    "correct": 1,
+    "correct": 0,
     "reasons": [
-      "Incorrecta. El polígono geométrico se usa en terrenos llanos.",
-      "Correcta. En terrenos abruptos se recomienda triangulación con una base y todos los ángulos.",
-      "Incorrecta. La trilateración mide lados, pero no es la recomendación principal para este caso."
+      "Correcta. El apunte indica que Pitágoras otorga un tercer control y no debe reemplazar las expresiones topográficas principales.",
+      "Incorrecta. Para coordenadas se usan las proyecciones con seno y coseno del rumbo.",
+      "Incorrecta. Pitágoras no compensa ángulos."
+    ]
+  },
+  {
+    "type": "COORDENADAS — TEORÍA",
+    "q": "Si ΔX > 0 y ΔY > 0, ¿en qué cuadrante se encuentra la línea y cómo se calcula el rumbo?",
+    "options": [
+      "Cuadrante I; rumbo = arctan(ΔY/ΔX).",
+      "Cuadrante II; rumbo = 180° + arctan(ΔY/ΔX).",
+      "Cuadrante IV; rumbo = 360° + arctan(ΔY/ΔX)."
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. Con ambas proyecciones positivas, la línea está en el primer cuadrante y no requiere corrección adicional.",
+      "Incorrecta. El segundo cuadrante aparece cuando ΔX es negativo y ΔY positivo.",
+      "Incorrecta. El cuarto cuadrante aparece cuando ΔX es positivo y ΔY negativo."
+    ]
+  },
+  {
+    "type": "COORDENADAS — TEORÍA",
+    "q": "Si ΔX < 0 y ΔY > 0, ¿qué cuidado debe tomarse al calcular el rumbo?",
+    "options": [
+      "Debe ajustarse al cuadrante II, porque el arctan directo entrega un ángulo negativo.",
+      "Debe dejarse el resultado negativo, porque los rumbos topográficos pueden ser negativos.",
+      "Debe sumarse siempre 360°, sin considerar el cuadrante."
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. En cuadrante II, el cociente ΔY/ΔX es negativo y el rumbo se ajusta para quedar entre 90° y 180°.",
+      "Incorrecta. Los rumbos se expresan normalmente entre 0° y 360°, no como negativos.",
+      "Incorrecta. Sumar 360° al ángulo negativo lo llevaría al cuarto cuadrante, no al segundo."
+    ]
+  },
+  {
+    "type": "COORDENADAS — TEORÍA",
+    "q": "¿Qué relación existe entre el rumbo (AB) y el rumbo contrario (BA)?",
+    "options": [
+      "Difieren en 180°.",
+      "Siempre son exactamente iguales.",
+      "Difieren en 90° porque los ejes son perpendiculares."
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. Una misma línea puede arrumbarse desde A o desde B; los rumbos recíprocos difieren 180°.",
+      "Incorrecta. El sentido de avance cambia el rumbo.",
+      "Incorrecta. La perpendicularidad de los ejes no define la diferencia entre rumbos recíprocos."
+    ]
+  },
+  {
+    "type": "MEDICIÓN ELECTRÓNICA",
+    "q": "¿Qué elementos básicos componen un equipo de medición electrónica de distancias?",
+    "options": [
+      "Un instrumento emisor o distanciómetro y un reflector o prisma.",
+      "Una cinta, dos fichas y un nivel de mano.",
+      "Un planímetro mecánico y un delineador."
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. El distanciómetro emite el haz y el prisma lo refleja para que el aparato determine la distancia.",
+      "Incorrecta. Eso corresponde a mediciones tradicionales con cinta, no a medición electrónica.",
+      "Incorrecta. El planímetro se usa para superficies, no para medir electrónicamente distancias."
+    ]
+  },
+  {
+    "type": "MEDICIÓN ELECTRÓNICA",
+    "q": "En medición electrónica de distancias, la distancia que entrega inicialmente el equipo suele ser:",
+    "options": [
+      "La distancia geométrica o inclinada entre instrumento y prisma.",
+      "La distancia horizontal ya reducida, sin necesidad de cálculo adicional.",
+      "La diferencia de nivel entre ambos puntos."
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. El aparato mide la línea inclinada; para obtener la horizontal se requiere reducción con el ángulo vertical o datos equivalentes.",
+      "Incorrecta. No debe asumirse que la lectura es horizontal si existe desnivel.",
+      "Incorrecta. La diferencia de nivel no es la distancia electrónica medida por el distanciómetro."
+    ]
+  },
+  {
+    "type": "MEDICIÓN ELECTRÓNICA",
+    "q": "¿Cuál de los siguientes errores corresponde a errores personales en medición electrónica de distancias?",
+    "options": [
+      "Incorrecta centración del instrumento y del prisma, o equivocaciones en las lecturas.",
+      "Pérdida de calibración del instrumento solamente.",
+      "Influencia de la presión atmosférica y la temperatura solamente."
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. La centración incorrecta y las equivocaciones de lectura son errores personales del operador.",
+      "Incorrecta. La pérdida de calibración es un error instrumental.",
+      "Incorrecta. La presión y la temperatura son errores naturales o atmosféricos."
+    ]
+  },
+  {
+    "type": "REPLANTEO",
+    "q": "¿Qué significa replantear un ángulo horizontal?",
+    "options": [
+      "Provocar en el terreno, desde una alineación conocida, un ángulo horizontal de valor conocido.",
+      "Medir una distancia inclinada y convertirla en distancia horizontal.",
+      "Calcular la superficie de un polígono por el método de Gauss."
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. En replanteo se traslada al terreno un dato de proyecto, en este caso un ángulo conocido.",
+      "Incorrecta. Eso pertenece a reducción de distancias, no al replanteo angular.",
+      "Incorrecta. El método de Gauss se usa para superficies, no para materializar un ángulo."
+    ]
+  },
+  {
+    "type": "REPLANTEO",
+    "q": "En el método sencillo de replanteo de ángulos, si al apuntar a B se lee l1 y el ángulo de proyecto es α, ¿qué lectura se debe provocar?",
+    "options": [
+      "l2 = l1 + α",
+      "l2 = l1 - α",
+      "l2 = α - 180°"
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. Se suma el ángulo conocido a la lectura inicial y se gira hasta provocar esa lectura.",
+      "Incorrecta. Restar α replantearía el ángulo en el sentido contrario al procedimiento indicado.",
+      "Incorrecta. Esa operación no corresponde al método sencillo."
+    ]
+  },
+  {
+    "type": "REPLANTEO",
+    "q": "¿Por qué al aumentar la distancia L conviene usar un mejor método de replanteo angular?",
+    "options": [
+      "Porque para un mismo error angular dα, el error transversal dl crece proporcionalmente con L.",
+      "Porque el ángulo de proyecto cambia de valor automáticamente con la distancia.",
+      "Porque a mayor distancia ya no se puede usar ningún jalón."
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. El error transversal depende de la distancia; por eso, cuanto mayor es L, más exigente debe ser el método.",
+      "Incorrecta. El ángulo de proyecto es dato y no cambia por la distancia.",
+      "Incorrecta. El uso de jalones depende de las condiciones de visibilidad, no de una prohibición por distancia."
+    ]
+  },
+  {
+    "type": "MINICASO PRÁCTICO — COORDENADAS",
+    "q": "Desde A(X=1000,00; Y=500,00) se mide AB = 100,00 m con rumbo (AB)=30°00'00''. ¿Cuáles son aproximadamente las coordenadas de B?",
+    "options": [
+      "XB = 1086,60 ; YB = 550,00",
+      "XB = 1050,00 ; YB = 586,60",
+      "XB = 913,40 ; YB = 550,00"
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. ΔX=100·cos30°=86,60 y ΔY=100·sen30°=50,00; por eso B=(1086,60; 550,00).",
+      "Incorrecta. Invierte seno y coseno para X e Y.",
+      "Incorrecta. Cambia mal el signo de ΔX."
+    ]
+  },
+  {
+    "type": "MINICASO PRÁCTICO — COORDENADAS",
+    "q": "A tiene coordenadas X=1200,00; Y=800,00 y B tiene X=1160,00; Y=880,00. ¿En qué cuadrante está AB y cuál es su rumbo aproximado?",
+    "options": [
+      "Cuadrante II; rumbo ≈ 116°34'",
+      "Cuadrante I; rumbo ≈ 63°26'",
+      "Cuadrante IV; rumbo ≈ 296°34'"
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. ΔX=-40 y ΔY=+80, por lo tanto está en cuadrante II; el rumbo ajustado es aproximadamente 116°34'.",
+      "Incorrecta. El cuadrante I exige ΔX y ΔY positivos.",
+      "Incorrecta. El cuadrante IV exige ΔX positivo y ΔY negativo."
+    ]
+  },
+  {
+    "type": "MINICASO PRÁCTICO — COORDENADAS",
+    "q": "A tiene coordenadas X=500,00; Y=500,00 y B tiene X=450,00; Y=430,00. ¿Cuál es el rumbo aproximado de AB?",
+    "options": [
+      "234°28'",
+      "54°28'",
+      "305°32'"
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. ΔX=-50 y ΔY=-70; está en cuadrante III. β=arctan(70/50)=54°28', entonces rumbo≈180°+54°28'=234°28'.",
+      "Incorrecta. Ese es solo el ángulo agudo, sin ajuste de cuadrante.",
+      "Incorrecta. Ese valor correspondería a otro cuadrante."
+    ]
+  },
+  {
+    "type": "MINICASO PRÁCTICO — COORDENADAS",
+    "q": "Desde A(X=2000,00; Y=1500,00) se avanza 75,00 m con rumbo 270°00'00''. ¿Cuáles son las coordenadas de B?",
+    "options": [
+      "XB = 2000,00 ; YB = 1425,00",
+      "XB = 1925,00 ; YB = 1500,00",
+      "XB = 2000,00 ; YB = 1575,00"
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. Para 270°, cos=0 y sen=-1; ΔX=0 y ΔY=-75, por eso Y disminuye.",
+      "Incorrecta. Ese resultado modificaría X, pero a 270° la variación principal es en Y.",
+      "Incorrecta. Ese sería el sentido contrario, rumbo 90°."
+    ]
+  },
+  {
+    "type": "MINICASO PRÁCTICO — COORDENADAS",
+    "q": "A(X=1000,00; Y=1000,00) y B(X=1060,00; Y=1080,00). Usando ΔX y ΔY, ¿qué distancia AB y rumbo aproximado se obtienen como control?",
+    "options": [
+      "AB = 100,00 m ; rumbo ≈ 53°08'",
+      "AB = 140,00 m ; rumbo ≈ 36°52'",
+      "AB = 100,00 m ; rumbo ≈ 306°52'"
+    ],
+    "correct": 0,
+    "reasons": [
+      "Correcta. ΔX=60 y ΔY=80; AB=√(60²+80²)=100 m y rumbo=arctan(80/60)=53°08'.",
+      "Incorrecta. La distancia no es la suma directa de las proyecciones.",
+      "Incorrecta. Ese rumbo pertenece a otro cuadrante; aquí ΔX y ΔY son positivos."
     ]
   }
 ];
@@ -944,13 +800,13 @@ function finishQuiz() {
 
   let verdict = "";
   if (percentage >= 90) {
-    verdict = "Excelente dominio del Método de Rumbos.";
+    verdict = "Excelente dominio de coordenadas, medición electrónica y replanteo.";
   } else if (percentage >= 70) {
-    verdict = "Buen manejo teórico y práctico.";
+    verdict = "Buen manejo teórico y práctico. Repasá los detalles de cuadrantes y replanteo.";
   } else if (percentage >= 50) {
-    verdict = "Aprobaste, pero todavía hay conceptos para repasar.";
+    verdict = "Aprobaste, pero todavía conviene reforzar fórmulas y minicasos de coordenadas.";
   } else {
-    verdict = "Necesitas repasar el método con más detalle.";
+    verdict = "Necesitas repasar con más detalle las fórmulas, los cuadrantes y el procedimiento de replanteo.";
   }
   document.getElementById("finalText").innerText = verdict;
 }
