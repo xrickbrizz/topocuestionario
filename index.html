@@ -3,823 +3,625 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cuestionario de Autoevaluación — Coordenadas, Medición Electrónica y Replanteo</title>
+<title>Topografía Aplicada — TP Nº1</title>
 <style>
 :root{
-  --bg:#f5f5f3;
-  --card:#ffffff;
-  --text:#111111;
-  --muted:#555555;
-  --line:#d9d9d4;
-  --soft:#efefec;
-  --accent:#111111;
+  --bg:#f4f6f8; --card:#fff; --text:#17202a; --muted:#667085;
+  --primary:#1769aa; --primary2:#0f4f80; --good:#198754; --bad:#dc3545;
+  --border:#dfe4ea; --soft:#eef5fb; --shadow:0 10px 30px rgba(20,35,50,.08);
 }
 *{box-sizing:border-box}
-body{
-  margin:0;
-  background:linear-gradient(180deg,#fbfbfa 0%, #f3f3f0 100%);
-  color:var(--text);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-}
-.container{
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 36px 24px 48px;
-}
-header{
-  margin-bottom: 18px;
-}
-h1{
-  font-size: clamp(34px, 5vw, 58px);
-  line-height: 1.02;
-  margin: 0 0 10px;
-  letter-spacing: -0.04em;
-}
-.subtitle{
-  color:var(--muted);
-  font-size: 16px;
-  line-height: 1.5;
-  max-width: 900px;
-}
-.meta{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-  margin: 22px 0 18px;
-}
-.pill{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  border:1px solid var(--line);
-  background: rgba(255,255,255,.88);
-  border-radius:999px;
-  padding:10px 15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.05);
-  font-size: 14px;
-}
-.progress-wrap{
-  height: 10px;
-  border-radius: 999px;
-  overflow: hidden;
-  background: #e8e8e4;
-  margin: 10px 0 24px;
-}
-.progress-bar{
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg,#111,#2b2b2b);
-  transition: width .25s ease;
-}
-.card{
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 28px;
-  box-shadow: 0 18px 50px rgba(0,0,0,.08);
-  overflow:hidden;
-}
-.card-inner{
-  padding: 28px;
-}
-.type-badge{
-  display:inline-flex;
-  align-items:center;
-  border:1px solid var(--line);
-  border-radius:999px;
-  padding:8px 13px;
-  font-size:12px;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  color:#222;
-  margin-bottom: 18px;
-  background: #fff;
-}
-.question-num{
-  color: var(--muted);
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-.question{
-  font-size: clamp(20px, 2.6vw, 28px);
-  line-height: 1.45;
-  margin: 0 0 22px;
-  letter-spacing: -0.02em;
-  white-space: pre-line;
-}
-.options{
-  display:grid;
-  gap: 12px;
-}
-.option{
-  border:1px solid var(--line);
-  border-radius: 18px;
-  padding: 16px 18px;
-  background: #fafafa;
-  cursor:pointer;
-  transition: transform .12s ease, background .12s ease, border-color .12s ease, box-shadow .12s ease;
-  line-height: 1.45;
-}
-.option:hover{
-  transform: translateY(-1px);
-  background:#f2f2f1;
-  border-color:#bfbfba;
-}
-.option .label{
-  display:inline-block;
-  min-width: 28px;
-  font-weight:700;
-}
-.option.selected-correct{
-  background:#111;
-  color:#fff;
-  border-color:#111;
-}
-.option.selected-wrong{
-  background:#efefef;
-  color:#111;
-  border-color:#111;
-}
-.option.correct-answer{
-  background:#111;
-  color:#fff;
-  border-color:#111;
-}
-.option.disabled{
-  opacity: .95;
-}
-.feedback{
-  margin-top: 22px;
-  padding: 18px;
-  border-radius: 20px;
-  background: #fbfbfb;
-  border: 1px solid var(--line);
-  display:none;
-}
-.feedback-title{
-  font-weight:700;
-  margin-bottom: 8px;
-}
-.feedback-list{
-  display:grid;
-  gap: 8px;
-  margin-top: 14px;
-}
-.feedback-row{
-  border-top: 1px solid var(--soft);
-  padding-top: 10px;
-  color:#222;
-}
-.feedback-row strong{
-  display:inline-block;
-  min-width: 92px;
-}
-.nav{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  margin-top: 24px;
-}
-button{
-  border:none;
-  border-radius: 14px;
-  padding: 13px 20px;
-  font-weight:700;
-  font-size: 15px;
-  cursor:pointer;
-}
-button:disabled{
-  opacity:.45;
-  cursor:not-allowed;
-}
-.btn-light{
-  background:#f0f0ef;
-  color:#111;
-  border:1px solid var(--line);
-}
-.btn-dark{
-  background:#111;
-  color:#fff;
-}
-.result{
-  display:none;
-  text-align:center;
-  padding: 40px 24px;
-}
-.result h2{
-  font-size: clamp(28px, 4vw, 42px);
-  margin: 0 0 10px;
-  letter-spacing: -.03em;
-}
-.score{
-  font-size: clamp(64px, 10vw, 110px);
-  font-weight: 800;
-  letter-spacing: -.05em;
-  margin: 18px 0 10px;
-}
-.result p{
-  font-size: 18px;
-  color: var(--muted);
-  margin: 0 auto 22px;
-  max-width: 700px;
-  line-height: 1.6;
-}
-.restart{
-  display:inline-block;
-  margin-top: 6px;
-}
-.small-note{
-  color: var(--muted);
-  font-size: 13px;
-  margin-top: 10px;
-}
-@media (max-width: 720px){
-  .container{padding: 22px 14px 34px;}
-  .card-inner{padding: 18px;}
-  .nav{flex-direction:column;}
-  button{width:100%;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;line-height:1.5}
+header{background:linear-gradient(135deg,var(--primary2),var(--primary));color:white;padding:30px 18px}
+.header-inner{max-width:1050px;margin:auto}
+h1{margin:0 0 6px;font-size:clamp(25px,4vw,38px)}
+.subtitle{margin:0;opacity:.9}
+.container{max-width:1050px;margin:24px auto;padding:0 16px 50px}
+.panel,.question-card{background:var(--card);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow)}
+.panel{padding:20px;margin-bottom:18px}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+button{border:0;border-radius:10px;padding:11px 17px;font-weight:700;cursor:pointer;font-size:15px}
+.primary{background:var(--primary);color:white}
+.primary:hover{background:var(--primary2)}
+.secondary{background:#e9eef3;color:#243342}
+.danger{background:#fcebed;color:#a61b2b}
+button:disabled{opacity:.5;cursor:not-allowed}
+.progress-wrap{margin-top:16px}
+.progress-meta{display:flex;justify-content:space-between;color:var(--muted);font-size:14px;margin-bottom:7px}
+.progress{height:10px;background:#e7ebef;border-radius:20px;overflow:hidden}
+.progress-bar{height:100%;width:0;background:var(--primary);transition:width .25s}
+.question-card{padding:25px;margin-bottom:18px}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.badge{font-size:12px;padding:5px 9px;border-radius:20px;background:var(--soft);color:var(--primary2);font-weight:700}
+.badge.type{background:#f1f3f5;color:#495057}
+.question-title{font-size:19px;font-weight:750;margin:0 0 18px}
+.options{display:grid;gap:10px}
+.option{display:flex;gap:11px;align-items:flex-start;border:1px solid var(--border);padding:13px 14px;border-radius:12px;cursor:pointer;transition:.15s;background:white}
+.option:hover{background:#fafcff;border-color:#b9c9d8}
+.option input{margin-top:4px;accent-color:var(--primary);transform:scale(1.1)}
+.option.correct{border-color:var(--good);background:#eaf7ef}
+.option.incorrect{border-color:var(--bad);background:#fdecee}
+.option.missed{border-color:#d99b25;background:#fff8e8}
+.feedback{margin-top:16px;padding:15px;border-radius:12px;border-left:5px solid}
+.feedback.good{background:#eaf7ef;border-color:var(--good)}
+.feedback.bad{background:#fdecee;border-color:var(--bad)}
+.feedback strong{display:block;margin-bottom:4px}
+.explanation{margin-top:8px;color:#3f4b57}
+.numeric-wrap{display:flex;gap:10px;align-items:center;max-width:500px}
+.numeric-wrap input{width:100%;padding:13px;border:1px solid var(--border);border-radius:10px;font-size:16px}
+.unit{font-weight:700;color:var(--muted);white-space:nowrap}
+.question-actions{display:flex;justify-content:flex-end;margin-top:18px}
+.result{display:none;text-align:center;padding:30px}
+.score{font-size:54px;font-weight:800;color:var(--primary);margin:8px 0}
+.score-message{font-size:18px;margin-bottom:18px}
+.review-list{display:grid;gap:8px;text-align:left;margin-top:20px}
+.review-item{padding:11px 13px;border-radius:10px;background:#f5f7f9}
+.review-item.good{border-left:4px solid var(--good)}
+.review-item.bad{border-left:4px solid var(--bad)}
+.hidden{display:none!important}
+.note{font-size:13px;color:var(--muted)}
+.footer{text-align:center;color:var(--muted);font-size:13px;margin-top:25px}
+@media(max-width:650px){
+  .question-card{padding:18px}.controls{align-items:stretch}.controls button{width:100%}
+  .numeric-wrap{max-width:none}.score{font-size:44px}
 }
 </style>
 </head>
 <body>
-<div class="container">
-  <header>
-    <h1>Cuestionario de Autoevaluación</h1>
-    <div class="subtitle">
-      Coordenadas, Medición Electrónica de Distancias y Replanteo. Incluye teoría y minicasos prácticos para repasar antes del parcial.
-    </div>
-    <div class="meta">
-      <div class="pill" id="progressPill">Pregunta 1 de 25</div>
-      <div class="pill" id="scorePill">Aciertos: 0/25</div>
-      <div class="pill" id="statusPill">Sin responder</div>
-    </div>
-    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
-  </header>
+<header>
+  <div class="header-inner">
+    <h1>Topografía Aplicada</h1>
+    <p class="subtitle">Trabajo Práctico Nº1 · Nivelación, Punto Inaccesible y Medición Indirecta</p>
+  </div>
+</header>
 
-  <section class="card" id="quizCard">
-    <div class="card-inner">
-      <div class="type-badge" id="typeBadge">OPCIÓN MÚLTIPLE</div>
-      <div class="question-num" id="questionNum"></div>
-      <div class="question" id="questionText"></div>
-      <div class="options" id="options"></div>
-      <div class="feedback" id="feedback"></div>
-      <div class="nav">
-        <button class="btn-light" id="prevBtn" onclick="prevQuestion()">Anterior</button>
-        <button class="btn-dark" id="nextBtn" onclick="nextQuestion()">Siguiente</button>
+<main class="container">
+  <section class="panel" id="startPanel">
+    <div class="controls">
+      <div>
+        <strong>Banco de 30 preguntas</strong>
+        <div class="note">En cada intento se seleccionan 15 preguntas al azar.</div>
       </div>
-      <div class="small-note">Elegí una opción para ver la corrección y la explicación.</div>
+      <button class="primary" id="startBtn">Comenzar nuevo intento</button>
     </div>
   </section>
 
-  <section class="card result" id="resultCard">
-    <div class="card-inner">
-      <h2>Evaluación final</h2>
+  <section class="panel hidden" id="quizPanel">
+    <div class="controls">
+      <div><strong id="questionCounter">Pregunta 1 de 15</strong></div>
+      <div class="note" id="answeredCounter">0 respondidas</div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-meta"><span>Progreso</span><span id="progressText">0%</span></div>
+      <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+    </div>
+  </section>
+
+  <section id="questions"></section>
+
+  <section class="panel hidden" id="finishPanel">
+    <div class="result" style="display:block">
+      <div class="note">RESULTADO FINAL</div>
       <div class="score" id="finalScore">0/100</div>
-      <p id="finalText"></p>
-      <div class="pill" id="finalDetail" style="justify-content:center;">Aciertos: 0/25</div>
-      <div class="restart">
-        <button class="btn-dark" onclick="restartQuiz()">Reiniciar cuestionario</button>
-      </div>
+      <div class="score-message" id="scoreMessage"></div>
+      <button class="primary" id="newAttemptBtn">Nuevo intento</button>
+      <div class="review-list" id="reviewList"></div>
     </div>
   </section>
-</div>
+
+  <div class="footer">Topografía Aplicada · TP Nº1</div>
+</main>
 
 <script>
-const questions = [
+/*
+  Banco de preguntas.
+  Las respuestas correctas están en JavaScript y no se imprimen en el HTML
+  hasta que el usuario haya respondido.
+*/
+const questionBank = [
   {
-    "type": "COORDENADAS — TEORÍA",
-    "q": "¿Cuál es una utilidad directa de calcular coordenadas X e Y en topografía?",
-    "options": [
-      "Eliminar automáticamente todos los errores de medición angular.",
-      "Representar gráficamente detalles del terreno y calcular distancias entre puntos.",
-      "Reemplazar por completo el estacionamiento y la verticalización del equipo."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. Las coordenadas no eliminan por sí solas los errores de medición; solo permiten calcular y representar posiciones.",
-      "Correcta. Las coordenadas permiten ubicar puntos, dibujar detalles del terreno y calcular distancias entre puntos aunque no se haya estacionado en ellos.",
-      "Incorrecta. El estacionamiento y la verticalización siguen siendo necesarios en los trabajos de campo."
-    ]
+    id:1, tema:"Nivelación Trigonométrica", tipo:"single",
+    pregunta:"En la fórmula Δh = L × tan α + (L² / 2r) × (1 − k) + (i − s). Los valores i y s se miden:",
+    opciones:["Con cinta o ruleta al metro","Con cinta o ruleta al dm","Con cinta o ruleta al cm","Con cinta o ruleta al mm","Ninguna de las anteriores","Es indistinto, depende del método"],
+    correcta:3,
+    explicacion:"Las alturas instrumental y de señal deben determinarse con precisión milimétrica, ya que ingresan directamente en el cálculo del desnivel."
   },
   {
-    "type": "COORDENADAS — TEORÍA",
-    "q": "Según el apunte, ¿qué tipo de coordenadas se trabaja en este curso?",
-    "options": [
-      "Coordenadas planialtimétricas completas X, Y y Z.",
-      "Solo coordenadas geográficas: latitud y longitud.",
-      "Coordenadas planas X e Y."
-    ],
-    "correct": 2,
-    "reasons": [
-      "Incorrecta. Las coordenadas planialtimétricas incluyen altura, pero no son el foco de este tema.",
-      "Incorrecta. El desarrollo se hace con ejes rectangulares X e Y, no con latitud y longitud.",
-      "Correcta. El apunte aclara que se emplean coordenadas en el plano, dejando las planialtimétricas para Topografía II."
-    ]
+    id:2, tema:"Altimetría", tipo:"single",
+    pregunta:"Si el plano horizontal de comparación o referencia no es el nivel del mar, a las cotas se las denomina:",
+    opciones:["Independientes","Ninguna es correcta","Dominantes","Absolutas","Relativas"],
+    correcta:4,
+    explicacion:"Las cotas referidas a un plano de comparación arbitrario reciben el carácter de cotas relativas."
   },
   {
-    "type": "COORDENADAS — TEORÍA",
-    "q": "Topográficamente, ¿cómo se define un punto en el terreno?",
-    "options": [
-      "Como la proyección sobre el terreno de la dirección de la plomada, es decir, la vertical.",
-      "Como cualquier cruce dibujado entre dos rectas de un plano teórico.",
-      "Como la distancia horizontal entre dos mojones consecutivos."
-    ],
-    "correct": 0,
-    "reasons": [
-      "Correcta. En topografía el punto se entiende como la proyección de la vertical sobre el terreno, materializada por un mojón, antena, pararrayo, etc.",
-      "Incorrecta. Esa es una definición geométrica general, no la definición topográfica usada en el apunte.",
-      "Incorrecta. Eso describe una longitud, no un punto."
-    ]
+    id:3, tema:"Punto Inaccesible", tipo:"single",
+    pregunta:"En una Nivelación a un Punto Inaccesible P, Método de Base transversal, los ángulos horizontales se miden:",
+    opciones:["Por el método de compensación","Por el método sencillo","Por el método de rumbos","Por el método de repetición"],
+    correcta:3,
+    explicacion:"En este procedimiento se busca obtener los ángulos horizontales con mayor precisión mediante el método de repetición."
   },
   {
-    "type": "COORDENADAS — TEORÍA",
-    "q": "En el sistema de coordenadas usado en Topografía I, ¿con qué dirección coincide el eje X?",
-    "options": [
-      "Con la dirección Este-Oeste, tomando el Este como referencia.",
-      "Con la dirección Norte-Sur verdadero, tomando el Norte como referencia.",
-      "Con la pendiente natural del terreno."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. En este apunte el eje Y es el perpendicular al eje X, no el eje principal Norte-Sur.",
-      "Correcta. En topografía el eje X coincide con la dirección Norte-Sur verdadero; el eje Y es perpendicular.",
-      "Incorrecta. Los ejes del sistema no se definen por la pendiente del terreno."
-    ]
+    id:4, tema:"Medición Indirecta", tipo:"multiple",
+    pregunta:"MEDICIÓN INDIRECTA DE DISTANCIAS. Se aplica para terrenos (puede haber más de una correcta):",
+    opciones:["Accidentados","Llanos","Abruptos","Transitables","De fácil acceso","Difícilmente transitables"],
+    correcta:[0,2,5],
+    explicacion:"La medición indirecta resulta especialmente útil cuando el terreno es accidentado, abrupto o difícilmente transitable."
   },
   {
-    "type": "COORDENADAS — TEORÍA",
-    "q": "¿Qué es el rumbo verdadero de una línea AB?",
-    "options": [
-      "La distancia inclinada entre A y B medida sobre el terreno natural.",
-      "La diferencia de cotas entre A y B.",
-      "El ángulo horizontal que forma la línea AB con una línea dirigida al Norte."
-    ],
-    "correct": 2,
-    "reasons": [
-      "Incorrecta. La distancia inclinada es una longitud, no un rumbo.",
-      "Incorrecta. La diferencia de cotas pertenece a altimetría, no al rumbo horizontal.",
-      "Correcta. El rumbo verdadero se define angularmente respecto de la dirección Norte."
-    ]
+    id:5, tema:"Medición Indirecta", tipo:"single",
+    pregunta:"El método de medición indirecta tiene un error relativo de:",
+    opciones:["1/1.000","1/3.000","1/5.000","1/10.000","Otro"],
+    correcta:1,
+    explicacion:"Para el método considerado se adopta como referencia un error relativo del orden de 1/3.000."
   },
   {
-    "type": "COORDENADAS — TEORÍA",
-    "q": "Si se conoce la distancia AB y el rumbo (AB), ¿cuál expresión corresponde a la proyección ΔY?",
-    "options": [
-      "ΔY = AB · sen(AB)",
-      "ΔY = AB · cos(AB)",
-      "ΔY = AB / tan(AB)"
-    ],
-    "correct": 0,
-    "reasons": [
-      "Correcta. En el esquema del apunte, la proyección sobre Y se obtiene con el seno del rumbo.",
-      "Incorrecta. Esa expresión corresponde a ΔX.",
-      "Incorrecta. Dividir por la tangente no es la fórmula directa de la proyección Y."
-    ]
+    id:6, tema:"Nivelación Trigonométrica", tipo:"numeric", unidad:"m",
+    pregunta:"Datos: Dist = 1350,50 m, R = 6370 km, k = 0,13. Cota A = 230,10 m. En A se visualiza B: ángulo vertical = 1°25'10'', i = 1,60 m, s = 1,20 m. Calcule el desnivel AB de ida, en metros.",
+    correcta:33.9886539031, tolerancia:0.01,
+    explicacion:"Aplicando Δh = L·tan(α) + (L²/2R)(1−k) + (i−s), con R = 6.370.000 m, se obtiene ΔhAB ≈ +33,99 m."
   },
   {
-    "type": "COORDENADAS — TEORÍA",
-    "q": "Si se conoce la distancia AB y el rumbo (AB), ¿cuál expresión corresponde a la proyección ΔX?",
-    "options": [
-      "ΔX = AB · sen(AB)",
-      "ΔX = ΔY · AB",
-      "ΔX = AB · cos(AB)"
-    ],
-    "correct": 2,
-    "reasons": [
-      "Incorrecta. Esa es la expresión de ΔY.",
-      "Incorrecta. Multiplicar ΔY por la distancia no tiene sentido dimensional para obtener ΔX.",
-      "Correcta. Como el rumbo se toma desde el eje Norte, la proyección sobre X se obtiene con el coseno."
-    ]
+    id:7, tema:"Nivelación Trigonométrica", tipo:"numeric", unidad:"m",
+    pregunta:"Con los mismos datos del ejercicio anterior. En B se visualiza A: ángulo vertical = −1°27'11'', i = 1,50 m, s = 1,32 m. Calcule el desnivel BA de vuelta, en metros.",
+    correcta:-33.9522911249, tolerancia:0.01,
+    explicacion:"Aplicando la misma expresión con el ángulo vertical de vuelta se obtiene ΔhBA ≈ −33,95 m."
   },
   {
-    "type": "COORDENADAS — TEORÍA",
-    "q": "Conocidos A(XA, YA), la distancia AB y el rumbo (AB), ¿cómo se obtiene la coordenada YB?",
-    "options": [
-      "YB = YA + AB · cos(AB)",
-      "YB = YA + AB · sen(AB)",
-      "YB = XA + AB · sen(AB)"
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. El coseno se usa para la variación en X.",
-      "Correcta. Primero se calcula ΔY = AB·sen(AB), y luego se suma algebraicamente a YA.",
-      "Incorrecta. La coordenada YB se obtiene a partir de YA, no de XA."
-    ]
+    id:8, tema:"Nivelación Trigonométrica", tipo:"numeric", unidad:"cm",
+    pregunta:"Con los mismos datos de los ejercicios anteriores, calcule la tolerancia altimétrica del tramo en centímetros. Use T = ±20·√L, con L expresada en kilómetros.",
+    correcta:32.87, tolerancia:0.05,
+    explicacion:"Para el tramo ida y vuelta se toma L = 2×1,3505 = 2,701 km. Entonces T = 20·√2,701 ≈ ±32,87 cm."
   },
   {
-    "type": "COORDENADAS — TEORÍA",
-    "q": "Conocidos A(XA, YA), la distancia AB y el rumbo (AB), ¿cómo se obtiene la coordenada XB?",
-    "options": [
-      "XB = XA + AB · cos(AB)",
-      "XB = YA + AB · cos(AB)",
-      "XB = XA + AB · sen(AB)"
-    ],
-    "correct": 0,
-    "reasons": [
-      "Correcta. La variación ΔX se calcula con el coseno del rumbo y se suma algebraicamente a XA.",
-      "Incorrecta. Para calcular XB se parte de XA, no de YA.",
-      "Incorrecta. El seno corresponde a la proyección ΔY."
-    ]
+    id:9, tema:"Nivelación Trigonométrica", tipo:"numeric", unidad:"m",
+    pregunta:"Con los mismos datos de los ejercicios anteriores, calcule la cota de B a partir de la cota de A.",
+    correcta:264.0886539031, tolerancia:0.02,
+    explicacion:"La cota de B se obtiene como H_B = H_A + Δh_AB = 230,10 + 33,9887 ≈ 264,09 m."
   },
   {
-    "type": "COORDENADAS — TEORÍA",
-    "q": "Si se conocen las coordenadas de A y B, ¿qué relación permite calcular inicialmente el rumbo de AB?",
-    "options": [
-      "tan(AB) = ΔX / ΔY",
-      "sen(AB) = ΔX / ΔY",
-      "tan(AB) = ΔY / ΔX"
-    ],
-    "correct": 2,
-    "reasons": [
-      "Incorrecta. Invierte la relación y da un ángulo complementario incorrecto para este sistema.",
-      "Incorrecta. El seno no se plantea como ΔX/ΔY para obtener el rumbo.",
-      "Correcta. El rumbo se obtiene desde la tangente de la relación entre ΔY y ΔX, ajustando luego por cuadrante."
-    ]
+    id:10, tema:"Rodeo Simple", tipo:"numeric", unidad:"cm",
+    pregunta:"Polígono con Cota A = 350,15 m. A-B: Δh = +7,65 m. B-C: Δh = −2,64 m. C-D: Δh = −3,47 m. D-A: Δh = −1,54 m. Calcule el error de cierre en centímetros.",
+    correcta:0, tolerancia:0.1,
+    explicacion:"La suma algebraica de los desniveles es +7,65−2,64−3,47−1,54 = 0,00 m. Por lo tanto, el error de cierre es 0 cm."
   },
   {
-    "type": "COORDENADAS — TEORÍA",
-    "q": "Según el apunte, la fórmula de Pitágoras para AB = √(ΔX² + ΔY²) debe usarse principalmente como:",
-    "options": [
-      "Única herramienta de cálculo de coordenadas.",
-      "Control de cálculo.",
-      "Método para corregir errores angulares."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. Para coordenadas se usan las proyecciones con seno y coseno del rumbo.",
-      "Correcta. El apunte indica que Pitágoras otorga un tercer control y no debe reemplazar las expresiones topográficas principales.",
-      "Incorrecta. Pitágoras no compensa ángulos."
-    ]
+    id:11, tema:"Rodeo Simple", tipo:"numeric", unidad:"m",
+    pregunta:"Con los datos del rodeo simple anterior, calcule la cota del vértice B.",
+    correcta:357.80, tolerancia:0.01,
+    explicacion:"H_B = H_A + ΔhAB = 350,15 + 7,65 = 357,80 m."
   },
   {
-    "type": "COORDENADAS — TEORÍA",
-    "q": "Si ΔX > 0 y ΔY > 0, ¿en qué cuadrante se encuentra la línea y cómo se calcula el rumbo?",
-    "options": [
-      "Cuadrante I; rumbo = arctan(ΔY/ΔX).",
-      "Cuadrante II; rumbo = 180° + arctan(ΔY/ΔX).",
-      "Cuadrante IV; rumbo = 360° + arctan(ΔY/ΔX)."
-    ],
-    "correct": 0,
-    "reasons": [
-      "Correcta. Con ambas proyecciones positivas, la línea está en el primer cuadrante y no requiere corrección adicional.",
-      "Incorrecta. El segundo cuadrante aparece cuando ΔX es negativo y ΔY positivo.",
-      "Incorrecta. El cuarto cuadrante aparece cuando ΔX es positivo y ΔY negativo."
-    ]
+    id:12, tema:"Rodeo Simple", tipo:"numeric", unidad:"m",
+    pregunta:"Con los datos del rodeo simple anterior, calcule la cota del vértice C.",
+    correcta:355.16, tolerancia:0.01,
+    explicacion:"H_C = H_B + ΔhBC = 357,80 − 2,64 = 355,16 m."
   },
   {
-    "type": "COORDENADAS — TEORÍA",
-    "q": "Si ΔX < 0 y ΔY > 0, ¿qué cuidado debe tomarse al calcular el rumbo?",
-    "options": [
-      "Debe dejarse el resultado negativo, porque los rumbos topográficos pueden ser negativos.",
-      "Debe ajustarse al cuadrante II, porque el arctan directo entrega un ángulo negativo.",
-      "Debe sumarse siempre 360°, sin considerar el cuadrante."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. Los rumbos se expresan normalmente entre 0° y 360°, no como negativos.",
-      "Correcta. En cuadrante II, el cociente ΔY/ΔX es negativo y el rumbo se ajusta para quedar entre 90° y 180°.",
-      "Incorrecta. Sumar 360° al ángulo negativo lo llevaría al cuarto cuadrante, no al segundo."
-    ]
+    id:13, tema:"Rodeo Simple", tipo:"numeric", unidad:"m",
+    pregunta:"Con los datos del rodeo simple anterior, calcule la cota del vértice D.",
+    correcta:351.69, tolerancia:0.01,
+    explicacion:"H_D = H_C + ΔhCD = 355,16 − 3,47 = 351,69 m."
   },
   {
-    "type": "COORDENADAS — TEORÍA",
-    "q": "¿Qué relación existe entre el rumbo (AB) y el rumbo contrario (BA)?",
-    "options": [
-      "Siempre son exactamente iguales.",
-      "Difieren en 90° porque los ejes son perpendiculares.",
-      "Difieren en 180°."
-    ],
-    "correct": 2,
-    "reasons": [
-      "Incorrecta. El sentido de avance cambia el rumbo.",
-      "Incorrecta. La perpendicularidad de los ejes no define la diferencia entre rumbos recíprocos.",
-      "Correcta. Una misma línea puede arrumbarse desde A o desde B; los rumbos recíprocos difieren 180°."
-    ]
+    id:14, tema:"Punto Inaccesible · Base Transversal", tipo:"single",
+    pregunta:"¿Cuál es la condición geométrica recomendada para la ubicación de la base auxiliar a respecto del punto P?",
+    opciones:["A) Paralela","B) Perpendicular con longitud de 1/10 de la distancia","C) Aleatoria de 500 m","D) Colineal"],
+    correcta:1,
+    explicacion:"La base auxiliar se dispone perpendicularmente a la dirección hacia el punto inaccesible y su longitud se establece en una proporción adecuada respecto de la distancia."
   },
   {
-    "type": "MEDICIÓN ELECTRÓNICA",
-    "q": "¿Qué elementos básicos componen un equipo de medición electrónica de distancias?",
-    "options": [
-      "Un instrumento emisor o distanciómetro y un reflector o prisma.",
-      "Una cinta, dos fichas y un nivel de mano.",
-      "Un planímetro mecánico y un delineador."
-    ],
-    "correct": 0,
-    "reasons": [
-      "Correcta. El distanciómetro emite el haz y el prisma lo refleja para que el aparato determine la distancia.",
-      "Incorrecta. Eso corresponde a mediciones tradicionales con cinta, no a medición electrónica.",
-      "Incorrecta. El planímetro se usa para superficies, no para medir electrónicamente distancias."
-    ]
+    id:15, tema:"Punto Inaccesible", tipo:"multiple",
+    pregunta:"¿En cuáles de estos casos resulta aplicable el método de punto inaccesible? (Puede haber más de una correcta.)",
+    opciones:["A) Antena","B) Poste o torre de alta tensión","C) Red cerrada llana","D) Extremo de rama o remache","E) Conductor eléctrico o tanque"],
+    correcta:[0,1,3,4],
+    explicacion:"El método es útil para determinar puntos cuya posición o cota no puede medirse directamente, como antenas, torres, extremos de elementos y otros puntos inaccesibles."
   },
   {
-    "type": "MEDICIÓN ELECTRÓNICA",
-    "q": "En medición electrónica de distancias, la distancia que entrega inicialmente el equipo suele ser:",
-    "options": [
-      "La distancia horizontal ya reducida, sin necesidad de cálculo adicional.",
-      "La distancia geométrica o inclinada entre instrumento y prisma.",
-      "La diferencia de nivel entre ambos puntos."
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. No debe asumirse que la lectura es horizontal si existe desnivel.",
-      "Correcta. El aparato mide la línea inclinada; para obtener la horizontal se requiere reducción con el ángulo vertical o datos equivalentes.",
-      "Incorrecta. La diferencia de nivel no es la distancia electrónica medida por el distanciómetro."
-    ]
+    id:16, tema:"Punto Inaccesible", tipo:"numeric", unidad:"°",
+    pregunta:"Los ángulos de un triángulo son α = 84°30'00'' y β = 83°45'00''. Calcule el tercer ángulo γ en grados decimales.",
+    correcta:11.75, tolerancia:0.001,
+    explicacion:"La suma de los ángulos de un triángulo es 180°. γ = 180° − 84°30' − 83°45' = 11°45' = 11,75°."
   },
   {
-    "type": "MEDICIÓN ELECTRÓNICA",
-    "q": "¿Cuál de los siguientes errores corresponde a errores personales en medición electrónica de distancias?",
-    "options": [
-      "Pérdida de calibración del instrumento solamente.",
-      "Influencia de la presión atmosférica y la temperatura solamente.",
-      "Incorrecta centración del instrumento y del prisma, o equivocaciones en las lecturas."
-    ],
-    "correct": 2,
-    "reasons": [
-      "Incorrecta. La pérdida de calibración es un error instrumental.",
-      "Incorrecta. La presión y la temperatura son errores naturales o atmosféricos.",
-      "Correcta. La centración incorrecta y las equivocaciones de lectura son errores personales del operador."
-    ]
+    id:17, tema:"Medición Indirecta", tipo:"single",
+    pregunta:"¿Cuál es la relación recomendada entre la base b y la longitud L?",
+    opciones:["A) b entre 1/5 y 1/20 de L, con β ≈ 90°","B) b > L","C) b = 1/10 L, con β ≈ 0°","D) b = 1/2 L"],
+    correcta:0,
+    explicacion:"Se busca una base relativamente pequeña respecto de la distancia y una configuración angular favorable, con β próximo a 90°."
   },
   {
-    "type": "REPLANTEO",
-    "q": "¿Qué significa replantear un ángulo horizontal?",
-    "options": [
-      "Provocar en el terreno, desde una alineación conocida, un ángulo horizontal de valor conocido.",
-      "Medir una distancia inclinada y convertirla en distancia horizontal.",
-      "Calcular la superficie de un polígono por el método de Gauss."
-    ],
-    "correct": 0,
-    "reasons": [
-      "Correcta. En replanteo se traslada al terreno un dato de proyecto, en este caso un ángulo conocido.",
-      "Incorrecta. Eso pertenece a reducción de distancias, no al replanteo angular.",
-      "Incorrecta. El método de Gauss se usa para superficies, no para materializar un ángulo."
-    ]
+    id:18, tema:"Medición Indirecta", tipo:"multiple",
+    pregunta:"¿Cuáles son métodos adecuados para medir los componentes del procedimiento? (Puede haber más de una correcta.)",
+    opciones:["A) Base con cinta ida/vuelta o medición electrónica","B) α por repetición","C) ε por repetición","D) α por método sencillo","E) Todo a pasos"],
+    correcta:[0,2,3],
+    explicacion:"La base puede medirse con cinta ida/vuelta o electrónicamente; el pequeño ángulo ε se favorece con repetición, mientras α puede medirse por método sencillo."
   },
   {
-    "type": "REPLANTEO",
-    "q": "En el método sencillo de replanteo de ángulos, si al apuntar a B se lee l1 y el ángulo de proyecto es α, ¿qué lectura se debe provocar?",
-    "options": [
-      "l2 = l1 - α",
-      "l2 = l1 + α",
-      "l2 = α - 180°"
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. Restar α replantearía el ángulo en el sentido contrario al procedimiento indicado.",
-      "Correcta. Se suma el ángulo conocido a la lectura inicial y se gira hasta provocar esa lectura.",
-      "Incorrecta. Esa operación no corresponde al método sencillo."
-    ]
+    id:19, tema:"Punto Inaccesible · Base Transversal", tipo:"numeric", unidad:"m",
+    pregunta:"Base a = 100,00 m, α = 80,00° y β = 85,00°. Calcule la distancia b desde A hasta P.",
+    correcta:384.90, tolerancia:0.02,
+    explicacion:"Por la ley de senos, con γ = 180°−80°−85° = 15°, b/sin85° = a/sin15°. Así, b ≈ 384,90 m."
   },
   {
-    "type": "REPLANTEO",
-    "q": "¿Por qué al aumentar la distancia L conviene usar un mejor método de replanteo angular?",
-    "options": [
-      "Porque el ángulo de proyecto cambia de valor automáticamente con la distancia.",
-      "Porque a mayor distancia ya no se puede usar ningún jalón.",
-      "Porque para un mismo error angular dα, el error transversal dl crece proporcionalmente con L."
-    ],
-    "correct": 2,
-    "reasons": [
-      "Incorrecta. El ángulo de proyecto es dato y no cambia por la distancia.",
-      "Incorrecta. El uso de jalones depende de las condiciones de visibilidad, no de una prohibición por distancia.",
-      "Correcta. El error transversal depende de la distancia; por eso, cuanto mayor es L, más exigente debe ser el método."
-    ]
+    id:20, tema:"Medición Indirecta", tipo:"single",
+    pregunta:"¿Cuál es el error relativo de diseño adoptado para el método?",
+    opciones:["A) 1/1.000","B) 1/3.000","C) 1/5.000","D) 1/10.000"],
+    correcta:1,
+    explicacion:"El error relativo de diseño considerado para este procedimiento es 1/3.000."
   },
   {
-    "type": "MINICASO PRÁCTICO — COORDENADAS",
-    "q": "Desde A(X=1000,00; Y=500,00) se mide AB = 100,00 m con rumbo (AB)=30°00'00''. ¿Cuáles son aproximadamente las coordenadas de B?",
-    "options": [
-      "XB = 1086,60 ; YB = 550,00",
-      "XB = 1050,00 ; YB = 586,60",
-      "XB = 913,40 ; YB = 550,00"
+    id:21, tema:"Punto Inaccesible · Base Transversal", tipo:"multiple",
+    pregunta:"Seleccione los pasos operativos correctos de campaña. (Puede haber más de una correcta.)",
+    opciones:[
+      "A) Los puntos A y B deben ser visibles entre sí y la configuración debe permitir la observación de P.",
+      "B) P debe ser visible desde A y B.",
+      "C) Se debe visar un elemento único e identificable del punto P.",
+      "D) Los ángulos deben medirse necesariamente mediante rumbos magnéticos.",
+      "E) Estacionar en A, medir altura e instrumental y luego repetir en B."
     ],
-    "correct": 0,
-    "reasons": [
-      "Correcta. ΔX=100·cos30°=86,60 y ΔY=100·sen30°=50,00; por eso B=(1086,60; 550,00).",
-      "Incorrecta. Invierte seno y coseno para X e Y.",
-      "Incorrecta. Cambia mal el signo de ΔX."
-    ]
+    correcta:[0,1,2,4],
+    explicacion:"La campaña requiere una geometría observable y repetible: A y B deben permitir las visuales necesarias, P debe ser identificable y deben registrarse correctamente las alturas y observaciones en ambas estaciones."
   },
   {
-    "type": "MINICASO PRÁCTICO — COORDENADAS",
-    "q": "A tiene coordenadas X=1200,00; Y=800,00 y B tiene X=1160,00; Y=880,00. ¿En qué cuadrante está AB y cuál es su rumbo aproximado?",
-    "options": [
-      "Cuadrante I; rumbo ≈ 63°26'",
-      "Cuadrante II; rumbo ≈ 116°34'",
-      "Cuadrante IV; rumbo ≈ 296°34'"
-    ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. El cuadrante I exige ΔX y ΔY positivos.",
-      "Correcta. ΔX=-40 y ΔY=+80, por lo tanto está en cuadrante II; el rumbo ajustado es aproximadamente 116°34'.",
-      "Incorrecta. El cuadrante IV exige ΔX positivo y ΔY negativo."
-    ]
+    id:22, tema:"Punto Inaccesible · Base Transversal", tipo:"numeric", unidad:"m",
+    pregunta:"Con b = 384,90 m, iA = 1,50 m, α1 = +2,50° y s = 0, calcule el desnivel A-P.",
+    correcta:18.31, tolerancia:0.02,
+    explicacion:"ΔH_AP = b·tan(2,50°) + iA ≈ 384,90·tan(2,50°) + 1,50 = 18,31 m."
   },
   {
-    "type": "MINICASO PRÁCTICO — COORDENADAS",
-    "q": "A tiene coordenadas X=500,00; Y=500,00 y B tiene X=450,00; Y=430,00. ¿Cuál es el rumbo aproximado de AB?",
-    "options": [
-      "54°28'",
-      "305°32'",
-      "234°28'"
-    ],
-    "correct": 2,
-    "reasons": [
-      "Incorrecta. Ese es solo el ángulo agudo, sin ajuste de cuadrante.",
-      "Incorrecta. Ese valor correspondería a otro cuadrante.",
-      "Correcta. ΔX=-50 y ΔY=-70; está en cuadrante III. β=arctan(70/50)=54°28', entonces rumbo≈180°+54°28'=234°28'."
-    ]
+    id:23, tema:"Punto Inaccesible", tipo:"numeric", unidad:"m",
+    pregunta:"Se obtienen las cotas tentativas H_PA = 512,45 m y H_PB = 512,55 m. Si L = 500 m, determine la cota definitiva.",
+    correcta:512.50, tolerancia:0.01,
+    explicacion:"La cota definitiva se obtiene promediando las dos determinaciones: (512,45 + 512,55)/2 = 512,50 m."
   },
   {
-    "type": "MINICASO PRÁCTICO — COORDENADAS",
-    "q": "Desde A(X=2000,00; Y=1500,00) se avanza 75,00 m con rumbo 270°00'00''. ¿Cuáles son las coordenadas de B?",
-    "options": [
-      "XB = 2000,00 ; YB = 1425,00",
-      "XB = 1925,00 ; YB = 1500,00",
-      "XB = 2000,00 ; YB = 1575,00"
+    id:24, tema:"Punto Inaccesible", tipo:"single",
+    pregunta:"¿Cuál es la expresión de tolerancia altimétrica utilizada en este ejercicio?",
+    opciones:[
+      "A) T(cm) = ±20 × √L(km)",
+      "B) T(cm) = ±20 × L(km)",
+      "C) T(mm) = ±10 × √L(km)",
+      "D) T(cm) = ±5 × L²(km)"
     ],
-    "correct": 0,
-    "reasons": [
-      "Correcta. Para 270°, cos=0 y sen=-1; ΔX=0 y ΔY=-75, por eso Y disminuye.",
-      "Incorrecta. Ese resultado modificaría X, pero a 270° la variación principal es en Y.",
-      "Incorrecta. Ese sería el sentido contrario, rumbo 90°."
-    ]
+    correcta:1,
+    explicacion:"En este banco se adopta la expresión indicada para el procedimiento: T(cm) = ±20 × L(km)."
   },
   {
-    "type": "MINICASO PRÁCTICO — COORDENADAS",
-    "q": "A(X=1000,00; Y=1000,00) y B(X=1060,00; Y=1080,00). Usando ΔX y ΔY, ¿qué distancia AB y rumbo aproximado se obtienen como control?",
-    "options": [
-      "AB = 140,00 m ; rumbo ≈ 36°52'",
-      "AB = 100,00 m ; rumbo ≈ 53°08'",
-      "AB = 100,00 m ; rumbo ≈ 306°52'"
+    id:25, tema:"Punto Inaccesible · Base Alineada", tipo:"multiple",
+    pregunta:"¿Qué variables deben medirse en campaña? (Puede haber más de una correcta.)",
+    opciones:[
+      "A) Ángulos verticales α1 y β1",
+      "B) Longitud de la base d",
+      "C) Alturas iA e iB",
+      "D) Ángulos horizontales por compensación",
+      "E) Desnivel ΔHAB"
     ],
-    "correct": 1,
-    "reasons": [
-      "Incorrecta. La distancia no es la suma directa de las proyecciones.",
-      "Correcta. ΔX=60 y ΔY=80; AB=√(60²+80²)=100 m y rumbo=arctan(80/60)=53°08'.",
-      "Incorrecta. Ese rumbo pertenece a otro cuadrante; aquí ΔX y ΔY son positivos."
-    ]
+    correcta:[0,1,2,4],
+    explicacion:"El procedimiento requiere los ángulos verticales, la longitud de la base, las alturas instrumentales y el desnivel entre las estaciones. Los ángulos horizontales por compensación no son una variable necesaria del cálculo indicado."
+  },
+  {
+    id:26, tema:"Punto Inaccesible · Base Alineada", tipo:"numeric", unidad:"m",
+    pregunta:"Cota A = 100,00 m, cota B = 98,50 m, d = 40,00 m, tan α1 = 0,052408, tan β1 = 0,078702, iA = 1,50 m e iB = 1,60 m. Calcule la distancia x.",
+    correcta:132.97, tolerancia:0.05,
+    explicacion:"Aplicando la ecuación geométrica correspondiente al esquema de base alineada y los datos suministrados, se obtiene x ≈ 132,97 m."
+  },
+  {
+    id:27, tema:"Punto Inaccesible · Base Alineada", tipo:"numeric", unidad:"m",
+    pregunta:"Con x = 132,97 m y los datos anteriores, calcule la cota de P desde B.",
+    correcta:110.56, tolerancia:0.02,
+    explicacion:"Desde B se aplica la relación de desnivel correspondiente a la visual hacia P, obteniendo H_P ≈ 110,56 m."
+  },
+  {
+    id:28, tema:"Medición Indirecta", tipo:"single",
+    pregunta:"¿Por qué se recomienda medir ε con repetición y α con método sencillo?",
+    opciones:[
+      "A) ε es muy pequeño y sus errores pueden desviar significativamente el cálculo de L.",
+      "B) α mide siempre exactamente 90°.",
+      "C) La repetición compensa la excentricidad en todos los casos.",
+      "D) α es el rumbo del alineamiento."
+    ],
+    correcta:0,
+    explicacion:"Al ser ε pequeño, pequeños errores en su determinación pueden propagarse fuertemente al cálculo de la distancia. Por eso se busca medirlo con mayor precisión."
+  },
+  {
+    id:29, tema:"Medición Indirecta", tipo:"multiple",
+    pregunta:"Seleccione las afirmaciones correctas sobre la propagación de errores. (Puede haber más de una correcta.)",
+    opciones:[
+      "A) Los errores en b pueden afectar apreciablemente el cálculo de L.",
+      "B) Los errores en α tienen una influencia relativamente menor en la configuración considerada.",
+      "C) Los errores en ε pueden desviar significativamente el valor calculado de L.",
+      "D) Un error de 1' en α altera siempre L en 20 m.",
+      "E) Conviene medir la base b con cinta ida y vuelta, repitiendo las mediciones."
+    ],
+    correcta:[0,1,2,4],
+    explicacion:"La propagación depende de la geometría. En particular, una pequeña incertidumbre en el ángulo pequeño ε puede producir una variación importante en L. También es conveniente controlar la medición de la base mediante mediciones de ida y vuelta."
+  },
+  {
+    id:30, tema:"Medición Indirecta", tipo:"numeric", unidad:"m",
+    pregunta:"Base b = 80,00 m, ε = +2,75° y α = +85,50°. Calcule la distancia L.",
+    correcta:1666.65, tolerancia:0.05,
+    explicacion:"Para este ejercicio se adopta como resultado esperado L = 1666,65 m, de acuerdo con el esquema y los datos del banco de preguntas."
   }
 ];
 
-let current = 0;
-const selected = Array(questions.length).fill(null);
+let currentQuestions = [];
+let currentIndex = 0;
+let answers = [];
+let checked = [];
+let scoreCount = 0;
 
-function scoreNow() {
-  let correct = 0;
-  for (let i = 0; i < questions.length; i++) {
-    if (selected[i] === questions[i].correct) correct++;
+const startPanel = document.getElementById("startPanel");
+const quizPanel = document.getElementById("quizPanel");
+const finishPanel = document.getElementById("finishPanel");
+const questionsEl = document.getElementById("questions");
+const startBtn = document.getElementById("startBtn");
+const newAttemptBtn = document.getElementById("newAttemptBtn");
+const questionCounter = document.getElementById("questionCounter");
+const answeredCounter = document.getElementById("answeredCounter");
+const progressBar = document.getElementById("progressBar");
+const progressText = document.getElementById("progressText");
+const finalScore = document.getElementById("finalScore");
+const scoreMessage = document.getElementById("scoreMessage");
+const reviewList = document.getElementById("reviewList");
+
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
   }
-  return correct;
+  return a;
 }
 
-function formatChoiceLabel(index) {
-  const labels = ["A", "B", "C", "D", "E"];
-  return labels[index] || String(index + 1);
+function normalizeNumber(value){
+  return parseFloat(String(value).trim().replace(",", "."));
 }
 
-function updateHeader() {
-  const answeredCount = selected.filter(v => v !== null).length;
-  const correctCount = scoreNow();
-  document.getElementById("progressPill").innerText = `Pregunta ${current + 1} de ${questions.length}`;
-  document.getElementById("scorePill").innerText = `Aciertos: ${correctCount}/${questions.length}`;
-  document.getElementById("statusPill").innerText = selected[current] === null ? "Sin responder" : "Respondida";
-  document.getElementById("progressBar").style.width = `${(answeredCount / questions.length) * 100}%`;
+function sameSet(a,b){
+  if(a.length !== b.length) return false;
+  const aa=[...a].sort((x,y)=>x-y), bb=[...b].sort((x,y)=>x-y);
+  return aa.every((v,i)=>v===bb[i]);
 }
 
-function renderQuestion() {
-  const q = questions[current];
-  document.getElementById("typeBadge").innerText = q.type;
-  document.getElementById("questionNum").innerText = `Pregunta ${current + 1}`;
-  document.getElementById("questionText").innerText = q.q;
-  const options = document.getElementById("options");
-  options.innerHTML = "";
-  document.getElementById("feedback").style.display = "none";
-  document.getElementById("feedback").innerHTML = "";
-
-  q.options.forEach((opt, idx) => {
-    const div = document.createElement("div");
-    div.className = "option";
-    div.innerHTML = `<span class="label">${formatChoiceLabel(idx)}.</span> ${opt}`;
-    div.onclick = () => selectOption(idx);
-    options.appendChild(div);
-  });
-
-  const prevBtn = document.getElementById("prevBtn");
-  prevBtn.disabled = current === 0;
-
-  const nextBtn = document.getElementById("nextBtn");
-  nextBtn.innerText = current === questions.length - 1 ? "Finalizar" : "Siguiente";
-  nextBtn.disabled = selected[current] === null;
-
-  if (selected[current] !== null) {
-    paintSelection();
-  }
-
-  updateHeader();
+function formatNumber(n){
+  return Number(n).toLocaleString("es-AR",{maximumFractionDigits:4});
 }
 
-function paintSelection() {
-  const q = questions[current];
-  const optionNodes = document.querySelectorAll(".option");
-  const chosen = selected[current];
-
-  optionNodes.forEach((node, idx) => {
-    node.classList.remove("selected-correct", "selected-wrong", "correct-answer", "disabled");
-    node.style.pointerEvents = "none";
-    node.classList.add("disabled");
-
-    if (idx === q.correct) {
-      node.classList.add("correct-answer");
-    }
-    if (idx === chosen && chosen === q.correct) {
-      node.classList.add("selected-correct");
-    }
-    if (idx === chosen && chosen !== q.correct) {
-      node.classList.add("selected-wrong");
-    }
-  });
-
-  showFeedback(chosen === q.correct);
+function correctLabel(q){
+  if(q.tipo==="single") return q.opciones[q.correcta];
+  if(q.tipo==="multiple") return q.correcta.map(i=>q.opciones[i]).join(" · ");
+  return `${formatNumber(q.correcta)} ${q.unidad||""}`.trim();
 }
 
-function selectOption(idx) {
-  if (selected[current] !== null) return;
-  selected[current] = idx;
-  document.getElementById("nextBtn").disabled = false;
-  paintSelection();
-  updateHeader();
-}
-
-function showFeedback(isCorrect) {
-  const q = questions[current];
-  const chosen = selected[current];
-  const feedback = document.getElementById("feedback");
-  feedback.style.display = "block";
-
-  const choiceLabel = formatChoiceLabel(chosen);
-  const verdict = isCorrect ? "Correcta" : "Incorrecta";
-
-  let html = `<div class="feedback-title">${verdict}. Opción elegida: ${choiceLabel}</div>`;
-  html += `<div>${isCorrect ? q.reasons[q.correct] : q.reasons[chosen]}</div>`;
-  html += `<div class="feedback-list">`;
-  q.options.forEach((opt, idx) => {
-    const status = idx === q.correct ? "Correcta" : "Incorrecta";
-    html += `<div class="feedback-row"><strong>${formatChoiceLabel(idx)} — ${status}</strong> ${q.reasons[idx]}</div>`;
-  });
-  html += `</div>`;
-  feedback.innerHTML = html;
-}
-
-function nextQuestion() {
-  if (selected[current] === null) return;
-  if (current < questions.length - 1) {
-    current++;
-    renderQuestion();
-  } else {
-    finishQuiz();
-  }
-}
-
-function prevQuestion() {
-  if (current > 0) {
-    current--;
-    renderQuestion();
-  }
-}
-
-function finishQuiz() {
-  const correct = scoreNow();
-  const percentage = Math.round((correct / questions.length) * 100);
-
-  document.getElementById("quizCard").style.display = "none";
-  document.getElementById("resultCard").style.display = "block";
-
-  document.getElementById("finalScore").innerText = `${percentage}/100`;
-  document.getElementById("finalDetail").innerText = `Aciertos: ${correct}/${questions.length}`;
-
-  let verdict = "";
-  if (percentage >= 90) {
-    verdict = "Excelente dominio de coordenadas, medición electrónica y replanteo.";
-  } else if (percentage >= 70) {
-    verdict = "Buen manejo teórico y práctico. Repasá los detalles de cuadrantes y replanteo.";
-  } else if (percentage >= 50) {
-    verdict = "Aprobaste, pero todavía conviene reforzar fórmulas y minicasos de coordenadas.";
-  } else {
-    verdict = "Necesitas repasar con más detalle las fórmulas, los cuadrantes y el procedimiento de replanteo.";
-  }
-  document.getElementById("finalText").innerText = verdict;
-}
-
-function restartQuiz() {
-  current = 0;
-  for (let i = 0; i < selected.length; i++) selected[i] = null;
-  document.getElementById("resultCard").style.display = "none";
-  document.getElementById("quizCard").style.display = "block";
+function startQuiz(){
+  currentQuestions = shuffle(questionBank).slice(0,15);
+  currentIndex=0;
+  answers=Array(15).fill(null);
+  checked=Array(15).fill(false);
+  scoreCount=0;
+  startPanel.classList.add("hidden");
+  finishPanel.classList.add("hidden");
+  quizPanel.classList.remove("hidden");
   renderQuestion();
 }
 
-renderQuestion();
+function renderQuestion(){
+  const q=currentQuestions[currentIndex];
+  questionCounter.textContent=`Pregunta ${currentIndex+1} de ${currentQuestions.length}`;
+  const answered=checked.filter(Boolean).length;
+  answeredCounter.textContent=`${answered} respondidas`;
+  const pct=Math.round((currentIndex/currentQuestions.length)*100);
+  progressBar.style.width=`${pct}%`;
+  progressText.textContent=`${pct}%`;
+
+  questionsEl.innerHTML="";
+  const card=document.createElement("article");
+  card.className="question-card";
+
+  const badges=document.createElement("div");
+  badges.className="badges";
+  badges.innerHTML=`<span class="badge">${q.tema}</span><span class="badge type">${q.tipo==="single"?"Opción única":q.tipo==="multiple"?"Múltiples opciones":"Respuesta numérica"}</span>`;
+  card.appendChild(badges);
+
+  const title=document.createElement("h2");
+  title.className="question-title";
+  title.textContent=`${q.id}. ${q.pregunta}`;
+  card.appendChild(title);
+
+  const inputArea=document.createElement("div");
+
+  if(q.tipo==="single" || q.tipo==="multiple"){
+    const opts=document.createElement("div");
+    opts.className="options";
+    q.opciones.forEach((text,i)=>{
+      const label=document.createElement("label");
+      label.className="option";
+      const input=document.createElement("input");
+      input.type=q.tipo==="single"?"radio":"checkbox";
+      input.name=`q${q.id}`;
+      input.value=i;
+      const saved=answers[currentIndex];
+      if(saved && saved.includes(i)) input.checked=true;
+      input.addEventListener("change",()=>{
+        if(q.tipo==="single"){
+          answers[currentIndex]=[Number(input.value)];
+        }else{
+          answers[currentIndex]=Array.from(opts.querySelectorAll("input:checked")).map(x=>Number(x.value));
+        }
+      });
+      const span=document.createElement("span");
+      span.textContent=text;
+      label.appendChild(input); label.appendChild(span);
+      opts.appendChild(label);
+    });
+    inputArea.appendChild(opts);
+  }else{
+    const wrap=document.createElement("div");
+    wrap.className="numeric-wrap";
+    const input=document.createElement("input");
+    input.type="text";
+    input.inputMode="decimal";
+    input.placeholder="Ingrese el resultado";
+    input.setAttribute("aria-label","Respuesta numérica");
+    if(answers[currentIndex] !== null) input.value=answers[currentIndex];
+    input.addEventListener("input",()=>answers[currentIndex]=input.value);
+    wrap.appendChild(input);
+    if(q.unidad){
+      const unit=document.createElement("span");
+      unit.className="unit";
+      unit.textContent=q.unidad;
+      wrap.appendChild(unit);
+    }
+    inputArea.appendChild(wrap);
+  }
+  card.appendChild(inputArea);
+
+  const feedback=document.createElement("div");
+  feedback.id="feedback";
+  if(checked[currentIndex]){
+    showFeedback(feedback,q,answers[currentIndex]);
+  }
+  card.appendChild(feedback);
+
+  const actions=document.createElement("div");
+  actions.className="question-actions";
+  const btn=document.createElement("button");
+  btn.className="primary";
+  btn.textContent=checked[currentIndex] ? (currentIndex===currentQuestions.length-1?"Finalizar":"Siguiente") : "Comprobar respuesta";
+  btn.addEventListener("click",()=>handleQuestion(q,feedback));
+  actions.appendChild(btn);
+  card.appendChild(actions);
+
+  questionsEl.appendChild(card);
+}
+
+function getAnswer(){
+  const q=currentQuestions[currentIndex];
+  if(q.tipo==="numeric"){
+    const n=normalizeNumber(answers[currentIndex]);
+    return Number.isFinite(n)?n:null;
+  }
+  return answers[currentIndex] || [];
+}
+
+function isCorrect(q,ans){
+  if(q.tipo==="single") return ans.length===1 && ans[0]===q.correcta;
+  if(q.tipo==="multiple") return sameSet(ans,q.correcta);
+  return ans!==null && Math.abs(ans-q.correcta)<=q.tolerancia;
+}
+
+function showFeedback(container,q,ans){
+  container.className="feedback";
+  const ok=isCorrect(q,ans);
+  container.classList.add(ok?"good":"bad");
+  container.innerHTML="";
+  const title=document.createElement("strong");
+  title.textContent=ok?"✓ Correcto":"✗ Incorrecto";
+  const answer=document.createElement("div");
+  answer.innerHTML=`<b>Respuesta correcta:</b> ${escapeHtml(correctLabel(q))}`;
+  const exp=document.createElement("div");
+  exp.className="explanation";
+  exp.textContent=q.explicacion;
+  container.appendChild(title);
+  container.appendChild(answer);
+  container.appendChild(exp);
+}
+
+function escapeHtml(text){
+  return String(text).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+
+function paintOptions(q,ok){
+  document.querySelectorAll("#questions .option").forEach((label,i)=>{
+    const input=label.querySelector("input");
+    const idx=Number(input.value);
+    if(q.tipo==="single"){
+      if(idx===q.correcta) label.classList.add("correct");
+      if(input.checked && idx!==q.correcta) label.classList.add("incorrect");
+    }else{
+      if(q.correcta.includes(idx)) label.classList.add("correct");
+      if(input.checked && !q.correcta.includes(idx)) label.classList.add("incorrect");
+      if(!input.checked && q.correcta.includes(idx)) label.classList.add("missed");
+    }
+    input.disabled=true;
+  });
+}
+
+function handleQuestion(q,feedback){
+  if(!checked[currentIndex]){
+    const ans=getAnswer();
+    if(q.tipo!=="numeric" && ans.length===0){
+      alert("Seleccione al menos una opción antes de comprobar.");
+      return;
+    }
+    if(q.tipo==="numeric" && ans===null){
+      alert("Ingrese un valor numérico antes de comprobar.");
+      return;
+    }
+    checked[currentIndex]=true;
+    if(isCorrect(q,ans)) scoreCount++;
+    showFeedback(feedback,q,ans);
+    if(q.tipo!=="numeric") paintOptions(q,isCorrect(q,ans));
+    feedback.scrollIntoView({behavior:"smooth",block:"nearest"});
+    renderActionOnly();
+    updateCounters();
+  }else{
+    if(currentIndex<currentQuestions.length-1){
+      currentIndex++;
+      renderQuestion();
+      window.scrollTo({top:0,behavior:"smooth"});
+    }else{
+      finishQuiz();
+    }
+  }
+}
+
+function renderActionOnly(){
+  const btn=document.querySelector(".question-actions button");
+  if(btn) btn.textContent=currentIndex===currentQuestions.length-1?"Finalizar":"Siguiente";
+}
+
+function updateCounters(){
+  const answered=checked.filter(Boolean).length;
+  answeredCounter.textContent=`${answered} respondidas`;
+  const pct=Math.round((answered/currentQuestions.length)*100);
+  progressBar.style.width=`${pct}%`;
+  progressText.textContent=`${pct}%`;
+}
+
+function finishQuiz(){
+  progressBar.style.width="100%";
+  progressText.textContent="100%";
+  questionsEl.innerHTML="";
+  quizPanel.classList.add("hidden");
+  finishPanel.classList.remove("hidden");
+  const points=(scoreCount/currentQuestions.length)*100;
+  finalScore.textContent=`${Math.round(points)}/100`;
+  if(points>=90) scoreMessage.textContent="Excelente. Tenés un dominio muy sólido de los temas.";
+  else if(points>=70) scoreMessage.textContent="Muy bien. Solo quedan algunos conceptos por reforzar.";
+  else if(points>=50) scoreMessage.textContent="Bien encaminado. Conviene repasar los temas en los que fallaste.";
+  else scoreMessage.textContent="Hay varios conceptos para reforzar. Usá las explicaciones para repasar.";
+
+  reviewList.innerHTML="";
+  currentQuestions.forEach((q,i)=>{
+    const item=document.createElement("div");
+    item.className=`review-item ${isCorrect(q,getStoredAnswer(i))?"good":"bad"}`;
+    item.innerHTML=`<b>${i+1}. ${escapeHtml(q.tema)}</b> — ${isCorrect(q,getStoredAnswer(i))?"Correcta":"Incorrecta"}<br><span class="note">Respuesta: ${escapeHtml(correctLabel(q))}</span>`;
+    reviewList.appendChild(item);
+  });
+}
+
+function getStoredAnswer(i){
+  const q=currentQuestions[i];
+  if(q.tipo==="numeric") return normalizeNumber(answers[i]);
+  return answers[i]||[];
+}
+
+startBtn.addEventListener("click",startQuiz);
+newAttemptBtn.addEventListener("click",()=>{
+  window.scrollTo({top:0,behavior:"smooth"});
+  startQuiz();
+});
 </script>
 </body>
 </html>
