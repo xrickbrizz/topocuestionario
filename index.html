@@ -20,14 +20,12 @@ h1{margin:0 0 6px;font-size:clamp(25px,4vw,38px)}
 .panel,.question-card{background:var(--card);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow)}
 .panel{padding:20px;margin-bottom:18px}
 .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
-button{border:0;border-radius:10px;padding:11px 17px;font-weight:700;cursor:pointer;font-size:15px; transition:.2s}
+button{border:0;border-radius:10px;padding:11px 17px;font-weight:700;cursor:pointer;font-size:15px}
 .primary{background:var(--primary);color:white}
 .primary:hover{background:var(--primary2)}
 .secondary{background:#e9eef3;color:#243342}
-.secondary:hover{background:#dbe3ea}
 .danger{background:#fcebed;color:#a61b2b}
 button:disabled{opacity:.5;cursor:not-allowed}
-.topic-bar{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px}
 .progress-wrap{margin-top:16px}
 .progress-meta{display:flex;justify-content:space-between;color:var(--muted);font-size:14px;margin-bottom:7px}
 .progress{height:10px;background:#e7ebef;border-radius:20px;overflow:hidden}
@@ -79,20 +77,32 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
 <main class="container">
   <section class="panel" id="startPanel">
-    <div>
-      <strong>Selecciona un tema para practicar:</strong>
-      <div class="topic-bar" id="topicFilters">
-        <!-- Los botones de filtro se inyectan acá -->
+    <div class="controls">
+      <div>
+        <strong>Banco de 30 preguntas</strong>
+        <div class="note" id="bankNote">Podés resolver las 30 preguntas en orden o filtrar por tema.</div>
       </div>
-    </div>
-    <div style="margin-top:20px; text-align:right;">
-      <button class="primary" id="startBtn">Comenzar intento</button>
+      <div class="controls" style="justify-content:flex-end; margin-top:12px; width:100%;">
+        <label for="topicFilter" style="font-weight:700;">Practicar tema:</label>
+        <select id="topicFilter" style="padding:11px 13px; border:1px solid var(--border); border-radius:10px; background:white; font-size:15px; min-width:240px;">
+          <option value="ALL">Todos los temas (30)</option>
+          <option value="Nivelación Trigonométrica">Nivelación Trigonométrica</option>
+          <option value="Altimetría">Altimetría</option>
+          <option value="Punto Inaccesible">Punto Inaccesible</option>
+          <option value="Medición Indirecta">Medición Indirecta</option>
+          <option value="Rodeo Simple">Rodeo Simple</option>
+        </select>
+        <button class="primary" id="startBtn">Comenzar práctica</button>
+      </div>
     </div>
   </section>
 
   <section class="panel hidden" id="quizPanel">
     <div class="controls">
-      <div><strong id="questionCounter">Pregunta 1</strong></div>
+      <div>
+        <strong id="questionCounter">Pregunta 1 de 30</strong>
+        <div class="note" id="selectedTopic">Todos los temas</div>
+      </div>
       <div class="note" id="answeredCounter">0 respondidas</div>
     </div>
     <div class="progress-wrap">
@@ -108,7 +118,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
       <div class="note">RESULTADO FINAL</div>
       <div class="score" id="finalScore">0/100</div>
       <div class="score-message" id="scoreMessage"></div>
-      <button class="primary" id="newAttemptBtn">Volver al inicio</button>
+      <button class="primary" id="newAttemptBtn">Nuevo intento</button>
       <div class="review-list" id="reviewList"></div>
     </div>
   </section>
@@ -117,37 +127,235 @@ button:disabled{opacity:.5;cursor:not-allowed}
 </main>
 
 <script>
+/*
+  Banco de preguntas.
+  Las respuestas correctas están en JavaScript y no se imprimen en el HTML
+  hasta que el usuario haya respondido.
+*/
 const questionBank = [
-  { id:1, tema:"Nivelación Trigonométrica", tipo:"single", pregunta:"En la fórmula Δh = L × tan α + (L² / 2r) × (1 − k) + (i − s). Los valores i y s se miden:", opciones:["Con cinta o ruleta al metro","Con cinta o ruleta al dm","Con cinta o ruleta al cm","Con cinta o ruleta al mm","Ninguna de las anteriores","Es indistinto, depende del método"], correcta:3, explicacion:"Las alturas instrumental y de señal deben determinarse con precisión milimétrica, ya que ingresan directamente en el cálculo del desnivel." },
-  { id:2, tema:"Altimetría", tipo:"single", pregunta:"Si el plano horizontal de comparación o referencia no es el nivel del mar, a las cotas se las denomina:", opciones:["Independientes","Ninguna es correcta","Dominantes","Absolutas","Relativas"], correcta:4, explicacion:"Las cotas referidas a un plano de comparación arbitrario reciben el carácter de cotas relativas." },
-  { id:3, tema:"Punto Inaccesible", tipo:"single", pregunta:"En una Nivelación a un Punto Inaccesible P, Método de Base transversal, los ángulos horizontales se miden:", opciones:["Por el método de compensación","Por el método sencillo","Por el método de rumbos","Por el método de repetición"], correcta:3, explicacion:"En este procedimiento se busca obtener los ángulos horizontales con mayor precisión mediante el método de repetición." },
-  { id:4, tema:"Medición Indirecta", tipo:"multiple", pregunta:"MEDICIÓN INDIRECTA DE DISTANCIAS. Se aplica para terrenos (puede haber más de una correcta):", opciones:["Accidentados","Llanos","Abruptos","Transitables","De fácil acceso","Difícilmente transitables"], correcta:[0,2,5], explicacion:"La medición indirecta resulta especialmente útil cuando el terreno es accidentado, abrupto o difícilmente transitable." },
-  { id:5, tema:"Medición Indirecta", tipo:"single", pregunta:"El método de medición indirecta tiene un error relativo de:", opciones:["1/1.000","1/3.000","1/5.000","1/10.000","Otro"], correcta:1, explicacion:"Para el método considerado se adopta como referencia un error relativo del orden de 1/3.000." },
-  { id:6, tema:"Nivelación Trigonométrica", tipo:"numeric", unidad:"m", pregunta:"Datos: Dist = 1350,50 m, R = 6370 km, k = 0,13. Cota A = 230,10 m. En A se visualiza B: ángulo vertical = 1°25'10'', i = 1,60 m, s = 1,20 m. Calcule el desnivel AB de ida, en metros.", correcta:33.9886539031, tolerancia:0.01, explicacion:"Aplicando Δh = L·tan(α) + (L²/2R)(1−k) + (i−s), con R = 6.370.000 m, se obtiene ΔhAB ≈ +33,99 m." },
-  { id:7, tema:"Nivelación Trigonométrica", tipo:"numeric", unidad:"m", pregunta:"Con los mismos datos del ejercicio anterior. En B se visualiza A: ángulo vertical = −1°27'11'', i = 1,50 m, s = 1,32 m. Calcule el desnivel BA de vuelta, en metros.", correcta:-33.9522911249, tolerancia:0.01, explicacion:"Aplicando la misma expresión con el ángulo vertical de vuelta se obtiene ΔhBA ≈ −33,95 m." },
-  { id:8, tema:"Nivelación Trigonométrica", tipo:"numeric", unidad:"cm", pregunta:"Con los mismos datos de los ejercicios anteriores, calcule la tolerancia altimétrica del tramo en centímetros. Use T = ±20·√L, con L expresada en kilómetros.", correcta:32.87, tolerancia:0.05, explicacion:"Para el tramo ida y vuelta se toma L = 2×1,3505 = 2,701 km. Entonces T = 20·√2,701 ≈ ±32,87 cm." },
-  { id:9, tema:"Nivelación Trigonométrica", tipo:"numeric", unidad:"m", pregunta:"Con los mismos datos de los ejercicios anteriores, calcule la cota de B a partir de la cota de A.", correcta:264.0886539031, tolerancia:0.02, explicacion:"La cota de B se obtiene como H_B = H_A + Δh_AB = 230,10 + 33,9887 ≈ 264,09 m." },
-  { id:10, tema:"Rodeo Simple", tipo:"numeric", unidad:"cm", pregunta:"Polígono con Cota A = 350,15 m. A-B: Δh = +7,65 m. B-C: Δh = −2,64 m. C-D: Δh = −3,47 m. D-A: Δh = −1,54 m. Calcule el error de cierre en centímetros.", correcta:0, tolerancia:0.1, explicacion:"La suma algebraica de los desniveles es +7,65−2,64−3,47−1,54 = 0,00 m. Por lo tanto, el error de cierre es 0 cm." },
-  { id:11, tema:"Rodeo Simple", tipo:"numeric", unidad:"m", pregunta:"Con los datos del rodeo simple anterior, calcule la cota del vértice B.", correcta:357.80, tolerancia:0.01, explicacion:"H_B = H_A + ΔhAB = 350,15 + 7,65 = 357,80 m." },
-  { id:12, tema:"Rodeo Simple", tipo:"numeric", unidad:"m", pregunta:"Con los datos del rodeo simple anterior, calcule la cota del vértice C.", correcta:355.16, tolerancia:0.01, explicacion:"H_C = H_B + ΔhBC = 357,80 − 2,64 = 355,16 m." },
-  { id:13, tema:"Rodeo Simple", tipo:"numeric", unidad:"m", pregunta:"Con los datos del rodeo simple anterior, calcule la cota del vértice D.", correcta:351.69, tolerancia:0.01, explicacion:"H_D = H_C + ΔhCD = 355,16 − 3,47 = 351,69 m." },
-  { id:14, tema:"Punto Inaccesible · Base Transversal", tipo:"single", pregunta:"¿Cuál es la condición geométrica recomendada para la ubicación de la base auxiliar a respecto del punto P?", opciones:["A) Paralela","B) Perpendicular con longitud de 1/10 de la distancia","C) Aleatoria de 500 m","D) Colineal"], correcta:1, explicacion:"La base auxiliar se dispone perpendicularmente a la dirección hacia el punto inaccesible y su longitud se establece en una proporción adecuada respecto de la distancia." },
-  { id:15, tema:"Punto Inaccesible", tipo:"multiple", pregunta:"¿En cuáles de estos casos resulta aplicable el método de punto inaccesible? (Puede haber más de una correcta.)", opciones:["A) Antena","B) Poste o torre de alta tensión","C) Red cerrada llana","D) Extremo de rama o remache","E) Conductor eléctrico o tanque"], correcta:[0,1,3,4], explicacion:"El método es útil para determinar puntos cuya posición o cota no puede medirse directamente, como antenas, torres, extremos de elementos y otros puntos inaccesibles." },
-  { id:16, tema:"Punto Inaccesible", tipo:"numeric", unidad:"°", pregunta:"Los ángulos de un triángulo son α = 84°30'00'' y β = 83°45'00''. Calcule el tercer ángulo γ en grados decimales.", correcta:11.75, tolerancia:0.001, explicacion:"La suma de los ángulos de un triángulo es 180°. γ = 180° − 84°30' − 83°45' = 11°45' = 11,75°." },
-  { id:17, tema:"Medición Indirecta", tipo:"single", pregunta:"¿Cuál es la relación recomendada entre la base b y la longitud L?", opciones:["A) b entre 1/5 y 1/20 de L, con β ≈ 90°","B) b > L","C) b = 1/10 L, con β ≈ 0°","D) b = 1/2 L"], correcta:0, explicacion:"Se busca una base relativamente pequeña respecto de la distancia y una configuración angular favorable, con β próximo a 90°." },
-  { id:18, tema:"Medición Indirecta", tipo:"multiple", pregunta:"¿Cuáles son métodos adecuados para medir los componentes del procedimiento? (Puede haber más de una correcta.)", opciones:["A) Base con cinta ida/vuelta o medición electrónica","B) α por repetición","C) ε por repetición","D) α por método sencillo","E) Todo a pasos"], correcta:[0,2,3], explicacion:"La base puede medirse con cinta ida/vuelta o electrónicamente; el pequeño ángulo ε se favorece con repetición, mientras α puede medirse por método sencillo." },
-  { id:19, tema:"Punto Inaccesible · Base Transversal", tipo:"numeric", unidad:"m", pregunta:"Base a = 100,00 m, α = 80,00° y β = 85,00°. Calcule la distancia b desde A hasta P.", correcta:384.90, tolerancia:0.02, explicacion:"Por la ley de senos, con γ = 180°−80°−85° = 15°, b/sin85° = a/sin15°. Así, b ≈ 384,90 m." },
-  { id:20, tema:"Medición Indirecta", tipo:"single", pregunta:"¿Cuál es el error relativo de diseño adoptado para el método?", opciones:["A) 1/1.000","B) 1/3.000","C) 1/5.000","D) 1/10.000"], correcta:1, explicacion:"El error relativo de diseño considerado para este procedimiento es 1/3.000." },
-  { id:21, tema:"Punto Inaccesible · Base Transversal", tipo:"multiple", pregunta:"Seleccione los pasos operativos correctos de campaña. (Puede haber más de una correcta.)", opciones:["A) Los puntos A y B deben ser visibles entre sí y la configuración debe permitir la observación de P.","B) P debe ser visible desde A y B.","C) Se debe visar un elemento único e identificable del punto P.","D) Los ángulos deben medirse necesariamente mediante rumbos magnéticos.","E) Estacionar en A, medir altura e instrumental y luego repetir en B."], correcta:[0,1,2,4], explicacion:"La campaña requiere una geometría observable y repetible: A y B deben permitir las visuales necesarias, P debe ser identificable y deben registrarse correctamente las alturas y observaciones en ambas estaciones." },
-  { id:22, tema:"Punto Inaccesible · Base Transversal", tipo:"numeric", unidad:"m", pregunta:"Con b = 384,90 m, iA = 1,50 m, α1 = +2,50° y s = 0, calcule el desnivel A-P.", correcta:18.31, tolerancia:0.02, explicacion:"ΔH_AP = b·tan(2,50°) + iA ≈ 384,90·tan(2,50°) + 1,50 = 18,31 m." },
-  { id:23, tema:"Punto Inaccesible", tipo:"numeric", unidad:"m", pregunta:"Se obtienen las cotas tentativas H_PA = 512,45 m y H_PB = 512,55 m. Si L = 500 m, determine la cota definitiva.", correcta:512.50, tolerancia:0.01, explicacion:"La cota definitiva se obtiene promediando las dos determinaciones: (512,45 + 512,55)/2 = 512,50 m." },
-  { id:24, tema:"Punto Inaccesible", tipo:"single", pregunta:"¿Cuál es la expresión de tolerancia altimétrica utilizada en este ejercicio?", opciones:["A) T(cm) = ±20 × √L(km)","B) T(cm) = ±20 × L(km)","C) T(mm) = ±10 × √L(km)","D) T(cm) = ±5 × L²(km)"], correcta:1, explicacion:"En este banco se adopta la expresión indicada para el procedimiento: T(cm) = ±20 × L(km)." },
-  { id:25, tema:"Punto Inaccesible · Base Alineada", tipo:"multiple", pregunta:"¿Qué variables deben medirse en campaña? (Puede haber más de una correcta.)", opciones:["A) Ángulos verticales α1 y β1","B) Longitud de la base d","C) Alturas iA e iB","D) Ángulos horizontales por compensación","E) Desnivel ΔHAB"], correcta:[0,1,2,4], explicacion:"El procedimiento requiere los ángulos verticales, la longitud de la base, las alturas instrumentales y el desnivel entre las estaciones." },
-  { id:26, tema:"Punto Inaccesible · Base Alineada", tipo:"numeric", unidad:"m", pregunta:"Cota A = 100,00 m, cota B = 98,50 m, d = 40,00 m, tan α1 = 0,052408, tan β1 = 0,078702, iA = 1,50 m e iB = 1,60 m. Calcule la distancia x.", correcta:132.97, tolerancia:0.05, explicacion:"Aplicando la ecuación geométrica correspondiente al esquema de base alineada y los datos suministrados, se obtiene x ≈ 132,97 m." },
-  { id:27, tema:"Punto Inaccesible · Base Alineada", tipo:"numeric", unidad:"m", pregunta:"Con x = 132,97 m y los datos anteriores, calcule la cota de P desde B.", correcta:110.56, tolerancia:0.02, explicacion:"Desde B se aplica la relación de desnivel correspondiente a la visual hacia P, obteniendo H_P ≈ 110,56 m." },
-  { id:28, tema:"Medición Indirecta", tipo:"single", pregunta:"¿Por qué se recomienda medir ε con repetición y α con método sencillo?", opciones:["A) ε es muy pequeño y sus errores pueden desviar significativamente el cálculo de L.","B) α mide siempre exactamente 90°.","C) La repetición compensa la excentricidad en todos los casos.","D) α es el rumbo del alineamiento."], correcta:0, explicacion:"Al ser ε pequeño, pequeños errores en su determinación pueden propagarse fuertemente al cálculo de la distancia." },
-  { id:29, tema:"Medición Indirecta", tipo:"multiple", pregunta:"Seleccione las afirmaciones correctas sobre la propagación de errores. (Puede haber más de una correcta.)", opciones:["A) Los errores en b pueden afectar apreciablemente el cálculo de L.","B) Los errores en α tienen una influencia relativamente menor en la configuración considerada.","C) Los errores en ε pueden desviar significativamente el valor calculado de L.","D) Un error de 1' en α altera siempre L en 20 m.","E) Conviene medir la base b con cinta ida y vuelta, repitiendo las mediciones."], correcta:[0,1,2,4], explicacion:"La propagación depende de la geometría. Una pequeña incertidumbre en el ángulo pequeño ε puede producir una variación importante en L." },
-  { id:30, tema:"Medición Indirecta", tipo:"numeric", unidad:"m", pregunta:"Base b = 80,00 m, ε = +2,75° y α = +85,50°. Calcule la distancia L.", correcta:1666.65, tolerancia:0.05, explicacion:"Para este ejercicio se adopta como resultado esperado L = 1666,65 m, de acuerdo con el esquema y los datos del banco de preguntas." }
+  {
+    id:1, tema:"Nivelación Trigonométrica", tipo:"single",
+    pregunta:"En la fórmula Δh = L × tan α + (L² / 2r) × (1 − k) + (i − s). Los valores i y s se miden:",
+    opciones:["Con cinta o ruleta al metro","Con cinta o ruleta al dm","Con cinta o ruleta al cm","Con cinta o ruleta al mm","Ninguna de las anteriores","Es indistinto, depende del método"],
+    correcta:3,
+    explicacion:"Las alturas instrumental y de señal deben determinarse con precisión milimétrica, ya que ingresan directamente en el cálculo del desnivel."
+  },
+  {
+    id:2, tema:"Altimetría", tipo:"single",
+    pregunta:"Si el plano horizontal de comparación o referencia no es el nivel del mar, a las cotas se las denomina:",
+    opciones:["Independientes","Ninguna es correcta","Dominantes","Absolutas","Relativas"],
+    correcta:4,
+    explicacion:"Las cotas referidas a un plano de comparación arbitrario reciben el carácter de cotas relativas."
+  },
+  {
+    id:3, tema:"Punto Inaccesible", tipo:"single",
+    pregunta:"En una Nivelación a un Punto Inaccesible P, Método de Base transversal, los ángulos horizontales se miden:",
+    opciones:["Por el método de compensación","Por el método sencillo","Por el método de rumbos","Por el método de repetición"],
+    correcta:3,
+    explicacion:"En este procedimiento se busca obtener los ángulos horizontales con mayor precisión mediante el método de repetición."
+  },
+  {
+    id:4, tema:"Medición Indirecta", tipo:"multiple",
+    pregunta:"MEDICIÓN INDIRECTA DE DISTANCIAS. Se aplica para terrenos (puede haber más de una correcta):",
+    opciones:["Accidentados","Llanos","Abruptos","Transitables","De fácil acceso","Difícilmente transitables"],
+    correcta:[0,2,5],
+    explicacion:"La medición indirecta resulta especialmente útil cuando el terreno es accidentado, abrupto o difícilmente transitable."
+  },
+  {
+    id:5, tema:"Medición Indirecta", tipo:"single",
+    pregunta:"El método de medición indirecta tiene un error relativo de:",
+    opciones:["1/1.000","1/3.000","1/5.000","1/10.000","Otro"],
+    correcta:1,
+    explicacion:"Para el método considerado se adopta como referencia un error relativo del orden de 1/3.000."
+  },
+  {
+    id:6, tema:"Nivelación Trigonométrica", tipo:"numeric", unidad:"m",
+    pregunta:"Datos: Dist = 1350,50 m, R = 6370 km, k = 0,13. Cota A = 230,10 m. En A se visualiza B: ángulo vertical = 1°25'10'', i = 1,60 m, s = 1,20 m. Calcule el desnivel AB de ida, en metros.",
+    correcta:33.9886539031, tolerancia:0.01,
+    explicacion:"Aplicando Δh = L·tan(α) + (L²/2R)(1−k) + (i−s), con R = 6.370.000 m, se obtiene ΔhAB ≈ +33,99 m."
+  },
+  {
+    id:7, tema:"Nivelación Trigonométrica", tipo:"numeric", unidad:"m",
+    pregunta:"Con los mismos datos del ejercicio anterior. En B se visualiza A: ángulo vertical = −1°27'11'', i = 1,50 m, s = 1,32 m. Calcule el desnivel BA de vuelta, en metros.",
+    correcta:-33.9522911249, tolerancia:0.01,
+    explicacion:"Aplicando la misma expresión con el ángulo vertical de vuelta se obtiene ΔhBA ≈ −33,95 m."
+  },
+  {
+    id:8, tema:"Nivelación Trigonométrica", tipo:"numeric", unidad:"cm",
+    pregunta:"Con los mismos datos de los ejercicios anteriores, calcule la tolerancia altimétrica del tramo en centímetros. Use T = ±20·√L, con L expresada en kilómetros.",
+    correcta:32.87, tolerancia:0.05,
+    explicacion:"Para el tramo ida y vuelta se toma L = 2×1,3505 = 2,701 km. Entonces T = 20·√2,701 ≈ ±32,87 cm."
+  },
+  {
+    id:9, tema:"Nivelación Trigonométrica", tipo:"numeric", unidad:"m",
+    pregunta:"Con los mismos datos de los ejercicios anteriores, calcule la cota de B a partir de la cota de A.",
+    correcta:264.0886539031, tolerancia:0.02,
+    explicacion:"La cota de B se obtiene como H_B = H_A + Δh_AB = 230,10 + 33,9887 ≈ 264,09 m."
+  },
+  {
+    id:10, tema:"Rodeo Simple", tipo:"numeric", unidad:"cm",
+    pregunta:"Polígono con Cota A = 350,15 m. A-B: Δh = +7,65 m. B-C: Δh = −2,64 m. C-D: Δh = −3,47 m. D-A: Δh = −1,54 m. Calcule el error de cierre en centímetros.",
+    correcta:0, tolerancia:0.1,
+    explicacion:"La suma algebraica de los desniveles es +7,65−2,64−3,47−1,54 = 0,00 m. Por lo tanto, el error de cierre es 0 cm."
+  },
+  {
+    id:11, tema:"Rodeo Simple", tipo:"numeric", unidad:"m",
+    pregunta:"Con los datos del rodeo simple anterior, calcule la cota del vértice B.",
+    correcta:357.80, tolerancia:0.01,
+    explicacion:"H_B = H_A + ΔhAB = 350,15 + 7,65 = 357,80 m."
+  },
+  {
+    id:12, tema:"Rodeo Simple", tipo:"numeric", unidad:"m",
+    pregunta:"Con los datos del rodeo simple anterior, calcule la cota del vértice C.",
+    correcta:355.16, tolerancia:0.01,
+    explicacion:"H_C = H_B + ΔhBC = 357,80 − 2,64 = 355,16 m."
+  },
+  {
+    id:13, tema:"Rodeo Simple", tipo:"numeric", unidad:"m",
+    pregunta:"Con los datos del rodeo simple anterior, calcule la cota del vértice D.",
+    correcta:351.69, tolerancia:0.01,
+    explicacion:"H_D = H_C + ΔhCD = 355,16 − 3,47 = 351,69 m."
+  },
+  {
+    id:14, tema:"Punto Inaccesible · Base Transversal", tipo:"single",
+    pregunta:"¿Cuál es la condición geométrica recomendada para la ubicación de la base auxiliar a respecto del punto P?",
+    opciones:["A) Paralela","B) Perpendicular con longitud de 1/10 de la distancia","C) Aleatoria de 500 m","D) Colineal"],
+    correcta:1,
+    explicacion:"La base auxiliar se dispone perpendicularmente a la dirección hacia el punto inaccesible y su longitud se establece en una proporción adecuada respecto de la distancia."
+  },
+  {
+    id:15, tema:"Punto Inaccesible", tipo:"multiple",
+    pregunta:"¿En cuáles de estos casos resulta aplicable el método de punto inaccesible? (Puede haber más de una correcta.)",
+    opciones:["A) Antena","B) Poste o torre de alta tensión","C) Red cerrada llana","D) Extremo de rama o remache","E) Conductor eléctrico o tanque"],
+    correcta:[0,1,3,4],
+    explicacion:"El método es útil para determinar puntos cuya posición o cota no puede medirse directamente, como antenas, torres, extremos de elementos y otros puntos inaccesibles."
+  },
+  {
+    id:16, tema:"Punto Inaccesible", tipo:"numeric", unidad:"°",
+    pregunta:"Los ángulos de un triángulo son α = 84°30'00'' y β = 83°45'00''. Calcule el tercer ángulo γ en grados decimales.",
+    correcta:11.75, tolerancia:0.001,
+    explicacion:"La suma de los ángulos de un triángulo es 180°. γ = 180° − 84°30' − 83°45' = 11°45' = 11,75°."
+  },
+  {
+    id:17, tema:"Medición Indirecta", tipo:"single",
+    pregunta:"¿Cuál es la relación recomendada entre la base b y la longitud L?",
+    opciones:["A) b entre 1/5 y 1/20 de L, con β ≈ 90°","B) b > L","C) b = 1/10 L, con β ≈ 0°","D) b = 1/2 L"],
+    correcta:0,
+    explicacion:"Se busca una base relativamente pequeña respecto de la distancia y una configuración angular favorable, con β próximo a 90°."
+  },
+  {
+    id:18, tema:"Medición Indirecta", tipo:"multiple",
+    pregunta:"¿Cuáles son métodos adecuados para medir los componentes del procedimiento? (Puede haber más de una correcta.)",
+    opciones:["A) Base con cinta ida/vuelta o medición electrónica","B) α por repetición","C) ε por repetición","D) α por método sencillo","E) Todo a pasos"],
+    correcta:[0,2,3],
+    explicacion:"La base puede medirse con cinta ida/vuelta o electrónicamente; el pequeño ángulo ε se favorece con repetición, mientras α puede medirse por método sencillo."
+  },
+  {
+    id:19, tema:"Punto Inaccesible · Base Transversal", tipo:"numeric", unidad:"m",
+    pregunta:"Base a = 100,00 m, α = 80,00° y β = 85,00°. Calcule la distancia b desde A hasta P.",
+    correcta:384.90, tolerancia:0.02,
+    explicacion:"Por la ley de senos, con γ = 180°−80°−85° = 15°, b/sin85° = a/sin15°. Así, b ≈ 384,90 m."
+  },
+  {
+    id:20, tema:"Medición Indirecta", tipo:"single",
+    pregunta:"¿Cuál es el error relativo de diseño adoptado para el método?",
+    opciones:["A) 1/1.000","B) 1/3.000","C) 1/5.000","D) 1/10.000"],
+    correcta:1,
+    explicacion:"El error relativo de diseño considerado para este procedimiento es 1/3.000."
+  },
+  {
+    id:21, tema:"Punto Inaccesible · Base Transversal", tipo:"multiple",
+    pregunta:"Seleccione los pasos operativos correctos de campaña. (Puede haber más de una correcta.)",
+    opciones:[
+      "A) Los puntos A y B deben ser visibles entre sí y la configuración debe permitir la observación de P.",
+      "B) P debe ser visible desde A y B.",
+      "C) Se debe visar un elemento único e identificable del punto P.",
+      "D) Los ángulos deben medirse necesariamente mediante rumbos magnéticos.",
+      "E) Estacionar en A, medir altura e instrumental y luego repetir en B."
+    ],
+    correcta:[0,1,2,4],
+    explicacion:"La campaña requiere una geometría observable y repetible: A y B deben permitir las visuales necesarias, P debe ser identificable y deben registrarse correctamente las alturas y observaciones en ambas estaciones."
+  },
+  {
+    id:22, tema:"Punto Inaccesible · Base Transversal", tipo:"numeric", unidad:"m",
+    pregunta:"Con b = 384,90 m, iA = 1,50 m, α1 = +2,50° y s = 0, calcule el desnivel A-P.",
+    correcta:18.31, tolerancia:0.02,
+    explicacion:"ΔH_AP = b·tan(2,50°) + iA ≈ 384,90·tan(2,50°) + 1,50 = 18,31 m."
+  },
+  {
+    id:23, tema:"Punto Inaccesible", tipo:"numeric", unidad:"m",
+    pregunta:"Se obtienen las cotas tentativas H_PA = 512,45 m y H_PB = 512,55 m. Si L = 500 m, determine la cota definitiva.",
+    correcta:512.50, tolerancia:0.01,
+    explicacion:"La cota definitiva se obtiene promediando las dos determinaciones: (512,45 + 512,55)/2 = 512,50 m."
+  },
+  {
+    id:24, tema:"Punto Inaccesible", tipo:"single",
+    pregunta:"¿Cuál es la expresión de tolerancia altimétrica utilizada en este ejercicio?",
+    opciones:[
+      "A) T(cm) = ±20 × √L(km)",
+      "B) T(cm) = ±20 × L(km)",
+      "C) T(mm) = ±10 × √L(km)",
+      "D) T(cm) = ±5 × L²(km)"
+    ],
+    correcta:1,
+    explicacion:"En este banco se adopta la expresión indicada para el procedimiento: T(cm) = ±20 × L(km)."
+  },
+  {
+    id:25, tema:"Punto Inaccesible · Base Alineada", tipo:"multiple",
+    pregunta:"¿Qué variables deben medirse en campaña? (Puede haber más de una correcta.)",
+    opciones:[
+      "A) Ángulos verticales α1 y β1",
+      "B) Longitud de la base d",
+      "C) Alturas iA e iB",
+      "D) Ángulos horizontales por compensación",
+      "E) Desnivel ΔHAB"
+    ],
+    correcta:[0,1,2,4],
+    explicacion:"El procedimiento requiere los ángulos verticales, la longitud de la base, las alturas instrumentales y el desnivel entre las estaciones. Los ángulos horizontales por compensación no son una variable necesaria del cálculo indicado."
+  },
+  {
+    id:26, tema:"Punto Inaccesible · Base Alineada", tipo:"numeric", unidad:"m",
+    pregunta:"Cota A = 100,00 m, cota B = 98,50 m, d = 40,00 m, tan α1 = 0,052408, tan β1 = 0,078702, iA = 1,50 m e iB = 1,60 m. Calcule la distancia x.",
+    correcta:132.97, tolerancia:0.05,
+    explicacion:"Aplicando la ecuación geométrica correspondiente al esquema de base alineada y los datos suministrados, se obtiene x ≈ 132,97 m."
+  },
+  {
+    id:27, tema:"Punto Inaccesible · Base Alineada", tipo:"numeric", unidad:"m",
+    pregunta:"Con x = 132,97 m y los datos anteriores, calcule la cota de P desde B.",
+    correcta:110.56, tolerancia:0.02,
+    explicacion:"Desde B se aplica la relación de desnivel correspondiente a la visual hacia P, obteniendo H_P ≈ 110,56 m."
+  },
+  {
+    id:28, tema:"Medición Indirecta", tipo:"single",
+    pregunta:"¿Por qué se recomienda medir ε con repetición y α con método sencillo?",
+    opciones:[
+      "A) ε es muy pequeño y sus errores pueden desviar significativamente el cálculo de L.",
+      "B) α mide siempre exactamente 90°.",
+      "C) La repetición compensa la excentricidad en todos los casos.",
+      "D) α es el rumbo del alineamiento."
+    ],
+    correcta:0,
+    explicacion:"Al ser ε pequeño, pequeños errores en su determinación pueden propagarse fuertemente al cálculo de la distancia. Por eso se busca medirlo con mayor precisión."
+  },
+  {
+    id:29, tema:"Medición Indirecta", tipo:"multiple",
+    pregunta:"Seleccione las afirmaciones correctas sobre la propagación de errores. (Puede haber más de una correcta.)",
+    opciones:[
+      "A) Los errores en b pueden afectar apreciablemente el cálculo de L.",
+      "B) Los errores en α tienen una influencia relativamente menor en la configuración considerada.",
+      "C) Los errores en ε pueden desviar significativamente el valor calculado de L.",
+      "D) Un error de 1' en α altera siempre L en 20 m.",
+      "E) Conviene medir la base b con cinta ida y vuelta, repitiendo las mediciones."
+    ],
+    correcta:[0,1,2,4],
+    explicacion:"La propagación depende de la geometría. En particular, una pequeña incertidumbre en el ángulo pequeño ε puede producir una variación importante en L. También es conveniente controlar la medición de la base mediante mediciones de ida y vuelta."
+  },
+  {
+    id:30, tema:"Medición Indirecta", tipo:"numeric", unidad:"m",
+    pregunta:"Base b = 80,00 m, ε = +2,75° y α = +85,50°. Calcule la distancia L.",
+    correcta:1666.65, tolerancia:0.05,
+    explicacion:"Para este ejercicio se adopta como resultado esperado L = 1666,65 m, de acuerdo con el esquema y los datos del banco de preguntas."
+  }
 ];
 
 let currentQuestions = [];
@@ -155,7 +363,6 @@ let currentIndex = 0;
 let answers = [];
 let checked = [];
 let scoreCount = 0;
-let selectedTopic = "Todos los temas";
 
 const startPanel = document.getElementById("startPanel");
 const quizPanel = document.getElementById("quizPanel");
@@ -167,27 +374,21 @@ const questionCounter = document.getElementById("questionCounter");
 const answeredCounter = document.getElementById("answeredCounter");
 const progressBar = document.getElementById("progressBar");
 const progressText = document.getElementById("progressText");
+const selectedTopic = document.getElementById("selectedTopic");
+const topicFilter = document.getElementById("topicFilter");
+const bankNote = document.getElementById("bankNote");
 const finalScore = document.getElementById("finalScore");
 const scoreMessage = document.getElementById("scoreMessage");
 const reviewList = document.getElementById("reviewList");
-const topicFilters = document.getElementById("topicFilters");
 
-// Generar botones de filtro
-function initFilters(){
-  const topics = ["Todos los temas", ...new Set(questionBank.map(q => q.tema))];
-  topics.forEach(t => {
-    const btn = document.createElement("button");
-    btn.className = t === "Todos los temas" ? "primary" : "secondary";
-    btn.textContent = t;
-    btn.onclick = () => {
-      document.querySelectorAll("#topicFilters button").forEach(b => b.className = "secondary");
-      btn.className = "primary";
-      selectedTopic = t;
-    };
-    topicFilters.appendChild(btn);
-  });
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
 }
-initFilters();
 
 function normalizeNumber(value){
   return parseFloat(String(value).trim().replace(",", "."));
@@ -210,20 +411,34 @@ function correctLabel(q){
 }
 
 function startQuiz(){
-  if(selectedTopic === "Todos los temas"){
-    currentQuestions = [...questionBank];
-  } else {
-    currentQuestions = questionBank.filter(q => q.tema === selectedTopic || q.tema.includes(selectedTopic));
+  const selected = topicFilter.value;
+
+  // Mantener siempre el orden original del banco.
+  // Si se elige un tema, se muestran todas las preguntas de ese tema,
+  // también respetando el orden en el que fueron recopiladas.
+  currentQuestions = selected === "ALL"
+    ? questionBank.slice()
+    : questionBank.filter(q => q.tema === selected || q.tema.startsWith(selected + " ·"));
+
+  if(currentQuestions.length === 0){
+    alert("No hay preguntas disponibles para ese tema.");
+    return;
   }
-  
+
   currentIndex=0;
   answers=Array(currentQuestions.length).fill(null);
   checked=Array(currentQuestions.length).fill(false);
   scoreCount=0;
-  
+
   startPanel.classList.add("hidden");
   finishPanel.classList.add("hidden");
   quizPanel.classList.remove("hidden");
+
+  selectedTopic.textContent =
+    selected === "ALL"
+      ? `Todos los temas · ${currentQuestions.length} preguntas`
+      : `${selected} · ${currentQuestions.length} preguntas`;
+
   renderQuestion();
 }
 
@@ -417,7 +632,9 @@ function finishQuiz(){
   questionsEl.innerHTML="";
   quizPanel.classList.add("hidden");
   finishPanel.classList.remove("hidden");
-  const points=(scoreCount/currentQuestions.length)*100;
+  const points=currentQuestions.length
+    ? (scoreCount/currentQuestions.length)*100
+    : 0;
   finalScore.textContent=`${Math.round(points)}/100`;
   if(points>=90) scoreMessage.textContent="Excelente. Tenés un dominio muy sólido de los temas.";
   else if(points>=70) scoreMessage.textContent="Muy bien. Solo quedan algunos conceptos por reforzar.";
@@ -428,7 +645,7 @@ function finishQuiz(){
   currentQuestions.forEach((q,i)=>{
     const item=document.createElement("div");
     item.className=`review-item ${isCorrect(q,getStoredAnswer(i))?"good":"bad"}`;
-    item.innerHTML=`<b>${q.id}. ${escapeHtml(q.tema)}</b> — ${isCorrect(q,getStoredAnswer(i))?"Correcta":"Incorrecta"}<br><span class="note">Respuesta: ${escapeHtml(correctLabel(q))}</span>`;
+    item.innerHTML=`<b>${i+1}. ${escapeHtml(q.tema)}</b> — ${isCorrect(q,getStoredAnswer(i))?"Correcta":"Incorrecta"}<br><span class="note">Respuesta: ${escapeHtml(correctLabel(q))}</span>`;
     reviewList.appendChild(item);
   });
 }
@@ -439,10 +656,23 @@ function getStoredAnswer(i){
   return answers[i]||[];
 }
 
+topicFilter.addEventListener("change",()=>{
+  const selected = topicFilter.value;
+  if(selected === "ALL"){
+    bankNote.textContent = "Podés resolver las 30 preguntas en orden o filtrar por tema.";
+  }else{
+    const count = questionBank.filter(q => q.tema === selected || q.tema.startsWith(selected + " ·")).length;
+    bankNote.textContent = `Este tema tiene ${count} pregunta${count === 1 ? "" : "s"} para practicar.`;
+  }
+});
+
 startBtn.addEventListener("click",startQuiz);
 newAttemptBtn.addEventListener("click",()=>{
+  window.scrollTo({top:0,behavior:"smooth"});
   finishPanel.classList.add("hidden");
   startPanel.classList.remove("hidden");
+  quizPanel.classList.add("hidden");
+  questionsEl.innerHTML="";
   window.scrollTo({top:0,behavior:"smooth"});
 });
 </script>
