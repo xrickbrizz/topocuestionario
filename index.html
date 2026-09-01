@@ -79,28 +79,21 @@ button:disabled{opacity:.5;cursor:not-allowed}
   <section class="panel" id="startPanel">
     <div class="controls">
       <div>
-        <strong>Banco de 30 preguntas</strong>
-        <div class="note" id="bankNote">Podés resolver las 30 preguntas en orden o filtrar por tema.</div>
+        <strong id="bankTitle">Banco de 38 preguntas</strong>
+        <div class="note" id="bankNote">Podés resolver todas las preguntas en orden o filtrar por tema.</div>
       </div>
-      <div class="controls" style="justify-content:flex-end; margin-top:12px; width:100%;">
-        <label for="topicFilter" style="font-weight:700;">Practicar tema:</label>
-        <select id="topicFilter" style="padding:11px 13px; border:1px solid var(--border); border-radius:10px; background:white; font-size:15px; min-width:240px;">
-          <option value="ALL">Todos los temas (30)</option>
-          <option value="Nivelación Trigonométrica">Nivelación Trigonométrica</option>
-          <option value="Altimetría">Altimetría</option>
-          <option value="Punto Inaccesible">Punto Inaccesible</option>
-          <option value="Medición Indirecta">Medición Indirecta</option>
-          <option value="Rodeo Simple">Rodeo Simple</option>
-        </select>
-        <button class="primary" id="startBtn">Comenzar práctica</button>
-      </div>
+    </div>
+    <div class="controls" style="justify-content:flex-end; margin-top:12px; width:100%;">
+      <label for="topicFilter" style="font-weight:700;">Practicar tema:</label>
+      <select id="topicFilter" style="padding:11px 13px; border:1px solid var(--border); border-radius:10px; background:white; font-size:15px; min-width:260px;"></select>
+      <button class="primary" id="startBtn">Comenzar práctica</button>
     </div>
   </section>
 
   <section class="panel hidden" id="quizPanel">
     <div class="controls">
       <div>
-        <strong id="questionCounter">Pregunta 1 de 30</strong>
+        <strong id="questionCounter">Pregunta 1 de 38</strong>
         <div class="note" id="selectedTopic">Todos los temas</div>
       </div>
       <div class="note" id="answeredCounter">0 respondidas</div>
@@ -355,6 +348,62 @@ const questionBank = [
     pregunta:"Base b = 80,00 m, ε = +2,75° y α = +85,50°. Calcule la distancia L.",
     correcta:1666.65, tolerancia:0.05,
     explicacion:"Para este ejercicio se adopta como resultado esperado L = 1666,65 m, de acuerdo con el esquema y los datos del banco de preguntas."
+  },
+  {
+    id:31, tema:"Medición Indirecta", tipo:"single",
+    pregunta:"En taquimetría electrónica (teodolito y distanciómetro), la altura instrumental se lee y anota:",
+    opciones:["Al cm","Al mm","Al dm"],
+    correcta:0,
+    explicacion:"Respuesta provisional: la altura instrumental se registra al centímetro. Conviene contrastarlo con el material de clase antes del estudio definitivo."
+  },
+  {
+    id:32, tema:"Medición Indirecta", tipo:"single",
+    pregunta:"En la fórmula estadimétrica D = c + C · l, l se la denomina:",
+    opciones:["Corte de mira","Diferencia de mira","Lectura en la mira","Ninguna de las opciones"],
+    correcta:0,
+    explicacion:"l representa el intervalo o corte de mira, obtenido a partir de las lecturas estadimétricas de los hilos extremos."
+  },
+  {
+    id:33, tema:"Medición Indirecta", tipo:"single",
+    pregunta:"En la fórmula estadimétrica D = c + C · l, el valor de la constante C es aproximadamente igual a:",
+    opciones:["1","10","100","Ninguna de las opciones"],
+    correcta:2,
+    explicacion:"En la estadimetría convencional, la constante multiplicativa suele ser aproximadamente C = 100."
+  },
+  {
+    id:34, tema:"Medición Indirecta", tipo:"single",
+    pregunta:"¿Cuál de estos valores corresponde al Error Relativo en la medición estadimétrica?",
+    opciones:["Entre 1/600 – 1/800","Entre 1/100 – 1/200","Entre 1/1000 – 1/2000"],
+    correcta:0,
+    explicacion:"Respuesta provisional: el error relativo se encuentra aproximadamente entre 1/600 y 1/800."
+  },
+  {
+    id:35, tema:"Medición Indirecta", tipo:"single",
+    pregunta:"La expresión G · cos²(α) nos permite calcular:",
+    opciones:["Ninguna opción es correcta","Desnivel","Número Generador","Coordenada","Distancia","Cota"],
+    correcta:4,
+    explicacion:"En el modelo taquimétrico considerado, G · cos²(α) permite obtener la distancia horizontal."
+  },
+  {
+    id:36, tema:"Medición Indirecta", tipo:"single",
+    pregunta:"El levantamiento taquimétrico se emplea:",
+    opciones:["Para obras de desarrollo lineal","Para obras de desarrollo superficial, radial o concentrada","Solamente para terrenos accidentados","Ninguna opción es correcta"],
+    correcta:1,
+    explicacion:"La taquimetría resulta especialmente útil para relevamientos de desarrollo superficial, radial o concentrado."
+  },
+  {
+    id:37, tema:"Medición Indirecta", tipo:"single",
+    pregunta:"En un relevamiento de detalles, la exactitud de los puntos relevados, tanto planimétrica como altimétrica, será al cm.",
+    opciones:["Verdadero","Falso"],
+    correcta:0,
+    explicacion:"Respuesta provisional: se considera verdadera para el criterio de precisión indicado en el relevamiento de detalles."
+  },
+  {
+    id:38, tema:"Medición Indirecta", tipo:"single",
+    pregunta:"El valor del corte de mira está dado por:",
+    opciones:["Diferencia entre hilo superior e inferior (S − i)","Diferencia entre hilo superior y la cruz de hilos","Diferencia entre hilo inferior y superior (i − s)","Diferencia entre hilo inferior y la cruz de hilos"],
+    correcta:0,
+    explicacion:"El corte de mira se obtiene como la diferencia entre la lectura del hilo superior y la del hilo inferior: S − i."
   }
 ];
 
@@ -377,6 +426,7 @@ const progressText = document.getElementById("progressText");
 const selectedTopic = document.getElementById("selectedTopic");
 const topicFilter = document.getElementById("topicFilter");
 const bankNote = document.getElementById("bankNote");
+const bankTitle = document.getElementById("bankTitle");
 const finalScore = document.getElementById("finalScore");
 const scoreMessage = document.getElementById("scoreMessage");
 const reviewList = document.getElementById("reviewList");
@@ -656,16 +706,41 @@ function getStoredAnswer(i){
   return answers[i]||[];
 }
 
+function populateTopicFilter(){
+  const baseTopics = [];
+  questionBank.forEach(q=>{
+    const topic = q.tema.split(" ·")[0];
+    if(!baseTopics.includes(topic)) baseTopics.push(topic);
+  });
+
+  topicFilter.innerHTML = "";
+  const allOption = document.createElement("option");
+  allOption.value = "ALL";
+  allOption.textContent = `Todos los temas (${questionBank.length})`;
+  topicFilter.appendChild(allOption);
+
+  baseTopics.forEach(topic=>{
+    const count = questionBank.filter(q => q.tema === topic || q.tema.startsWith(topic + " ·")).length;
+    const option = document.createElement("option");
+    option.value = topic;
+    option.textContent = `${topic} (${count})`;
+    topicFilter.appendChild(option);
+  });
+
+  bankTitle.textContent = `Banco de ${questionBank.length} preguntas`;
+}
+
 topicFilter.addEventListener("change",()=>{
   const selected = topicFilter.value;
   if(selected === "ALL"){
-    bankNote.textContent = "Podés resolver las 30 preguntas en orden o filtrar por tema.";
+    bankNote.textContent = `Podés resolver las ${questionBank.length} preguntas en orden o filtrar por tema.`;
   }else{
     const count = questionBank.filter(q => q.tema === selected || q.tema.startsWith(selected + " ·")).length;
     bankNote.textContent = `Este tema tiene ${count} pregunta${count === 1 ? "" : "s"} para practicar.`;
   }
 });
 
+populateTopicFilter();
 startBtn.addEventListener("click",startQuiz);
 newAttemptBtn.addEventListener("click",()=>{
   window.scrollTo({top:0,behavior:"smooth"});
@@ -677,4 +752,5 @@ newAttemptBtn.addEventListener("click",()=>{
 });
 </script>
 <div style="position:fixed;bottom:10px;right:14px;font-size:12px;font-weight:600;color:#667085;opacity:.5;z-index:9999;pointer-events:none;">© Hecho por Rick</div>
+</body>
 </html>
