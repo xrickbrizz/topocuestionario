@@ -48,7 +48,10 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .feedback strong{display:block;margin-bottom:4px}
 .explanation{margin-top:8px;color:#3f4b57}
 .numeric-wrap{display:flex;gap:10px;align-items:center;max-width:500px}
-.numeric-wrap input{width:100%;padding:13px;border:1px solid var(--border);border-radius:10px;font-size:16px}
+.numeric-wrap input{width:100%;padding:13px;border:1px solid var(--border);border-radius:10px;font-size:16px;min-width:0}
+.angle-answer .numeric-wrap{flex-wrap:wrap}
+.angle-answer .numeric-wrap input{flex:1 1 80px}
+.angle-answer .secondary{padding:9px 12px}
 .unit{font-weight:700;color:var(--muted);white-space:nowrap}
 .question-actions{display:flex;justify-content:flex-end;margin-top:18px}
 .result{display:none;text-align:center;padding:30px}
@@ -116,7 +119,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
     </div>
   </section>
 
-  <div class="footer">Topografía Aplicada · TP Nº1</div>
+  <div class="footer">Topografía Aplicada · TP Nº1 · © Hecho por Rick</div>
 </main>
 
 <script>
@@ -131,7 +134,7 @@ const questionBank = [
     pregunta:"En la fórmula Δh = L × tan α + (L² / 2r) × (1 − k) + (i − s). Los valores i y s se miden:",
     opciones:["Con cinta o ruleta al metro","Con cinta o ruleta al dm","Con cinta o ruleta al cm","Con cinta o ruleta al mm","Ninguna de las anteriores","Es indistinto, depende del método"],
     correcta:3,
-    explicacion:"Las alturas instrumental y de señal deben determinarse con precisión milimétrica, ya que ingresan directamente en el cálculo del desnivel."
+    explicacion:"Clave provisional: el material cargado indica que i y s se miden con ruleta, pero no especifica en estas páginas la resolución cm/mm. Conviene contrastar ese detalle con el apunte específico de la cátedra."
   },
   {
     id:2, tema:"Altimetría", tipo:"single",
@@ -144,8 +147,8 @@ const questionBank = [
     id:3, tema:"Punto Inaccesible", tipo:"single",
     pregunta:"En una Nivelación a un Punto Inaccesible P, Método de Base transversal, los ángulos horizontales se miden:",
     opciones:["Por el método de compensación","Por el método sencillo","Por el método de rumbos","Por el método de repetición"],
-    correcta:3,
-    explicacion:"En este procedimiento se busca obtener los ángulos horizontales con mayor precisión mediante el método de repetición."
+    correcta:0,
+    explicacion:"En el material de clase, los ángulos horizontales α y β se obtienen con teodolito mediante el método de compensación."
   },
   {
     id:4, tema:"Medición Indirecta", tipo:"multiple",
@@ -175,9 +178,9 @@ const questionBank = [
   },
   {
     id:8, tema:"Nivelación Trigonométrica", tipo:"numeric", unidad:"cm",
-    pregunta:"Con los mismos datos de los ejercicios anteriores, calcule la tolerancia altimétrica del tramo en centímetros. Use T = ±20·√L, con L expresada en kilómetros.",
-    correcta:32.87, tolerancia:0.05,
-    explicacion:"Para el tramo ida y vuelta se toma L = 2×1,3505 = 2,701 km. Entonces T = 20·√2,701 ≈ ±32,87 cm."
+    pregunta:"Con los mismos datos de los ejercicios anteriores, calcule la tolerancia altimétrica del tramo en centímetros.",
+    correcta:27.01, tolerancia:0.02,
+    explicacion:"Según el material de Nivelación Trigonométrica, T = ±20 cm × L(km). Para L = 1,3505 km: T = 20 × 1,3505 = 27,01 cm."
   },
   {
     id:9, tema:"Nivelación Trigonométrica", tipo:"numeric", unidad:"m",
@@ -211,20 +214,20 @@ const questionBank = [
   },
   {
     id:14, tema:"Punto Inaccesible · Base Transversal", tipo:"single",
-    pregunta:"¿Cuál es la condición geométrica recomendada para la ubicación de la base auxiliar a respecto del punto P?",
-    opciones:["A) Paralela","B) Perpendicular con longitud de 1/10 de la distancia","C) Aleatoria de 500 m","D) Colineal"],
+    pregunta:"¿Cuál es la condición geométrica recomendada para la ubicación de la base auxiliar A-B respecto de la dirección hacia el punto P?",
+    opciones:["A) Paralela a la dirección hacia P","B) Lo más perpendicular posible a la dirección hacia P","C) Aleatoria","D) Colineal con la dirección hacia P"],
     correcta:1,
-    explicacion:"La base auxiliar se dispone perpendicularmente a la dirección hacia el punto inaccesible y su longitud se establece en una proporción adecuada respecto de la distancia."
+    explicacion:"El material de clase indica que la base A-B debe tener una alineación lo más perpendicular posible con la dirección hacia P."
   },
   {
     id:15, tema:"Punto Inaccesible", tipo:"multiple",
     pregunta:"¿En cuáles de estos casos resulta aplicable el método de punto inaccesible? (Puede haber más de una correcta.)",
     opciones:["A) Antena","B) Poste o torre de alta tensión","C) Red cerrada llana","D) Extremo de rama o remache","E) Conductor eléctrico o tanque"],
-    correcta:[0,1,3,4],
-    explicacion:"El método es útil para determinar puntos cuya posición o cota no puede medirse directamente, como antenas, torres, extremos de elementos y otros puntos inaccesibles."
+    correcta:[0,1,4],
+    explicacion:"El material de clase da como ejemplos puntos inaccesibles como antenas, torres o postes de alta tensión y tanques o techos. No se utiliza como ejemplo una red cerrada llana."
   },
   {
-    id:16, tema:"Punto Inaccesible", tipo:"numeric", unidad:"°",
+    id:16, tema:"Punto Inaccesible", tipo:"angle", unidad:"°",
     pregunta:"Los ángulos de un triángulo son α = 84°30'00'' y β = 83°45'00''. Calcule el tercer ángulo γ en grados decimales.",
     correcta:11.75, tolerancia:0.001,
     explicacion:"La suma de los ángulos de un triángulo es 180°. γ = 180° − 84°30' − 83°45' = 11°45' = 11,75°."
@@ -354,7 +357,7 @@ const questionBank = [
     pregunta:"En taquimetría electrónica (teodolito y distanciómetro), la altura instrumental se lee y anota:",
     opciones:["Al cm","Al mm","Al dm"],
     correcta:0,
-    explicacion:"Respuesta provisional: la altura instrumental se registra al centímetro. Conviene contrastarlo con el material de clase antes del estudio definitivo."
+    explicacion:"Clave provisional: los PDFs cargados no indican expresamente si esta lectura se registra al cm, mm o dm. Contrastala con el apunte específico de taquimetría electrónica."
   },
   {
     id:32, tema:"Medición Indirecta", tipo:"single",
@@ -382,7 +385,7 @@ const questionBank = [
     pregunta:"La expresión G · cos²(α) nos permite calcular:",
     opciones:["Ninguna opción es correcta","Desnivel","Número Generador","Coordenada","Distancia","Cota"],
     correcta:4,
-    explicacion:"En el modelo taquimétrico considerado, G · cos²(α) permite obtener la distancia horizontal."
+    explicacion:"Clave provisional: el material cargado sobre medición indirecta respalda el cálculo de L con senos, pero no muestra expresamente esta expresión G · cos²(α). Contrastala con el apunte específico de taquimetría."
   },
   {
     id:36, tema:"Medición Indirecta", tipo:"single",
@@ -396,7 +399,7 @@ const questionBank = [
     pregunta:"En un relevamiento de detalles, la exactitud de los puntos relevados, tanto planimétrica como altimétrica, será al cm.",
     opciones:["Verdadero","Falso"],
     correcta:0,
-    explicacion:"Respuesta provisional: se considera verdadera para el criterio de precisión indicado en el relevamiento de detalles."
+    explicacion:"Clave provisional: los PDFs cargados no establecen expresamente esta exactitud como regla general. Conviene verificarla con el material específico de relevamiento de detalles."
   },
   {
     id:38, tema:"Medición Indirecta", tipo:"single",
@@ -454,9 +457,20 @@ function formatNumber(n){
   return Number(n).toLocaleString("es-AR",{maximumFractionDigits:4});
 }
 
+function formatDMS(decimal){
+  const sign=decimal<0?"−":"";
+  const abs=Math.abs(decimal);
+  const d=Math.floor(abs);
+  const minuteFloat=(abs-d)*60;
+  const m=Math.floor(minuteFloat);
+  const s=(minuteFloat-m)*60;
+  return `${sign}${d}°${String(m).padStart(2,"0")}'${s.toFixed(2).padStart(5,"0")}"`;
+}
+
 function correctLabel(q){
   if(q.tipo==="single") return q.opciones[q.correcta];
   if(q.tipo==="multiple") return q.correcta.map(i=>q.opciones[i]).join(" · ");
+  if(q.tipo==="angle") return `${formatNumber(q.correcta)}° (${formatDMS(q.correcta)})`;
   return `${formatNumber(q.correcta)} ${q.unidad||""}`.trim();
 }
 
@@ -507,7 +521,7 @@ function renderQuestion(){
 
   const badges=document.createElement("div");
   badges.className="badges";
-  badges.innerHTML=`<span class="badge">${q.tema}</span><span class="badge type">${q.tipo==="single"?"Opción única":q.tipo==="multiple"?"Múltiples opciones":"Respuesta numérica"}</span>`;
+  badges.innerHTML=`<span class="badge">${q.tema}</span><span class="badge type">${q.tipo==="single"?"Opción única":q.tipo==="multiple"?"Múltiples opciones":q.tipo==="angle"?"Ángulo":"Respuesta numérica"}</span>`;
   card.appendChild(badges);
 
   const title=document.createElement("h2");
@@ -542,6 +556,109 @@ function renderQuestion(){
       opts.appendChild(label);
     });
     inputArea.appendChild(opts);
+  }else if(q.tipo==="angle"){
+    const wrap=document.createElement("div");
+    wrap.className="angle-answer";
+
+    const switchRow=document.createElement("div");
+    switchRow.style.display="flex";
+    switchRow.style.gap="8px";
+    switchRow.style.flexWrap="wrap";
+    switchRow.style.marginBottom="10px";
+
+    const decimalBtn=document.createElement("button");
+    decimalBtn.type="button";
+    decimalBtn.className="secondary";
+    decimalBtn.textContent="Grados decimales";
+    const dmsBtn=document.createElement("button");
+    dmsBtn.type="button";
+    dmsBtn.className="secondary";
+    dmsBtn.textContent="Grados · Minutos · Segundos";
+
+    switchRow.appendChild(decimalBtn);
+    switchRow.appendChild(dmsBtn);
+    wrap.appendChild(switchRow);
+
+    const forms=document.createElement("div");
+
+    const decimalForm=document.createElement("div");
+    decimalForm.className="numeric-wrap";
+    const decimalInput=document.createElement("input");
+    decimalInput.type="text";
+    decimalInput.inputMode="decimal";
+    decimalInput.placeholder="Ej.: 11,75";
+    decimalInput.setAttribute("aria-label","Ángulo en grados decimales");
+    if(answers[currentIndex] && answers[currentIndex].mode==="decimal") decimalInput.value=answers[currentIndex].value;
+    decimalInput.addEventListener("input",()=>{
+      answers[currentIndex]={mode:"decimal", value:decimalInput.value};
+    });
+    decimalForm.appendChild(decimalInput);
+    const degreeUnit=document.createElement("span");
+    degreeUnit.className="unit";
+    degreeUnit.textContent="°";
+    decimalForm.appendChild(degreeUnit);
+
+    const dmsForm=document.createElement("div");
+    dmsForm.className="numeric-wrap";
+    dmsForm.style.maxWidth="100%";
+
+    const deg=document.createElement("input");
+    deg.type="text"; deg.inputMode="numeric"; deg.placeholder="°"; deg.maxLength=4;
+    deg.setAttribute("aria-label","Grados");
+    const min=document.createElement("input");
+    min.type="text"; min.inputMode="numeric"; min.placeholder="'"; min.maxLength=2;
+    min.setAttribute("aria-label","Minutos");
+    const sec=document.createElement("input");
+    sec.type="text"; sec.inputMode="decimal"; sec.placeholder='"'; sec.maxLength=7;
+    sec.setAttribute("aria-label","Segundos");
+
+    const degLabel=document.createElement("span"); degLabel.className="unit"; degLabel.textContent="°";
+    const minLabel=document.createElement("span"); minLabel.className="unit"; minLabel.textContent="'";
+    const secLabel=document.createElement("span"); secLabel.className="unit"; secLabel.textContent='"';
+    dmsForm.appendChild(deg); dmsForm.appendChild(degLabel);
+    dmsForm.appendChild(min); dmsForm.appendChild(minLabel);
+    dmsForm.appendChild(sec); dmsForm.appendChild(secLabel);
+
+    if(answers[currentIndex] && answers[currentIndex].mode==="dms"){
+      deg.value=answers[currentIndex].deg ?? "";
+      min.value=answers[currentIndex].min ?? "";
+      sec.value=answers[currentIndex].sec ?? "";
+    }
+
+    function saveDMS(){
+      answers[currentIndex]={mode:"dms",deg:deg.value,min:min.value,sec:sec.value};
+    }
+    deg.addEventListener("input",saveDMS);
+    min.addEventListener("input",saveDMS);
+    sec.addEventListener("input",saveDMS);
+
+    function setMode(mode){
+      decimalForm.classList.toggle("hidden",mode!=="decimal");
+      dmsForm.classList.toggle("hidden",mode!=="dms");
+    }
+    decimalBtn.addEventListener("click",()=>{
+      setMode("decimal");
+      decimalInput.focus();
+    });
+    dmsBtn.addEventListener("click",()=>{
+      setMode("dms");
+      deg.focus();
+    });
+
+    const existing = answers[currentIndex];
+    setMode(existing && existing.mode==="dms" ? "dms" : "decimal");
+
+    forms.appendChild(decimalForm);
+    forms.appendChild(dmsForm);
+    wrap.appendChild(forms);
+
+    const hint=document.createElement("div");
+    hint.className="note";
+    hint.style.marginTop="8px";
+    hint.textContent="En celular podés usar tres casilleros para °, \' y \". También podés responder en grados decimales.";
+    wrap.appendChild(hint);
+
+    inputArea.appendChild(wrap);
   }else{
     const wrap=document.createElement("div");
     wrap.className="numeric-wrap";
@@ -582,11 +699,33 @@ function renderQuestion(){
   questionsEl.appendChild(card);
 }
 
+function angleToDecimal(raw){
+  if(!raw) return null;
+
+  if(raw.mode==="decimal"){
+    const n=normalizeNumber(raw.value);
+    return Number.isFinite(n)?n:null;
+  }
+
+  const d=normalizeNumber(raw.deg);
+  const m=normalizeNumber(raw.min);
+  const s=normalizeNumber(raw.sec);
+
+  if(!Number.isFinite(d) || !Number.isFinite(m) || !Number.isFinite(s)) return null;
+  if(m < 0 || m >= 60 || s < 0 || s >= 60) return null;
+
+  const sign=d < 0 ? -1 : 1;
+  return sign * (Math.abs(d) + m/60 + s/3600);
+}
+
 function getAnswer(){
   const q=currentQuestions[currentIndex];
   if(q.tipo==="numeric"){
     const n=normalizeNumber(answers[currentIndex]);
     return Number.isFinite(n)?n:null;
+  }
+  if(q.tipo==="angle"){
+    return angleToDecimal(answers[currentIndex]);
   }
   return answers[currentIndex] || [];
 }
@@ -703,6 +842,7 @@ function finishQuiz(){
 function getStoredAnswer(i){
   const q=currentQuestions[i];
   if(q.tipo==="numeric") return normalizeNumber(answers[i]);
+  if(q.tipo==="angle") return angleToDecimal(answers[i]);
   return answers[i]||[];
 }
 
