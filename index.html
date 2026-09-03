@@ -82,7 +82,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
   <section class="panel" id="startPanel">
     <div class="controls">
       <div>
-        <strong id="bankTitle">Banco de 38 preguntas</strong>
+        <strong id="bankTitle">Banco de 33 preguntas</strong>
         <div class="note" id="bankNote">Podés resolver todas las preguntas en orden o filtrar por tema.</div>
       </div>
     </div>
@@ -96,7 +96,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
   <section class="panel hidden" id="quizPanel">
     <div class="controls">
       <div>
-        <strong id="questionCounter">Pregunta 1 de 38</strong>
+        <strong id="questionCounter">Pregunta 1 de 33</strong>
         <div class="note" id="selectedTopic">Todos los temas</div>
       </div>
       <div class="note" id="answeredCounter">0 respondidas</div>
@@ -310,99 +310,56 @@ const questionBank = [
     explicacion:"El procedimiento requiere los ángulos verticales, la longitud de la base, las alturas instrumentales y el desnivel entre las estaciones. Los ángulos horizontales por compensación no son una variable necesaria del cálculo indicado."
   },
   {
-    id:26, tema:"Punto Inaccesible · Base Alineada", tipo:"numeric", unidad:"m",
-    pregunta:"Cota A = 100,00 m, cota B = 98,50 m, d = 40,00 m, tan α1 = 0,052408, tan β1 = 0,078702, iA = 1,50 m e iB = 1,60 m. Calcule la distancia x.",
-    correcta:132.97, tolerancia:0.05,
-    explicacion:"Aplicando la ecuación geométrica correspondiente al esquema de base alineada y los datos suministrados, se obtiene x ≈ 132,97 m."
-  },
-  {
-    id:27, tema:"Punto Inaccesible · Base Alineada", tipo:"numeric", unidad:"m",
-    pregunta:"Con x = 132,97 m y los datos anteriores, calcule la cota de P desde B.",
-    correcta:110.56, tolerancia:0.02,
-    explicacion:"Desde B se aplica la relación de desnivel correspondiente a la visual hacia P, obteniendo H_P ≈ 110,56 m."
-  },
-  {
-    id:28, tema:"Medición Indirecta", tipo:"single",
-    pregunta:"¿Por qué se recomienda medir ε con repetición y α con método sencillo?",
-    opciones:[
-      "A) ε es muy pequeño y sus errores pueden desviar significativamente el cálculo de L.",
-      "B) α mide siempre exactamente 90°.",
-      "C) La repetición compensa la excentricidad en todos los casos.",
-      "D) α es el rumbo del alineamiento."
-    ],
-    correcta:0,
-    explicacion:"Al ser ε pequeño, pequeños errores en su determinación pueden propagarse fuertemente al cálculo de la distancia. Por eso se busca medirlo con mayor precisión."
-  },
-  {
-    id:29, tema:"Medición Indirecta", tipo:"multiple",
-    pregunta:"Seleccione las afirmaciones correctas sobre la propagación de errores. (Puede haber más de una correcta.)",
-    opciones:[
-      "A) Los errores en b pueden afectar apreciablemente el cálculo de L.",
-      "B) Los errores en α tienen una influencia relativamente menor en la configuración considerada.",
-      "C) Los errores en ε pueden desviar significativamente el valor calculado de L.",
-      "D) Un error de 1' en α altera siempre L en 20 m.",
-      "E) Conviene medir la base b con cinta ida y vuelta, repitiendo las mediciones."
-    ],
-    correcta:[0,1,2,4],
-    explicacion:"La propagación depende de la geometría. En particular, una pequeña incertidumbre en el ángulo pequeño ε puede producir una variación importante en L. También es conveniente controlar la medición de la base mediante mediciones de ida y vuelta."
-  },
-  {
-    id:30, tema:"Medición Indirecta", tipo:"numeric", unidad:"m",
-    pregunta:"Base b = 80,00 m, ε = +2,75° y α = +85,50°. Calcule la distancia L.",
-    correcta:1666.65, tolerancia:0.05,
-    explicacion:"Para este ejercicio se adopta como resultado esperado L = 1666,65 m, de acuerdo con el esquema y los datos del banco de preguntas."
-  },
-  {
-    id:31, tema:"Medición Indirecta", tipo:"single",
+    id:26, tema:"Medición Indirecta", tipo:"single",
     pregunta:"En taquimetría electrónica (teodolito y distanciómetro), la altura instrumental se lee y anota:",
     opciones:["Al cm","Al mm","Al dm"],
     correcta:0,
-    explicacion:"Clave provisional: los PDFs cargados no indican expresamente si esta lectura se registra al cm, mm o dm. Contrastala con el apunte específico de taquimetría electrónica."
+    explicacion:"La respuesta correcta para este cuestionario es al cm."
   },
   {
-    id:32, tema:"Medición Indirecta", tipo:"single",
+    id:27, tema:"Medición Indirecta", tipo:"single",
     pregunta:"En la fórmula estadimétrica D = c + C · l, l se la denomina:",
     opciones:["Corte de mira","Diferencia de mira","Lectura en la mira","Ninguna de las opciones"],
     correcta:0,
     explicacion:"l representa el intervalo o corte de mira, obtenido a partir de las lecturas estadimétricas de los hilos extremos."
   },
   {
-    id:33, tema:"Medición Indirecta", tipo:"single",
+    id:28, tema:"Medición Indirecta", tipo:"single",
     pregunta:"En la fórmula estadimétrica D = c + C · l, el valor de la constante C es aproximadamente igual a:",
     opciones:["1","10","100","Ninguna de las opciones"],
     correcta:2,
     explicacion:"En la estadimetría convencional, la constante multiplicativa suele ser aproximadamente C = 100."
   },
   {
-    id:34, tema:"Medición Indirecta", tipo:"single",
+    id:29, tema:"Medición Indirecta", tipo:"single",
     pregunta:"¿Cuál de estos valores corresponde al Error Relativo en la medición estadimétrica?",
     opciones:["Entre 1/600 – 1/800","Entre 1/100 – 1/200","Entre 1/1000 – 1/2000"],
     correcta:0,
     explicacion:"Respuesta provisional: el error relativo se encuentra aproximadamente entre 1/600 y 1/800."
   },
   {
-    id:35, tema:"Medición Indirecta", tipo:"single",
+    id:30, tema:"Medición Indirecta", tipo:"single",
     pregunta:"La expresión G · cos²(α) nos permite calcular:",
     opciones:["Ninguna opción es correcta","Desnivel","Número Generador","Coordenada","Distancia","Cota"],
     correcta:4,
     explicacion:"Clave provisional: el material cargado sobre medición indirecta respalda el cálculo de L con senos, pero no muestra expresamente esta expresión G · cos²(α). Contrastala con el apunte específico de taquimetría."
   },
   {
-    id:36, tema:"Medición Indirecta", tipo:"single",
+    id:31, tema:"Medición Indirecta", tipo:"single",
     pregunta:"El levantamiento taquimétrico se emplea:",
     opciones:["Para obras de desarrollo lineal","Para obras de desarrollo superficial, radial o concentrada","Solamente para terrenos accidentados","Ninguna opción es correcta"],
     correcta:1,
     explicacion:"La taquimetría resulta especialmente útil para relevamientos de desarrollo superficial, radial o concentrado."
   },
   {
-    id:37, tema:"Medición Indirecta", tipo:"single",
+    id:32, tema:"Medición Indirecta", tipo:"single",
     pregunta:"En un relevamiento de detalles, la exactitud de los puntos relevados, tanto planimétrica como altimétrica, será al cm.",
     opciones:["Verdadero","Falso"],
     correcta:0,
-    explicacion:"Clave provisional: los PDFs cargados no establecen expresamente esta exactitud como regla general. Conviene verificarla con el material específico de relevamiento de detalles."
+    explicacion:"La respuesta correcta para este cuestionario es Verdadero."
   },
   {
-    id:38, tema:"Medición Indirecta", tipo:"single",
+    id:33, tema:"Medición Indirecta", tipo:"single",
     pregunta:"El valor del corte de mira está dado por:",
     opciones:["Diferencia entre hilo superior e inferior (S − i)","Diferencia entre hilo superior y la cruz de hilos","Diferencia entre hilo inferior y superior (i − s)","Diferencia entre hilo inferior y la cruz de hilos"],
     correcta:0,
@@ -415,6 +372,72 @@ let currentIndex = 0;
 let answers = [];
 let checked = [];
 let scoreCount = 0;
+
+const STORAGE_KEY = "topografiaAplicadaQuizV3";
+
+function saveQuizState(active=true){
+  try{
+    const state = {
+      active,
+      topic: topicFilter.value,
+      questionIds: currentQuestions.map(q => q.id),
+      currentIndex,
+      answers,
+      checked,
+      scoreCount
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }catch(error){
+    console.warn("No se pudo guardar el progreso local.", error);
+  }
+}
+
+function clearQuizState(){
+  try{
+    localStorage.removeItem(STORAGE_KEY);
+  }catch(error){
+    console.warn("No se pudo limpiar el progreso local.", error);
+  }
+}
+
+function restoreQuizState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return false;
+
+    const state = JSON.parse(raw);
+    if(!state || !state.active || !Array.isArray(state.questionIds)) return false;
+
+    const restored = state.questionIds
+      .map(id => questionBank.find(q => q.id === id))
+      .filter(Boolean);
+
+    if(!restored.length) return false;
+
+    currentQuestions = restored;
+    currentIndex = Math.min(Math.max(Number(state.currentIndex) || 0, 0), restored.length - 1);
+    answers = Array.isArray(state.answers) ? state.answers : Array(restored.length).fill(null);
+    checked = Array.isArray(state.checked) ? state.checked : Array(restored.length).fill(false);
+    scoreCount = Number(state.scoreCount) || 0;
+
+    topicFilter.value = state.topic || "ALL";
+
+    startPanel.classList.add("hidden");
+    finishPanel.classList.add("hidden");
+    quizPanel.classList.remove("hidden");
+
+    selectedTopic.textContent =
+      topicFilter.value === "ALL"
+        ? `Todos los temas · ${currentQuestions.length} preguntas`
+        : `${topicFilter.value} · ${currentQuestions.length} preguntas`;
+
+    renderQuestion();
+    return true;
+  }catch(error){
+    console.warn("No se pudo recuperar el progreso local.", error);
+    return false;
+  }
+}
 
 const startPanel = document.getElementById("startPanel");
 const quizPanel = document.getElementById("quizPanel");
@@ -477,9 +500,6 @@ function correctLabel(q){
 function startQuiz(){
   const selected = topicFilter.value;
 
-  // Mantener siempre el orden original del banco.
-  // Si se elige un tema, se muestran todas las preguntas de ese tema,
-  // también respetando el orden en el que fueron recopiladas.
   currentQuestions = selected === "ALL"
     ? questionBank.slice()
     : questionBank.filter(q => q.tema === selected || q.tema.startsWith(selected + " ·"));
@@ -494,6 +514,7 @@ function startQuiz(){
   checked=Array(currentQuestions.length).fill(false);
   scoreCount=0;
 
+  clearQuizState();
   startPanel.classList.add("hidden");
   finishPanel.classList.add("hidden");
   quizPanel.classList.remove("hidden");
@@ -504,6 +525,7 @@ function startQuiz(){
       : `${selected} · ${currentQuestions.length} preguntas`;
 
   renderQuestion();
+  saveQuizState(true);
 }
 
 function renderQuestion(){
@@ -549,6 +571,7 @@ function renderQuestion(){
         }else{
           answers[currentIndex]=Array.from(opts.querySelectorAll("input:checked")).map(x=>Number(x.value));
         }
+        saveQuizState(true);
       });
       const span=document.createElement("span");
       span.textContent=text;
@@ -591,6 +614,7 @@ function renderQuestion(){
     if(answers[currentIndex] && answers[currentIndex].mode==="decimal") decimalInput.value=answers[currentIndex].value;
     decimalInput.addEventListener("input",()=>{
       answers[currentIndex]={mode:"decimal", value:decimalInput.value};
+      saveQuizState(true);
     });
     decimalForm.appendChild(decimalInput);
     const degreeUnit=document.createElement("span");
@@ -627,6 +651,7 @@ function renderQuestion(){
 
     function saveDMS(){
       answers[currentIndex]={mode:"dms",deg:deg.value,min:min.value,sec:sec.value};
+      saveQuizState(true);
     }
     deg.addEventListener("input",saveDMS);
     min.addEventListener("input",saveDMS);
@@ -668,7 +693,10 @@ function renderQuestion(){
     input.placeholder="Ingrese el resultado";
     input.setAttribute("aria-label","Respuesta numérica");
     if(answers[currentIndex] !== null) input.value=answers[currentIndex];
-    input.addEventListener("input",()=>answers[currentIndex]=input.value);
+    input.addEventListener("input",()=>{
+      answers[currentIndex]=input.value;
+      saveQuizState(true);
+    });
     wrap.appendChild(input);
     if(q.unidad){
       const unit=document.createElement("span");
@@ -689,10 +717,29 @@ function renderQuestion(){
 
   const actions=document.createElement("div");
   actions.className="question-actions";
+  actions.style.justifyContent="space-between";
+  actions.style.gap="10px";
+
+  const backBtn=document.createElement("button");
+  backBtn.className="secondary";
+  backBtn.textContent="← Anterior";
+  backBtn.disabled=currentIndex===0;
+  backBtn.addEventListener("click",()=>{
+    saveQuizState(true);
+    if(currentIndex>0){
+      currentIndex--;
+      renderQuestion();
+      saveQuizState(true);
+      window.scrollTo({top:0,behavior:"smooth"});
+    }
+  });
+
   const btn=document.createElement("button");
   btn.className="primary";
   btn.textContent=checked[currentIndex] ? (currentIndex===currentQuestions.length-1?"Finalizar":"Siguiente") : "Comprobar respuesta";
   btn.addEventListener("click",()=>handleQuestion(q,feedback));
+
+  actions.appendChild(backBtn);
   actions.appendChild(btn);
   card.appendChild(actions);
 
@@ -788,6 +835,7 @@ function handleQuestion(q,feedback){
     if(isCorrect(q,ans)) scoreCount++;
     showFeedback(feedback,q,ans);
     if(q.tipo!=="numeric") paintOptions(q,isCorrect(q,ans));
+    saveQuizState(true);
     feedback.scrollIntoView({behavior:"smooth",block:"nearest"});
     renderActionOnly();
     updateCounters();
@@ -795,6 +843,7 @@ function handleQuestion(q,feedback){
     if(currentIndex<currentQuestions.length-1){
       currentIndex++;
       renderQuestion();
+      saveQuizState(true);
       window.scrollTo({top:0,behavior:"smooth"});
     }else{
       finishQuiz();
@@ -816,6 +865,7 @@ function updateCounters(){
 }
 
 function finishQuiz(){
+  clearQuizState();
   progressBar.style.width="100%";
   progressText.textContent="100%";
   questionsEl.innerHTML="";
@@ -881,14 +931,19 @@ topicFilter.addEventListener("change",()=>{
 });
 
 populateTopicFilter();
+
+if(!restoreQuizState()){
+  clearQuizState();
+}
+
 startBtn.addEventListener("click",startQuiz);
 newAttemptBtn.addEventListener("click",()=>{
+  clearQuizState();
   window.scrollTo({top:0,behavior:"smooth"});
   finishPanel.classList.add("hidden");
   startPanel.classList.remove("hidden");
   quizPanel.classList.add("hidden");
   questionsEl.innerHTML="";
-  window.scrollTo({top:0,behavior:"smooth"});
 });
 </script>
 <div style="position:fixed;bottom:10px;right:14px;font-size:12px;font-weight:600;color:#667085;opacity:.5;z-index:9999;pointer-events:none;">© Hecho por Rick</div>
