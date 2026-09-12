@@ -28,6 +28,103 @@ button{border:0;border-radius:10px;padding:11px 17px;font-weight:700;cursor:poin
 .secondary{background:#e9eef3;color:#243342}
 .danger{background:#fcebed;color:#a61b2b}
 button:disabled{opacity:.5;cursor:not-allowed}
+.reset-confirm{
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(15,23,42,.42);
+  backdrop-filter:blur(3px);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .2s ease,visibility .2s ease;
+}
+.reset-confirm.show{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+.reset-confirm-card{
+  width:min(430px,100%);
+  padding:22px;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 18px 60px rgba(0,0,0,.28);
+  border:1px solid rgba(0,0,0,.08);
+  transform:translateY(10px) scale(.98);
+  transition:transform .2s ease;
+}
+.reset-confirm.show .reset-confirm-card{
+  transform:translateY(0) scale(1);
+}
+.reset-confirm-title{
+  font-size:20px;
+  font-weight:800;
+  margin-bottom:8px;
+}
+.reset-confirm-text{
+  color:#475569;
+  line-height:1.5;
+  margin-bottom:18px;
+}
+.reset-confirm-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+}
+@media (max-width:600px){
+  .reset-confirm{
+    align-items:flex-end;
+    padding:12px;
+  }
+  .reset-confirm-card{
+    border-radius:16px 16px 12px 12px;
+  }
+  .reset-confirm-actions{
+    width:100%;
+  }
+  .reset-confirm-actions button{
+    flex:1;
+  }
+}
+
+.app-toast{
+  position:fixed;
+  top:20px;
+  right:20px;
+  z-index:9999;
+  max-width:min(380px,calc(100vw - 32px));
+  padding:14px 18px;
+  border-radius:12px;
+  background:#1f2937;
+  color:#fff;
+  box-shadow:0 10px 30px rgba(0,0,0,.22);
+  font-weight:700;
+  line-height:1.35;
+  opacity:0;
+  transform:translateY(-12px);
+  pointer-events:none;
+  transition:opacity .22s ease,transform .22s ease;
+}
+.app-toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+.app-toast.success{
+  background:#166534;
+}
+@media (max-width:600px){
+  .app-toast{
+    top:12px;
+    left:12px;
+    right:12px;
+    max-width:none;
+  }
+}
 .quiz-header-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 @media (max-width:600px){
   .quiz-header-actions{width:100%;justify-content:space-between}
@@ -440,12 +537,75 @@ const esc=t=>String(t).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"
 function currentState(){return {active:attemptActive,topic:topicFilter.value,questionIds:currentQuestions.map(q=>q.id),currentIndex,answers,checked,scoreCount};}
 function save(){try{localStorage.setItem(tps[activeTp].storage,JSON.stringify(currentState()));}catch(e){console.warn("No se pudo guardar el progreso local.",e)}}
 function clear(){localStorage.removeItem(tps[activeTp].storage)}
-function resetAll(){
-  const ok=confirm("¿Seguro que querés reiniciar TODO el cuestionario?\n\nSe borrará el progreso guardado de TP Nº1 y TP Nº2 y volverás al inicio.");
-  if(!ok)return;
+function showToast(message, type="info"){
+  let toast=document.getElementById("appToast");
+  if(!toast){
+    toast=document.createElement("div");
+    toast.id="appToast";
+    toast.className="app-toast";
+    document.body.appendChild(toast);
+  }
+
+  toast.className=`app-toast ${type}`;
+  toast.textContent=message;
+
+  requestAnimationFrame(()=>toast.classList.add("show"));
+
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer=setTimeout(()=>{
+    toast.classList.remove("show");
+  },3200);
+}
+
+function showResetConfirm(){
+  let box=document.getElementById("resetConfirm");
+  if(!box){
+    box=document.createElement("div");
+    box.id="resetConfirm";
+    box.className="reset-confirm";
+    box.innerHTML=`
+      <div class="reset-confirm-card" role="dialog" aria-modal="true" aria-labelledby="resetConfirmTitle">
+        <div class="reset-confirm-title" id="resetConfirmTitle">¿Reiniciar todo el cuestionario?</div>
+        <div class="reset-confirm-text">
+          Se borrará el progreso guardado de TP Nº1 y TP Nº2 y volverás al inicio.
+        </div>
+        <div class="reset-confirm-actions">
+          <button type="button" class="secondary" id="resetCancelBtn">Cancelar</button>
+          <button type="button" class="danger" id="resetConfirmBtn">Reiniciar</button>
+        </div>
+      </div>`;
+    document.body.appendChild(box);
+
+    document.getElementById("resetCancelBtn").addEventListener("click",hideResetConfirm);
+    document.getElementById("resetConfirmBtn").addEventListener("click",confirmResetAll);
+    box.addEventListener("click",(e)=>{
+      if(e.target===box) hideResetConfirm();
+    });
+  }
+
+  box.classList.add("show");
+}
+
+function hideResetConfirm(){
+  const box=document.getElementById("resetConfirm");
+  if(box) box.classList.remove("show");
+}
+
+function confirmResetAll(){
+  hideResetConfirm();
+
   Object.values(tps).forEach(tp=>localStorage.removeItem(tp.storage));
   localStorage.removeItem("topografia_tp_activo");
-  window.location.reload();
+
+  showToast("Se reinició todo el cuestionario. Volviendo al inicio…","success");
+
+  setTimeout(()=>{
+    location.reload();
+  },900);
+}
+
+function resetAll(){
+  showResetConfirm();
 }
 function label(q){if(q.tipo==="single")return q.opciones[q.correcta];if(q.tipo==="multiple")return q.correcta.map(i=>q.opciones[i]).join(" · ");if(q.tipo==="ordering")return q.correcta.map(i=>q.opciones[i]).join(" → ");return `${format(q.correcta)} ${q.unidad||""}`.trim()}
 function topicMatches(q,t){return t==="ALL"||q.tema===t||q.tema.startsWith(t+" ·")}
