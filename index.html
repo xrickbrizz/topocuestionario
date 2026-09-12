@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Topografía Aplicada — TP Nº1</title>
+<title>Topografía Aplicada</title>
 <style>
 :root{
   --bg:#f4f6f8; --card:#fff; --text:#17202a; --muted:#667085;
@@ -12,7 +12,9 @@
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;line-height:1.5}
-header{background:linear-gradient(135deg,var(--primary2),var(--primary));color:white;padding:30px 18px}
+header{background:linear-gradient(135deg,var(--primary2),var(--primary));color:white;padding:24px 18px 30px;transition:background .25s}
+body[data-tp="tp2"]{--primary:#7b1e3d;--primary2:#56132a;--soft:#f8edf1}
+.tp-tabs{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}.tp-tab{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.45)}.tp-tab:hover,.tp-tab.active{background:#fff;color:var(--primary2)}
 .header-inner{max-width:1050px;margin:auto}
 h1{margin:0 0 6px;font-size:clamp(25px,4vw,38px)}
 .subtitle{margin:0;opacity:.9}
@@ -63,6 +65,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .review-item.bad{border-left:4px solid var(--bad)}
 .hidden{display:none!important}
 .note{font-size:13px;color:var(--muted)}
+.table-wrap{overflow-x:auto;margin:0 0 16px}.table-wrap table{border-collapse:collapse;min-width:520px;width:100%;font-size:14px}.table-wrap th,.table-wrap td{border:1px solid var(--border);padding:8px;text-align:left}.table-wrap th{background:var(--soft)}
 .footer{text-align:center;color:var(--muted);font-size:13px;margin-top:25px}
 @media(max-width:650px){
   .question-card{padding:18px}.controls{align-items:stretch}.controls button{width:100%}
@@ -74,7 +77,8 @@ button:disabled{opacity:.5;cursor:not-allowed}
 <header>
   <div class="header-inner">
     <h1>Topografía Aplicada</h1>
-    <p class="subtitle">Trabajo Práctico Nº1 · Nivelación, Punto Inaccesible y Medición Indirecta</p>
+    <p class="subtitle" id="subtitle">Trabajo Práctico Nº1 · Nivelación, Punto Inaccesible y Medición Indirecta</p>
+    <nav class="tp-tabs" id="tpTabs" aria-label="Trabajos prácticos"></nav>
   </div>
 </header>
 
@@ -119,7 +123,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
     </div>
   </section>
 
-  <div class="footer">Topografía Aplicada · TP Nº1 · © Hecho por Rick</div>
+  <div class="footer" id="footer">Topografía Aplicada · TP Nº1 · © Hecho por Rick</div>
 </main>
 
 <script>
@@ -128,7 +132,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
   Las respuestas correctas están en JavaScript y no se imprimen en el HTML
   hasta que el usuario haya respondido.
 */
-const questionBank = [
+const tp1Questions = [
   {
     id:1, tema:"Nivelación Trigonométrica", tipo:"single",
     pregunta:"En la fórmula Δh = L × tan α + (L² / 2r) × (1 − k) + (i − s). Los valores i y s se miden:",
@@ -367,584 +371,60 @@ const questionBank = [
   }
 ];
 
-let currentQuestions = [];
-let currentIndex = 0;
-let answers = [];
-let checked = [];
-let scoreCount = 0;
-
-const STORAGE_KEY = "topografiaAplicadaQuizV3";
-
-function saveQuizState(active=true){
-  try{
-    const state = {
-      active,
-      topic: topicFilter.value,
-      questionIds: currentQuestions.map(q => q.id),
-      currentIndex,
-      answers,
-      checked,
-      scoreCount
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  }catch(error){
-    console.warn("No se pudo guardar el progreso local.", error);
-  }
-}
-
-function clearQuizState(){
-  try{
-    localStorage.removeItem(STORAGE_KEY);
-  }catch(error){
-    console.warn("No se pudo limpiar el progreso local.", error);
-  }
-}
-
-function restoreQuizState(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw) return false;
-
-    const state = JSON.parse(raw);
-    if(!state || !state.active || !Array.isArray(state.questionIds)) return false;
-
-    const restored = state.questionIds
-      .map(id => questionBank.find(q => q.id === id))
-      .filter(Boolean);
-
-    if(!restored.length) return false;
-
-    currentQuestions = restored;
-    currentIndex = Math.min(Math.max(Number(state.currentIndex) || 0, 0), restored.length - 1);
-    answers = Array.isArray(state.answers) ? state.answers : Array(restored.length).fill(null);
-    checked = Array.isArray(state.checked) ? state.checked : Array(restored.length).fill(false);
-    scoreCount = Number(state.scoreCount) || 0;
-
-    topicFilter.value = state.topic || "ALL";
-
-    startPanel.classList.add("hidden");
-    finishPanel.classList.add("hidden");
-    quizPanel.classList.remove("hidden");
-
-    selectedTopic.textContent =
-      topicFilter.value === "ALL"
-        ? `Todos los temas · ${currentQuestions.length} preguntas`
-        : `${topicFilter.value} · ${currentQuestions.length} preguntas`;
-
-    renderQuestion();
-    return true;
-  }catch(error){
-    console.warn("No se pudo recuperar el progreso local.", error);
-    return false;
-  }
-}
-
-const startPanel = document.getElementById("startPanel");
-const quizPanel = document.getElementById("quizPanel");
-const finishPanel = document.getElementById("finishPanel");
-const questionsEl = document.getElementById("questions");
-const startBtn = document.getElementById("startBtn");
-const newAttemptBtn = document.getElementById("newAttemptBtn");
-const questionCounter = document.getElementById("questionCounter");
-const answeredCounter = document.getElementById("answeredCounter");
-const progressBar = document.getElementById("progressBar");
-const progressText = document.getElementById("progressText");
-const selectedTopic = document.getElementById("selectedTopic");
-const topicFilter = document.getElementById("topicFilter");
-const bankNote = document.getElementById("bankNote");
-const bankTitle = document.getElementById("bankTitle");
-const finalScore = document.getElementById("finalScore");
-const scoreMessage = document.getElementById("scoreMessage");
-const reviewList = document.getElementById("reviewList");
-
-function shuffle(arr){
-  const a = [...arr];
-  for(let i=a.length-1;i>0;i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]]=[a[j],a[i]];
-  }
-  return a;
-}
-
-function normalizeNumber(value){
-  return parseFloat(String(value).trim().replace(",", "."));
-}
-
-function sameSet(a,b){
-  if(a.length !== b.length) return false;
-  const aa=[...a].sort((x,y)=>x-y), bb=[...b].sort((x,y)=>x-y);
-  return aa.every((v,i)=>v===bb[i]);
-}
-
-function formatNumber(n){
-  return Number(n).toLocaleString("es-AR",{maximumFractionDigits:4});
-}
-
-function formatDMS(decimal){
-  const sign=decimal<0?"−":"";
-  const abs=Math.abs(decimal);
-  const d=Math.floor(abs);
-  const minuteFloat=(abs-d)*60;
-  const m=Math.floor(minuteFloat);
-  const s=(minuteFloat-m)*60;
-  return `${sign}${d}°${String(m).padStart(2,"0")}'${s.toFixed(2).padStart(5,"0")}"`;
-}
-
-function correctLabel(q){
-  if(q.tipo==="single") return q.opciones[q.correcta];
-  if(q.tipo==="multiple") return q.correcta.map(i=>q.opciones[i]).join(" · ");
-  if(q.tipo==="angle") return `${formatNumber(q.correcta)}° (${formatDMS(q.correcta)})`;
-  return `${formatNumber(q.correcta)} ${q.unidad||""}`.trim();
-}
-
-function startQuiz(){
-  const selected = topicFilter.value;
-
-  currentQuestions = selected === "ALL"
-    ? questionBank.slice()
-    : questionBank.filter(q => q.tema === selected || q.tema.startsWith(selected + " ·"));
-
-  if(currentQuestions.length === 0){
-    alert("No hay preguntas disponibles para ese tema.");
-    return;
-  }
-
-  currentIndex=0;
-  answers=Array(currentQuestions.length).fill(null);
-  checked=Array(currentQuestions.length).fill(false);
-  scoreCount=0;
-
-  clearQuizState();
-  startPanel.classList.add("hidden");
-  finishPanel.classList.add("hidden");
-  quizPanel.classList.remove("hidden");
-
-  selectedTopic.textContent =
-    selected === "ALL"
-      ? `Todos los temas · ${currentQuestions.length} preguntas`
-      : `${selected} · ${currentQuestions.length} preguntas`;
-
-  renderQuestion();
-  saveQuizState(true);
-}
-
-function renderQuestion(){
-  const q=currentQuestions[currentIndex];
-  questionCounter.textContent=`Pregunta ${currentIndex+1} de ${currentQuestions.length}`;
-  const answered=checked.filter(Boolean).length;
-  answeredCounter.textContent=`${answered} respondidas`;
-  const pct=Math.round((currentIndex/currentQuestions.length)*100);
-  progressBar.style.width=`${pct}%`;
-  progressText.textContent=`${pct}%`;
-
-  questionsEl.innerHTML="";
-  const card=document.createElement("article");
-  card.className="question-card";
-
-  const badges=document.createElement("div");
-  badges.className="badges";
-  badges.innerHTML=`<span class="badge">${q.tema}</span><span class="badge type">${q.tipo==="single"?"Opción única":q.tipo==="multiple"?"Múltiples opciones":q.tipo==="angle"?"Ángulo":"Respuesta numérica"}</span>`;
-  card.appendChild(badges);
-
-  const title=document.createElement("h2");
-  title.className="question-title";
-  title.textContent=`${q.id}. ${q.pregunta}`;
-  card.appendChild(title);
-
-  const inputArea=document.createElement("div");
-
-  if(q.tipo==="single" || q.tipo==="multiple"){
-    const opts=document.createElement("div");
-    opts.className="options";
-    q.opciones.forEach((text,i)=>{
-      const label=document.createElement("label");
-      label.className="option";
-      const input=document.createElement("input");
-      input.type=q.tipo==="single"?"radio":"checkbox";
-      input.name=`q${q.id}`;
-      input.value=i;
-      const saved=answers[currentIndex];
-      if(saved && saved.includes(i)) input.checked=true;
-      input.addEventListener("change",()=>{
-        if(q.tipo==="single"){
-          answers[currentIndex]=[Number(input.value)];
-        }else{
-          answers[currentIndex]=Array.from(opts.querySelectorAll("input:checked")).map(x=>Number(x.value));
-        }
-        saveQuizState(true);
-      });
-      const span=document.createElement("span");
-      span.textContent=text;
-      label.appendChild(input); label.appendChild(span);
-      opts.appendChild(label);
-    });
-    inputArea.appendChild(opts);
-  }else if(q.tipo==="angle"){
-    const wrap=document.createElement("div");
-    wrap.className="angle-answer";
-
-    const switchRow=document.createElement("div");
-    switchRow.style.display="flex";
-    switchRow.style.gap="8px";
-    switchRow.style.flexWrap="wrap";
-    switchRow.style.marginBottom="10px";
-
-    const decimalBtn=document.createElement("button");
-    decimalBtn.type="button";
-    decimalBtn.className="secondary";
-    decimalBtn.textContent="Grados decimales";
-    const dmsBtn=document.createElement("button");
-    dmsBtn.type="button";
-    dmsBtn.className="secondary";
-    dmsBtn.textContent="Grados · Minutos · Segundos";
-
-    switchRow.appendChild(decimalBtn);
-    switchRow.appendChild(dmsBtn);
-    wrap.appendChild(switchRow);
-
-    const forms=document.createElement("div");
-
-    const decimalForm=document.createElement("div");
-    decimalForm.className="numeric-wrap";
-    const decimalInput=document.createElement("input");
-    decimalInput.type="text";
-    decimalInput.inputMode="decimal";
-    decimalInput.placeholder="Ej.: 11,75";
-    decimalInput.setAttribute("aria-label","Ángulo en grados decimales");
-    if(answers[currentIndex] && answers[currentIndex].mode==="decimal") decimalInput.value=answers[currentIndex].value;
-    decimalInput.addEventListener("input",()=>{
-      answers[currentIndex]={mode:"decimal", value:decimalInput.value};
-      saveQuizState(true);
-    });
-    decimalForm.appendChild(decimalInput);
-    const degreeUnit=document.createElement("span");
-    degreeUnit.className="unit";
-    degreeUnit.textContent="°";
-    decimalForm.appendChild(degreeUnit);
-
-    const dmsForm=document.createElement("div");
-    dmsForm.className="numeric-wrap";
-    dmsForm.style.maxWidth="100%";
-
-    const deg=document.createElement("input");
-    deg.type="text"; deg.inputMode="numeric"; deg.placeholder="°"; deg.maxLength=4;
-    deg.setAttribute("aria-label","Grados");
-    const min=document.createElement("input");
-    min.type="text"; min.inputMode="numeric"; min.placeholder="'"; min.maxLength=2;
-    min.setAttribute("aria-label","Minutos");
-    const sec=document.createElement("input");
-    sec.type="text"; sec.inputMode="decimal"; sec.placeholder='"'; sec.maxLength=7;
-    sec.setAttribute("aria-label","Segundos");
-
-    const degLabel=document.createElement("span"); degLabel.className="unit"; degLabel.textContent="°";
-    const minLabel=document.createElement("span"); minLabel.className="unit"; minLabel.textContent="'";
-    const secLabel=document.createElement("span"); secLabel.className="unit"; secLabel.textContent='"';
-    dmsForm.appendChild(deg); dmsForm.appendChild(degLabel);
-    dmsForm.appendChild(min); dmsForm.appendChild(minLabel);
-    dmsForm.appendChild(sec); dmsForm.appendChild(secLabel);
-
-    if(answers[currentIndex] && answers[currentIndex].mode==="dms"){
-      deg.value=answers[currentIndex].deg ?? "";
-      min.value=answers[currentIndex].min ?? "";
-      sec.value=answers[currentIndex].sec ?? "";
-    }
-
-    function saveDMS(){
-      answers[currentIndex]={mode:"dms",deg:deg.value,min:min.value,sec:sec.value};
-      saveQuizState(true);
-    }
-    deg.addEventListener("input",saveDMS);
-    min.addEventListener("input",saveDMS);
-    sec.addEventListener("input",saveDMS);
-
-    function setMode(mode){
-      decimalForm.classList.toggle("hidden",mode!=="decimal");
-      dmsForm.classList.toggle("hidden",mode!=="dms");
-    }
-    decimalBtn.addEventListener("click",()=>{
-      setMode("decimal");
-      decimalInput.focus();
-    });
-    dmsBtn.addEventListener("click",()=>{
-      setMode("dms");
-      deg.focus();
-    });
-
-    const existing = answers[currentIndex];
-    setMode(existing && existing.mode==="dms" ? "dms" : "decimal");
-
-    forms.appendChild(decimalForm);
-    forms.appendChild(dmsForm);
-    wrap.appendChild(forms);
-
-    const hint=document.createElement("div");
-    hint.className="note";
-    hint.style.marginTop="8px";
-    hint.textContent="En celular podés usar tres casilleros para °, \' y \". También podés responder en grados decimales.";
-    wrap.appendChild(hint);
-
-    inputArea.appendChild(wrap);
-  }else{
-    const wrap=document.createElement("div");
-    wrap.className="numeric-wrap";
-    const input=document.createElement("input");
-    input.type="text";
-    input.inputMode="decimal";
-    input.placeholder="Ingrese el resultado";
-    input.setAttribute("aria-label","Respuesta numérica");
-    if(answers[currentIndex] !== null) input.value=answers[currentIndex];
-    input.addEventListener("input",()=>{
-      answers[currentIndex]=input.value;
-      saveQuizState(true);
-    });
-    wrap.appendChild(input);
-    if(q.unidad){
-      const unit=document.createElement("span");
-      unit.className="unit";
-      unit.textContent=q.unidad;
-      wrap.appendChild(unit);
-    }
-    inputArea.appendChild(wrap);
-  }
-  card.appendChild(inputArea);
-
-  const feedback=document.createElement("div");
-  feedback.id="feedback";
-  if(checked[currentIndex]){
-    showFeedback(feedback,q,answers[currentIndex]);
-  }
-  card.appendChild(feedback);
-
-  const actions=document.createElement("div");
-  actions.className="question-actions";
-  actions.style.justifyContent="space-between";
-  actions.style.gap="10px";
-
-  const backBtn=document.createElement("button");
-  backBtn.className="secondary";
-  backBtn.textContent="← Anterior";
-  backBtn.disabled=currentIndex===0;
-  backBtn.addEventListener("click",()=>{
-    saveQuizState(true);
-    if(currentIndex>0){
-      currentIndex--;
-      renderQuestion();
-      saveQuizState(true);
-      window.scrollTo({top:0,behavior:"smooth"});
-    }
-  });
-
-  const btn=document.createElement("button");
-  btn.className="primary";
-  btn.textContent=checked[currentIndex] ? (currentIndex===currentQuestions.length-1?"Finalizar":"Siguiente") : "Comprobar respuesta";
-  btn.addEventListener("click",()=>handleQuestion(q,feedback));
-
-  actions.appendChild(backBtn);
-  actions.appendChild(btn);
-  card.appendChild(actions);
-
-  questionsEl.appendChild(card);
-}
-
-function angleToDecimal(raw){
-  if(!raw) return null;
-
-  if(raw.mode==="decimal"){
-    const n=normalizeNumber(raw.value);
-    return Number.isFinite(n)?n:null;
-  }
-
-  const d=normalizeNumber(raw.deg);
-  const m=normalizeNumber(raw.min);
-  const s=normalizeNumber(raw.sec);
-
-  if(!Number.isFinite(d) || !Number.isFinite(m) || !Number.isFinite(s)) return null;
-  if(m < 0 || m >= 60 || s < 0 || s >= 60) return null;
-
-  const sign=d < 0 ? -1 : 1;
-  return sign * (Math.abs(d) + m/60 + s/3600);
-}
-
-function getAnswer(){
-  const q=currentQuestions[currentIndex];
-  if(q.tipo==="numeric"){
-    const n=normalizeNumber(answers[currentIndex]);
-    return Number.isFinite(n)?n:null;
-  }
-  if(q.tipo==="angle"){
-    return angleToDecimal(answers[currentIndex]);
-  }
-  return answers[currentIndex] || [];
-}
-
-function isCorrect(q,ans){
-  if(q.tipo==="single") return ans.length===1 && ans[0]===q.correcta;
-  if(q.tipo==="multiple") return sameSet(ans,q.correcta);
-  return ans!==null && Math.abs(ans-q.correcta)<=q.tolerancia;
-}
-
-function showFeedback(container,q,ans){
-  container.className="feedback";
-  const ok=isCorrect(q,ans);
-  container.classList.add(ok?"good":"bad");
-  container.innerHTML="";
-  const title=document.createElement("strong");
-  title.textContent=ok?"✓ Correcto":"✗ Incorrecto";
-  const answer=document.createElement("div");
-  answer.innerHTML=`<b>Respuesta correcta:</b> ${escapeHtml(correctLabel(q))}`;
-  const exp=document.createElement("div");
-  exp.className="explanation";
-  exp.textContent=q.explicacion;
-  container.appendChild(title);
-  container.appendChild(answer);
-  container.appendChild(exp);
-}
-
-function escapeHtml(text){
-  return String(text).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
-}
-
-function paintOptions(q,ok){
-  document.querySelectorAll("#questions .option").forEach((label,i)=>{
-    const input=label.querySelector("input");
-    const idx=Number(input.value);
-    if(q.tipo==="single"){
-      if(idx===q.correcta) label.classList.add("correct");
-      if(input.checked && idx!==q.correcta) label.classList.add("incorrect");
-    }else{
-      if(q.correcta.includes(idx)) label.classList.add("correct");
-      if(input.checked && !q.correcta.includes(idx)) label.classList.add("incorrect");
-      if(!input.checked && q.correcta.includes(idx)) label.classList.add("missed");
-    }
-    input.disabled=true;
-  });
-}
-
-function handleQuestion(q,feedback){
-  if(!checked[currentIndex]){
-    const ans=getAnswer();
-    if(q.tipo!=="numeric" && ans.length===0){
-      alert("Seleccione al menos una opción antes de comprobar.");
-      return;
-    }
-    if(q.tipo==="numeric" && ans===null){
-      alert("Ingrese un valor numérico antes de comprobar.");
-      return;
-    }
-    checked[currentIndex]=true;
-    if(isCorrect(q,ans)) scoreCount++;
-    showFeedback(feedback,q,ans);
-    if(q.tipo!=="numeric") paintOptions(q,isCorrect(q,ans));
-    saveQuizState(true);
-    feedback.scrollIntoView({behavior:"smooth",block:"nearest"});
-    renderActionOnly();
-    updateCounters();
-  }else{
-    if(currentIndex<currentQuestions.length-1){
-      currentIndex++;
-      renderQuestion();
-      saveQuizState(true);
-      window.scrollTo({top:0,behavior:"smooth"});
-    }else{
-      finishQuiz();
-    }
-  }
-}
-
-function renderActionOnly(){
-  const btn=document.querySelector(".question-actions button");
-  if(btn) btn.textContent=currentIndex===currentQuestions.length-1?"Finalizar":"Siguiente";
-}
-
-function updateCounters(){
-  const answered=checked.filter(Boolean).length;
-  answeredCounter.textContent=`${answered} respondidas`;
-  const pct=Math.round((answered/currentQuestions.length)*100);
-  progressBar.style.width=`${pct}%`;
-  progressText.textContent=`${pct}%`;
-}
-
-function finishQuiz(){
-  clearQuizState();
-  progressBar.style.width="100%";
-  progressText.textContent="100%";
-  questionsEl.innerHTML="";
-  quizPanel.classList.add("hidden");
-  finishPanel.classList.remove("hidden");
-  const points=currentQuestions.length
-    ? (scoreCount/currentQuestions.length)*100
-    : 0;
-  finalScore.textContent=`${Math.round(points)}/100`;
-  if(points>=90) scoreMessage.textContent="Excelente. Tenés un dominio muy sólido de los temas.";
-  else if(points>=70) scoreMessage.textContent="Muy bien. Solo quedan algunos conceptos por reforzar.";
-  else if(points>=50) scoreMessage.textContent="Bien encaminado. Conviene repasar los temas en los que fallaste.";
-  else scoreMessage.textContent="Hay varios conceptos para reforzar. Usá las explicaciones para repasar.";
-
-  reviewList.innerHTML="";
-  currentQuestions.forEach((q,i)=>{
-    const item=document.createElement("div");
-    item.className=`review-item ${isCorrect(q,getStoredAnswer(i))?"good":"bad"}`;
-    item.innerHTML=`<b>${i+1}. ${escapeHtml(q.tema)}</b> — ${isCorrect(q,getStoredAnswer(i))?"Correcta":"Incorrecta"}<br><span class="note">Respuesta: ${escapeHtml(correctLabel(q))}</span>`;
-    reviewList.appendChild(item);
-  });
-}
-
-function getStoredAnswer(i){
-  const q=currentQuestions[i];
-  if(q.tipo==="numeric") return normalizeNumber(answers[i]);
-  if(q.tipo==="angle") return angleToDecimal(answers[i]);
-  return answers[i]||[];
-}
-
-function populateTopicFilter(){
-  const baseTopics = [];
-  questionBank.forEach(q=>{
-    const topic = q.tema.split(" ·")[0];
-    if(!baseTopics.includes(topic)) baseTopics.push(topic);
-  });
-
-  topicFilter.innerHTML = "";
-  const allOption = document.createElement("option");
-  allOption.value = "ALL";
-  allOption.textContent = `Todos los temas (${questionBank.length})`;
-  topicFilter.appendChild(allOption);
-
-  baseTopics.forEach(topic=>{
-    const count = questionBank.filter(q => q.tema === topic || q.tema.startsWith(topic + " ·")).length;
-    const option = document.createElement("option");
-    option.value = topic;
-    option.textContent = `${topic} (${count})`;
-    topicFilter.appendChild(option);
-  });
-
-  bankTitle.textContent = `Banco de ${questionBank.length} preguntas`;
-}
-
-topicFilter.addEventListener("change",()=>{
-  const selected = topicFilter.value;
-  if(selected === "ALL"){
-    bankNote.textContent = `Podés resolver las ${questionBank.length} preguntas en orden o filtrar por tema.`;
-  }else{
-    const count = questionBank.filter(q => q.tema === selected || q.tema.startsWith(selected + " ·")).length;
-    bankNote.textContent = `Este tema tiene ${count} pregunta${count === 1 ? "" : "s"} para practicar.`;
-  }
-});
-
-populateTopicFilter();
-
-if(!restoreQuizState()){
-  clearQuizState();
-}
-
-startBtn.addEventListener("click",startQuiz);
-newAttemptBtn.addEventListener("click",()=>{
-  clearQuizState();
-  window.scrollTo({top:0,behavior:"smooth"});
-  finishPanel.classList.add("hidden");
-  startPanel.classList.remove("hidden");
-  quizPanel.classList.add("hidden");
-  questionsEl.innerHTML="";
-});
+// El sistema agrupa cada trabajo práctico con su propia identidad, banco y clave de guardado.
+const profile7Table = `<div class="table-wrap"><table><thead><tr><th>Punto</th><th>Lectura inicial (m)</th><th>Lectura tras cambio (m)</th></tr></thead><tbody><tr><td>34 (cota 325,250 m)</td><td>1,614</td><td>—</td></tr><tr><td>a</td><td>2,425</td><td>—</td></tr><tr><td>b</td><td>2,014</td><td>—</td></tr><tr><td>c</td><td>1,815</td><td>—</td></tr><tr><td>d</td><td>1,125</td><td>—</td></tr><tr><td>e</td><td>0,732</td><td>2,144</td></tr><tr><td>f</td><td>—</td><td>1,914</td></tr><tr><td>g</td><td>—</td><td>1,120</td></tr></tbody></table></div>`;
+const tp2Questions = [
+ {id:1,tema:"Método de Perfiles",tipo:"single",pregunta:"¿En qué tipo de obras resulta más aplicable el método de perfiles?",opciones:["Obras de desarrollo lineal", "Obras aisladas de pequeña superficie", "Solo obras subterráneas"],correcta:0,explicacion:"El método de perfiles se aplica especialmente en obras de desarrollo lineal, como caminos, canales, vías y conductos."},
+ {id:2,tema:"Perfil Longitudinal",tipo:"single",pregunta:"El perfil longitudinal se obtiene:",opciones:["Sobre el eje de la obra, siguiendo sus progresivas", "Únicamente sobre líneas de máxima pendiente", "Uniendo puntos al azar del terreno"],correcta:0,explicacion:"Representa la variación altimétrica del terreno a lo largo del eje de proyecto."},
+ {id:3,tema:"Perfil Transversal",tipo:"single",pregunta:"Los perfiles transversales muestran:",opciones:["La forma del terreno perpendicular al eje", "Solo la pendiente media longitudinal", "Las coordenadas geográficas del eje"],correcta:0,explicacion:"Cada sección transversal describe el relieve a ambos lados del eje en una progresiva."},
+ {id:4,tema:"Perfil Longitudinal",tipo:"single",pregunta:"¿Qué función cumplen los puntos de línea?",opciones:["Definen y materializan el eje de la obra", "Reemplazan los puntos de nivel", "Indican únicamente cambios de estación"],correcta:0,explicacion:"Los puntos de línea sirven de apoyo para definir el trazado y referenciar las progresivas."},
+ {id:5,tema:"Apoyo Planimétrico y Altimétrico",tipo:"single",pregunta:"¿Qué ventaja ofrece el polígono doblemente atado y orientado?",opciones:["Permite controlar el cierre y la orientación", "Evita medir ángulos", "Elimina la necesidad de puntos conocidos"],correcta:0,explicacion:"Al estar vinculado y orientado en ambos extremos, ofrece controles independientes de posición y dirección."},
+ {id:6,tema:"Perfil Transversal",tipo:"single",pregunta:"Los piquetes de todos los perfiles transversales se designan con letras minúsculas de izquierda a derecha, en el sentido de avance de las progresivas del perfil longitudinal.",opciones:["Verdadero", "Falso"],correcta:0,explicacion:"Esta convención permite identificar de manera consistente los puntos de cada sección."},
+ {id:7,tema:"Perfil Transversal",tipo:"single",pregunta:"El perfil transversal con teodolito es apto para terrenos llanos, mientras que en terrenos accidentados se recomienda estación total o nivel.",opciones:["Verdadero", "Falso"],correcta:0,explicacion:"En terrenos accidentados conviene emplear un procedimiento que facilite la determinación altimétrica."},
+ {id:8,tema:"Método de Perfiles",tipo:"single",pregunta:"En obras de desarrollo lineal y escaso ancho:",opciones:["Se relevan perfil longitudinal y perfiles transversales", "Basta un levantamiento radial", "No se requiere apoyo"],correcta:0,explicacion:"Los perfiles longitudinales y transversales aportan la información necesaria para el proyecto lineal."},
+ {id:9,tema:"Perfil Transversal",tipo:"single",pregunta:"En el perfil transversal con nivel, la dirección perpendicular la determinamos:",opciones:["Con una escuadra, teodolito o estación total referida al eje", "Por estimación visual", "Con la mira vertical"],correcta:0,explicacion:"La perpendicular debe replantearse respecto del eje con un método planimétrico."},
+ {id:10,tema:"Perfil Transversal",tipo:"single",pregunta:"En el perfil transversal con teodolito, el teodolito se estaciona:",opciones:["Sobre el punto del eje correspondiente a la sección", "En cualquier punto visible", "Siempre en el punto más alto"],correcta:0,explicacion:"La estación sobre el eje permite orientar y observar la sección transversal asociada a la progresiva."},
+ {id:11,tema:"Apoyo Planimétrico y Altimétrico",tipo:"single",pregunta:"En una medición con un receptor GPS, para resolver la posición del receptor, es necesario:",opciones:["Recibir señales simultáneas de al menos cuatro satélites", "Un único satélite", "Medir una base con cinta"],correcta:0,explicacion:"La solución espacial y la corrección del reloj del receptor requieren, en general, cuatro satélites."},
+ {id:12,tema:"Apoyo Planimétrico y Altimétrico",tipo:"single",pregunta:"El sistema de apoyo planimétrico del perfil longitudinal deberá:",opciones:["Estar vinculado y orientado respecto de puntos de control", "Ser independiente del eje", "Usar solamente coordenadas aproximadas"],correcta:0,explicacion:"El apoyo debe dar control y referencia al trazado del perfil."},
+ {id:13,tema:"Perfil Transversal",tipo:"numeric",unidad:"m",pregunta:"Perfil Transversal 7. Con los siguientes datos, calcule el Horizonte Instrumental inicial (J).",datos:profile7Table,correcta:326.864,tolerancia:.001,explicacion:"J = cota del punto 34 + lectura atrás = 325,250 + 1,614 = 326,864 m.",desarrollo:"J = 325,250 + 1,614 = 326,864 m."},
+ {id:14,tema:"Perfil Transversal",tipo:"numeric",unidad:"m",pregunta:"Perfil Transversal 7. Con los datos mostrados, calcule el Horizonte Instrumental nuevo luego del cambio de estación en e.",datos:profile7Table,correcta:328.276,tolerancia:.001,explicacion:"J nuevo = cota de e + lectura atrás en e = 326,132 + 2,144 = 328,276 m.",desarrollo:"J nuevo = 326,132 + 2,144 = 328,276 m."},
+ {id:15,tema:"Perfil Transversal",tipo:"numeric",unidad:"m",pregunta:"Perfil Transversal 7. Calcule la cota del punto d.",datos:profile7Table,correcta:325.739,tolerancia:.01,explicacion:"Cota d = J inicial − lectura d = 326,864 − 1,125 = 325,739 m.",desarrollo:"Cota d = 326,864 − 1,125 = 325,739 m."},
+ {id:16,tema:"Perfil Transversal",tipo:"numeric",unidad:"m",pregunta:"Perfil Transversal 7. Calcule la cota del punto f.",datos:profile7Table,correcta:326.362,tolerancia:.01,explicacion:"Cota f = J nuevo − lectura f = 328,276 − 1,914 = 326,362 m.",desarrollo:"Cota f = 328,276 − 1,914 = 326,362 m."},
+ {id:17,tema:"Perfil Transversal",tipo:"numeric",unidad:"m",pregunta:"Perfil Transversal 15. A partir del horizonte instrumental J = 418,625 m y la lectura de mira en c = 1,785 m, calcule la cota del punto c.",correcta:416.840,tolerancia:.01,explicacion:"La cota se obtiene restando la lectura de mira al horizonte instrumental.",desarrollo:"Cota c = 418,625 − 1,785 = 416,840 m."},
+ {id:18,tema:"Levantamiento Taquimétrico",tipo:"single",pregunta:"Aquellos niveles que no poseen tornillo de calado de nivel, sino un sistema de péndulo interno, se denominan:",opciones:["Niveles automáticos", "Niveles de mano", "Niveles de burbuja partida"],correcta:0,explicacion:"El compensador o péndulo interno nivela automáticamente la línea de mira dentro de su rango de trabajo."}
+];
+const tps={
+ tp1:{nombre:"TP Nº1",descripcion:"Trabajo Práctico Nº1 · Nivelación, Punto Inaccesible y Medición Indirecta",color:"azul",storage:"topografia_tp1",preguntas:tp1Questions},
+ tp2:{nombre:"TP Nº2",descripcion:"TP Nº2 · Perfiles y Taquimetría",color:"bordó",storage:"topografia_tp2",preguntas:tp2Questions}
+};
+let activeTp=localStorage.getItem("topografia_tp_activo") in tps ? localStorage.getItem("topografia_tp_activo") : "tp1";
+let currentQuestions=[],currentIndex=0,answers=[],checked=[],scoreCount=0,attemptActive=false;
+const $=id=>document.getElementById(id);
+const startPanel=$("startPanel"),quizPanel=$("quizPanel"),finishPanel=$("finishPanel"),questionsEl=$("questions"),startBtn=$("startBtn"),newAttemptBtn=$("newAttemptBtn"),questionCounter=$("questionCounter"),answeredCounter=$("answeredCounter"),progressBar=$("progressBar"),progressText=$("progressText"),selectedTopic=$("selectedTopic"),topicFilter=$("topicFilter"),bankNote=$("bankNote"),bankTitle=$("bankTitle"),finalScore=$("finalScore"),scoreMessage=$("scoreMessage"),reviewList=$("reviewList"),subtitle=$("subtitle"),footer=$("footer"),tpTabs=$("tpTabs");
+const bank=()=>tps[activeTp].preguntas;
+const norm=v=>parseFloat(String(v??"").trim().replace(",","."));
+const sameSet=(a,b)=>a.length===b.length&&[...a].sort().every((v,i)=>v===[...b].sort()[i]);
+const format=n=>Number(n).toLocaleString("es-AR",{maximumFractionDigits:4});
+const esc=t=>String(t).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+function currentState(){return {active:attemptActive,topic:topicFilter.value,questionIds:currentQuestions.map(q=>q.id),currentIndex,answers,checked,scoreCount};}
+function save(){try{localStorage.setItem(tps[activeTp].storage,JSON.stringify(currentState()));}catch(e){console.warn("No se pudo guardar el progreso local.",e)}}
+function clear(){localStorage.removeItem(tps[activeTp].storage)}
+function label(q){if(q.tipo==="single")return q.opciones[q.correcta];if(q.tipo==="multiple")return q.correcta.map(i=>q.opciones[i]).join(" · ");return `${format(q.correcta)} ${q.unidad||""}`.trim()}
+function topicMatches(q,t){return t==="ALL"||q.tema===t||q.tema.startsWith(t+" ·")}
+function populateTopics(selected="ALL"){const topics=[...new Set(bank().map(q=>q.tema.split(" ·")[0]))];topicFilter.innerHTML=`<option value="ALL">Todos los temas (${bank().length})</option>`;topics.forEach(t=>topicFilter.insertAdjacentHTML("beforeend",`<option value="${esc(t)}">${esc(t)} (${bank().filter(q=>topicMatches(q,t)).length})</option>`));topicFilter.value=[...topicFilter.options].some(o=>o.value===selected)?selected:"ALL";bankTitle.textContent=`Banco de ${bank().length} preguntas`; updateNote();}
+function updateNote(){const n=bank().filter(q=>topicMatches(q,topicFilter.value)).length;bankNote.textContent=topicFilter.value==="ALL"?`Podés resolver las ${n} preguntas en orden o filtrar por tema.`:`Este tema tiene ${n} preguntas para practicar.`}
+function tabs(){tpTabs.innerHTML="";Object.entries(tps).forEach(([key,tp])=>{const b=document.createElement("button");b.className=`tp-tab ${key===activeTp?"active":""}`;b.textContent=tp.nombre;b.onclick=()=>switchTp(key);tpTabs.appendChild(b)})}
+function switchTp(key){save();activeTp=key;localStorage.setItem("topografia_tp_activo",key);document.body.dataset.tp=key;document.title=`Topografía Aplicada — ${tps[key].nombre}`;subtitle.textContent=tps[key].descripcion;footer.textContent=`Topografía Aplicada · ${tps[key].nombre} · © Hecho por Rick`;tabs();populateTopics();restore();}
+function restore(){attemptActive=false;currentQuestions=[];currentIndex=0;answers=[];checked=[];scoreCount=0;const raw=localStorage.getItem(tps[activeTp].storage);startPanel.classList.remove("hidden");quizPanel.classList.add("hidden");finishPanel.classList.add("hidden");questionsEl.innerHTML="";if(!raw)return;try{const s=JSON.parse(raw);if(!s?.active)return;attemptActive=true;currentQuestions=s.questionIds.map(id=>bank().find(q=>q.id===id)).filter(Boolean);if(!currentQuestions.length)return;populateTopics(s.topic);currentIndex=Math.min(Math.max(+s.currentIndex||0,0),currentQuestions.length-1);answers=Array.isArray(s.answers)?s.answers:Array(currentQuestions.length).fill(null);checked=Array.isArray(s.checked)?s.checked:Array(currentQuestions.length).fill(false);scoreCount=+s.scoreCount||0;startPanel.classList.add("hidden");quizPanel.classList.remove("hidden");selectedTopic.textContent=`${topicFilter.value==="ALL"?"Todos los temas":topicFilter.value} · ${currentQuestions.length} preguntas`;render();}catch(e){console.warn("No se pudo recuperar el progreso local.",e)}}
+function startQuiz(){attemptActive=true;currentQuestions=bank().filter(q=>topicMatches(q,topicFilter.value));if(!currentQuestions.length)return;currentIndex=0;answers=Array(currentQuestions.length).fill(null);checked=Array(currentQuestions.length).fill(false);scoreCount=0;startPanel.classList.add("hidden");finishPanel.classList.add("hidden");quizPanel.classList.remove("hidden");selectedTopic.textContent=`${topicFilter.value==="ALL"?"Todos los temas":topicFilter.value} · ${currentQuestions.length} preguntas`;render();save()}
+function parsed(i=currentIndex){const q=currentQuestions[i],a=answers[i];if(q.tipo==="numeric")return Number.isFinite(norm(a))?norm(a):null;if(q.tipo==="angle"){if(!a)return null;if(a.mode==="decimal")return norm(a.value);const d=norm(a.deg),m=norm(a.min),s=norm(a.sec);if(!Number.isFinite(d))return null;if((a.min===""||a.min==null)&&(a.sec===""||a.sec==null))return d;if(![m,s].every(Number.isFinite)||m<0||m>=60||s<0||s>=60)return null;return (d<0?-1:1)*(Math.abs(d)+m/60+s/3600)}return a||[]}
+function correct(q,a){return q.tipo==="single"?a.length===1&&a[0]===q.correcta:q.tipo==="multiple"?sameSet(a,q.correcta):a!==null&&Math.abs(a-q.correcta)<=q.tolerancia}
+function feedback(el,q,a){const ok=correct(q,a);el.className=`feedback ${ok?"good":"bad"}`;el.innerHTML=`<strong>${ok?"✓ Correcto":"✗ Incorrecto"}</strong>${!ok?`<div><b>Tu respuesta:</b> ${esc(q.tipo==="numeric"?String(answers[currentIndex]):Array.isArray(a)?a.map(x=>q.opciones[x]).join(" · "):String(a))}</div>`:""}<div><b>Respuesta correcta:</b> ${esc(label(q))}</div><div class="explanation"><b>Explicación:</b> ${esc(q.explicacion)}</div>${q.desarrollo?`<div class="explanation"><b>Procedimiento:</b> ${esc(q.desarrollo)}</div>`:""}`}
+function render(){const q=currentQuestions[currentIndex],answered=checked.filter(Boolean).length;questionCounter.textContent=`Pregunta ${currentIndex+1} de ${currentQuestions.length}`;answeredCounter.textContent=`${answered} respondidas`;const pct=Math.round(answered/currentQuestions.length*100);progressBar.style.width=`${pct}%`;progressText.textContent=`${pct}%`;const c=document.createElement("article");c.className="question-card";c.innerHTML=`<div class="badges"><span class="badge">${esc(q.tema)}</span><span class="badge type">${q.tipo==="single"?"Opción única":q.tipo==="multiple"?"Múltiples opciones":q.tipo==="angle"?"Ángulo":"Respuesta numérica"}</span></div><h2 class="question-title">${q.id}. ${esc(q.pregunta)}</h2>${q.datos||""}`;const area=document.createElement("div");
+if(["single","multiple"].includes(q.tipo)){const opts=document.createElement("div");opts.className="options";q.opciones.forEach((text,i)=>{const l=document.createElement("label"),inp=document.createElement("input");l.className="option";inp.type=q.tipo==="single"?"radio":"checkbox";inp.name=`${activeTp}-${q.id}`;inp.value=i;inp.checked=(answers[currentIndex]||[]).includes(i);inp.disabled=checked[currentIndex];inp.onchange=()=>{answers[currentIndex]=q.tipo==="single"?[i]:[...opts.querySelectorAll("input:checked")].map(x=>+x.value);save()};l.append(inp,document.createTextNode(text));if(checked[currentIndex]){if((q.correcta||[]).includes(i))l.classList.add("correct");else if(inp.checked)l.classList.add("incorrect")}opts.append(l)});area.append(opts)}else {const w=document.createElement("div");w.className=q.tipo==="angle"?"angle-answer":"numeric-wrap";if(q.tipo==="angle"){w.innerHTML=`<div class="numeric-wrap"><input aria-label="Grados" inputmode="numeric" placeholder="Grados"><span class="unit">°</span><input aria-label="Minutos" inputmode="numeric" placeholder="Minutos"><span class="unit">'</span><input aria-label="Segundos" inputmode="decimal" placeholder="Segundos"><span class="unit">\"</span></div><div class="note">Ingresá grados, minutos y segundos. Para grados decimales, usá el primer campo y dejá los otros dos en cero.</div>`;const ins=w.querySelectorAll("input"),a=answers[currentIndex]||{};["deg","min","sec"].forEach((k,i)=>ins[i].value=a[k]??"");ins.forEach(()=>{});ins.forEach((x,i)=>x.oninput=()=>{answers[currentIndex]={mode:"dms",deg:ins[0].value,min:ins[1].value,sec:ins[2].value};save()})}else{const inp=document.createElement("input");inp.type="text";inp.inputMode="decimal";inp.placeholder="Ingrese el resultado";inp.value=answers[currentIndex]??"";inp.disabled=checked[currentIndex];inp.oninput=()=>{answers[currentIndex]=inp.value;save()};w.append(inp);if(q.unidad)w.insertAdjacentHTML("beforeend",`<span class="unit">${esc(q.unidad)}</span>`)}area.append(w)}c.append(area);const f=document.createElement("div");if(checked[currentIndex])feedback(f,q,parsed());c.append(f);const actions=document.createElement("div");actions.className="question-actions";actions.style.justifyContent="space-between";const back=document.createElement("button");back.className="secondary";back.textContent="← Anterior";back.disabled=!currentIndex;back.onclick=()=>{currentIndex--;render();save()};const next=document.createElement("button");next.className="primary";next.textContent=checked[currentIndex]?(currentIndex===currentQuestions.length-1?"Finalizar":"Siguiente"):"Comprobar respuesta";next.onclick=()=>{if(!checked[currentIndex]){const a=parsed();if((q.tipo==="numeric"||q.tipo==="angle")?a===null:!a.length){alert("Ingrese una respuesta antes de comprobar.");return}checked[currentIndex]=true;if(correct(q,a))scoreCount++;save();render()}else if(currentIndex<currentQuestions.length-1){currentIndex++;render();save()}else finish()};actions.append(back,next);c.append(actions);questionsEl.replaceChildren(c)}
+function finish(){attemptActive=false;save();quizPanel.classList.add("hidden");questionsEl.innerHTML="";finishPanel.classList.remove("hidden");const pts=Math.round(scoreCount/currentQuestions.length*100),bad=currentQuestions.length-scoreCount;finalScore.textContent=`${pts}/100`;scoreMessage.textContent=`${scoreCount} correctas · ${bad} incorrectas · ${pts}%`;reviewList.innerHTML=currentQuestions.map((q,i)=>`<div class="review-item ${correct(q,parsed(i))?"good":"bad"}"><b>${i+1}. ${esc(q.tema)}</b> — ${correct(q,parsed(i))?"Correcta":"Incorrecta"}</div>`).join("")}
+topicFilter.onchange=()=>{updateNote();save()};startBtn.onclick=startQuiz;newAttemptBtn.onclick=()=>{attemptActive=false;clear();finishPanel.classList.add("hidden");startPanel.classList.remove("hidden");populateTopics();window.scrollTo({top:0,behavior:"smooth"})};
+document.body.dataset.tp=activeTp;tabs();populateTopics();switchTp(activeTp);
 </script>
 <div style="position:fixed;bottom:10px;right:14px;font-size:12px;font-weight:600;color:#667085;opacity:.5;z-index:9999;pointer-events:none;">© Hecho por Rick</div>
 </body>
