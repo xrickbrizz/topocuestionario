@@ -14,6 +14,7 @@
 body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;line-height:1.5}
 header{background:linear-gradient(135deg,var(--primary2),var(--primary));color:white;padding:24px 18px 30px;transition:background .25s}
 body[data-tp="tp2"]{--primary:#7b1e3d;--primary2:#56132a;--soft:#f8edf1}
+body[data-tp="tp3"]{--primary:#0f766e;--primary2:#115e59;--soft:#e6f6f3}
 .tp-tabs{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}.tp-tab{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.45)}.tp-tab:hover,.tp-tab.active{background:#fff;color:var(--primary2)}
 .header-inner{max-width:1050px;margin:auto}
 h1{margin:0 0 6px;font-size:clamp(25px,4vw,38px)}
@@ -234,11 +235,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
 </main>
 
 <script>
-/*
-  Banco de preguntas.
-  Las respuestas correctas están en JavaScript y no se imprimen en el HTML
-  hasta que el usuario haya respondido.
-*/
 const tp1Questions = [
   {
     id:1, tema:"Nivelación Trigonométrica", tipo:"single",
@@ -478,7 +474,6 @@ const tp1Questions = [
   }
 ];
 
-// TP Nº2 conserva el orden académico del banco; cada pregunta tiene un identificador estable para restaurar su progreso.
 const profile50Table = `<div class="table-wrap"><table><thead><tr><th>Piquete</th><th>Distancia (m)</th><th>Lectura en la mira (m)</th><th>Horizonte Instrumental (m)</th><th>Cotas (m)</th></tr></thead><tbody><tr><td>a</td><td>0,0</td><td>1,010</td><td>—</td><td>—</td></tr><tr><td>b</td><td>12,2</td><td>2,261</td><td>—</td><td>—</td></tr><tr><td>c</td><td>24,8</td><td>0,315</td><td>—</td><td>—</td></tr><tr><td>50</td><td>75,7</td><td>2,431</td><td>—</td><td>143,15</td></tr><tr><td>d</td><td>86,1</td><td>2,014</td><td>—</td><td>—</td></tr><tr><td>e</td><td>103,4</td><td>2,491</td><td>—</td><td>—</td></tr><tr><td>e</td><td>—</td><td>1,530</td><td>—</td><td>—</td></tr><tr><td>f</td><td>116,0</td><td>2,453</td><td>—</td><td>—</td></tr><tr><td>g</td><td>145,0</td><td>1,733</td><td>—</td><td>—</td></tr></tbody></table></div>`;
 const profile7Table = `<div class="table-wrap"><table><thead><tr><th>Punto</th><th>Cota / lectura inicial (m)</th><th>Lectura tras cambio (m)</th></tr></thead><tbody><tr><td>Piquete 7</td><td>Cota: 431,26 · Lectura: 1,621</td><td>—</td></tr><tr><td>a</td><td>2,355</td><td>—</td></tr><tr><td>b</td><td>2,236</td><td>—</td></tr><tr><td>c</td><td>1,812</td><td>—</td></tr><tr><td>d</td><td>1,235</td><td>—</td></tr><tr><td>e</td><td>0,812</td><td>2,144</td></tr><tr><td>f</td><td>—</td><td>1,926</td></tr><tr><td>g</td><td>—</td><td>1,237</td></tr></tbody></table></div>`;
 const single=(id,tema,pregunta,correcta,explicacion,opciones)=>({id,tema,tipo:"single",pregunta,opciones:[correcta,...(opciones||["Ninguna de las anteriores.","Solo en casos excepcionales.","No depende del relevamiento."])],correcta:0,explicacion});
@@ -524,9 +519,275 @@ const tp2Questions = [
  numeric(36,"Valor del desnivel del piquete d (con su signo +/-), sin espacios",0.27,.005,"H ≈ +0,274 m; al centímetro: +0,27 m.","H = h + (i-s) ≈ 0,254 + 0,020 = +0,274 m\nAl cm: +0,27 m.",teodolitoTable),
  numeric(37,"Valor del desnivel del piquete e (con su signo +/-)",0.77,.005,"H ≈ +0,768 m; al centímetro: +0,77 m.","G = 100 × 0,188 = 18,8 m\nh = G/2 × sen(2×2°17′) ≈ 0,748 m\nH = h + (1,47−1,45) ≈ +0,768 m\nAl cm: +0,77 m.",teodolitoTable),
 ];
+
+const tp3Multiple=(id,tema,pregunta,opciones,correcta,explicacion)=>({
+  ...multiple(id,tema,pregunta,opciones,correcta,explicacion),
+  numero:Number(String(id).match(/\d+$/)?.[0]||0)
+});
+const tp3Single=(id,tema,pregunta,opciones,correcta,explicacion)=>({
+  ...single(id,tema,pregunta,opciones[correcta],explicacion,opciones.filter((_,i)=>i!==correcta)),
+  numero:Number(String(id).match(/\d+$/)?.[0]||0)
+});
+const tp3Numeric=(id,tema,pregunta,correcta,tolerancia,explicacion)=>({
+  ...numeric(id,pregunta,correcta,tolerancia,explicacion),
+  tema,
+  numero:Number(String(id).match(/\d+$/)?.[0]||0)
+});
+
+const tp3Questions = [
+  tp3Multiple(
+    "tp3_q1",
+    "GPS",
+    "Los Componentes ó Módulos del Sistema GPS son:",
+    [
+      "Módulo Espacial (Satélites)",
+      "Módulo de Control Terrestre",
+      "Módulo de los Usuarios",
+      "Módulo de Control Atmosférico",
+      "Módulo de Señal"
+    ],
+    [0, 1, 2],
+    "Los tres módulos fundamentales del sistema GPS son el Módulo Espacial (satélites), el Módulo de Control Terrestre (estaciones de seguimiento) y el Módulo del Usuario (receptores)."
+  ),
+  tp3Single(
+    "tp3_q2",
+    "Equipos",
+    "Un Equipo de centración Forzosa requiere de:",
+    [
+      "Dos Trípodes, Un teodolito, Dos señales de Puntería",
+      "Tres Trípodes, Un teodolito, Dos señales de Puntería",
+      "Dos Trípodes, Dos teodolitos, Dos señales de Puntería",
+      "Tres Trípodes, Dos teodolitos, Dos señales de Puntería"
+    ],
+    1,
+    "El método de centración forzosa utiliza un juego de tres trípodes, un instrumento (teodolito) y dos señales de puntería para intercambiar posiciones sin mover las bases."
+  ),
+  tp3Single(
+    "tp3_q3",
+    "Estadimetría",
+    "En la fórmula estadimétrica D = c + C · l; a 'l' se la denomina:",
+    [
+      "Lectura en la mira",
+      "Diferencia de mira",
+      "Ninguna de las opciones",
+      "Corte de mira"
+    ],
+    3,
+    "El parámetro 'l' representa el corte de mira, obtenido como la diferencia entre la lectura del hilo superior e inferior (ls - li)."
+  ),
+  tp3Single(
+    "tp3_q4",
+    "Estadimetría",
+    "Cuál de estos valores es el Error Relativo en la medición estadimétrica:",
+    [
+      "Entre 1/1000 – 1/2000",
+      "Entre 1/600 – 1/800",
+      "Entre 1/100 – 1/200"
+    ],
+    1,
+    "El error relativo característico adoptado para la medición estadimétrica con teodolito y mira oscila entre 1/600 y 1/800."
+  ),
+  tp3Single(
+    "tp3_q5",
+    "Taquimetría",
+    "La fórmula G x cos²(α) nos permite calcular:",
+    [
+      "Distancia",
+      "Cota",
+      "Coordenada",
+      "Número Generador",
+      "Desnivel",
+      "Ninguna opción es Correcta"
+    ],
+    0,
+    "La fórmula L = G · cos²(α) permite obtener la distancia horizontal reducida al horizonte en levantamientos taquimétricos."
+  ),
+  tp3Single(
+    "tp3_q6",
+    "Taquimetría",
+    "El levantamiento taquimétrico se emplea:",
+    [
+      "Para obras de desarrollo lineal",
+      "Para obras de desarrollo superficial, radial o concentrada",
+      "Solamente para terrenos accidentados",
+      "Ninguna opción es correcta"
+    ],
+    1,
+    "El levantamiento taquimétrico es el método idóneo para obras de desarrollo superficial, radial o concentrado."
+  ),
+  tp3Single(
+    "tp3_q7",
+    "Taquimetría",
+    "En un relevamiento de detalles, la exactitud de los puntos relevados, tanto planimétrica como altimétrica, será al cm.",
+    ["Verdadero", "Falso"],
+    1,
+    "La exactitud requerida al centímetro corresponde al Sistema de Apoyo (red poligonal). Para los puntos de detalle la precisión requerida es menor y sus cotas se expresan al decímetro."
+  ),
+  tp3Numeric(
+    "tp3_q8",
+    "Cálculo Taquimétrico",
+    "Punto 3: Dados los datos de la tabla (I=1,729 m, α=+1°47', i=1,76 m, s=1,76 m), calcular el desnivel del punto 3 en metros:",
+    5.38,
+    0.02,
+    "Desnivel h = G · 1/2 · sin(2α) = (100 · 1,729) · 0.5 · sin(3°34') = +5,38 m. Como i = s, la corrección (i - s) es igual a 0."
+  ),
+  tp3Numeric(
+    "tp3_q9",
+    "Cálculo Taquimétrico",
+    "Punto 3: Con cota A = 750,25 m y el desnivel calculated (+5,38 m), calcular la cota del punto 3 en metros:",
+    755.63,
+    0.05,
+    "Cota Punto 3 = Cota Estación A + Desnivel = 750,25 + 5,38 = 755,63 m."
+  ),
+  tp3Single(
+    "tp3_q10",
+    "Equidistancia y Definición",
+    "¿Cómo se define formalmente la equidistancia en el trazado de curvas de nivel?",
+    [
+      "La distancia horizontal constante medida entre dos puntos adyacentes del terreno.",
+      "La distancia vertical constante entre dos planos horizontales consecutivos que cortan al terreno.",
+      "El ángulo de inclinación promedio de la línea de mayor pendiente.",
+      "La diferencia entre la cota máxima y mínima del polígono de apoyo."
+    ],
+    1,
+    "La equidistancia (e) se define explícitamente como la distancia vertical constante entre los planos horizontales paralelos que interceptan al terreno para proyectar las curvas de nivel."
+  ),
+  tp3Single(
+    "tp3_q11",
+    "Propiedades de Curvas",
+    "De acuerdo con las propiedades fundamentales de las curvas de nivel, ¿qué regla rige sobre su intersección y bifurcación?",
+    [
+      "Pueden bifurcarse libremente al atravesar una divisoria de aguas.",
+      "Dos curvas de nivel no pueden cortarse ni una curva puede bifurcarse.",
+      "Se cortan obligatoriamente en zonas donde la pendiente es constante.",
+      "Pueden cruzarse únicamente en terrenos de muy baja pendiente."
+    ],
+    1,
+    "Entre las propiedades fundamentales se establece que dos curvas de nivel no pueden cortarse (Propiedad 3) ni una curva de nivel puede bifurcarse (Propiedad 4)."
+  ),
+  tp3Single(
+    "tp3_q12",
+    "Interpretación del Relieve",
+    "En la lectura de un plano topográfico, ¿cómo se interpretan las curvas de nivel cerradas y concéntricas cuyas cotas aumentan hacia el centro?",
+    [
+      "Representan una depresión o hondonada del terreno.",
+      "Indican la cuenca de recepción de una vaguada.",
+      "Indican una elevación o cumbre.",
+      "Representan una zona llana de pendiente nula."
+    ],
+    2,
+    "La propiedad 12 de las curvas de nivel indica que las curvas concéntricas y cerradas cuyas cotas van aumentando hacia el centro representan una elevación o cumbre."
+  ),
+  tp3Single(
+    "tp3_q13",
+    "Interpretación del Relieve",
+    "¿Qué función topográfica cumplen las líneas de vaguada (o colectoras) en la representación del relieve?",
+    [
+      "Representan el lugar donde se separan los escurrimientos de las aguas superficiales.",
+      "Representan el lugar en donde van a converger y escurrir las aguas superficiales.",
+      "Son líneas imaginarias de cota constante perpendiculares al cauce del río.",
+      "Unen exclusivamente los puntos de cota máxima entre dos cumbreras."
+    ],
+    1,
+    "Las líneas de vaguada o colectoras representan los cauces o zonas donde convergen y escurren las aguas superficiales, a diferencia de las divisorias o dorsales donde las aguas se separan."
+  ),
+  tp3Single(
+    "tp3_q14",
+    "Líneas Notables y Pendientes",
+    "Por cada punto de una curva de nivel pasan dos líneas notables (la horizontal y su perpendicular). ¿Qué importancia tiene la línea de máxima pendiente?",
+    [
+      "Es paralela a la curva de nivel y define la dirección de menor resistencia del terreno.",
+      "Es perpendicular a la curva de nivel y determina la dirección en la cual escurrirán las aguas superficiales.",
+      "Es la línea recta que une dos vértices consecutivos del sistema de apoyo.",
+      "Es la tangente horizontal a la curva en los bordes del plano."
+    ],
+    1,
+    "La línea de máxima pendiente es siempre perpendicular a la curva de nivel y adquiere singular importancia por ser la dirección por donde escurren las aguas superficiales."
+  ),
+  tp3Single(
+    "tp3_q15",
+    "Interpretación de Pendientes",
+    "Al analizar la separación gráfica entre curvas de nivel en un plano topográfico, ¿qué representa una menor separación entre ellas?",
+    [
+      "Un terreno llano o de menor pendiente.",
+      "Una mayor magnitud de la pendiente (terreno más empinado).",
+      "Un cambio en el valor de la equidistancia del plano.",
+      "La presencia obligatoria de una depresión o barranco."
+    ],
+    1,
+    "La separación entre curvas indica la magnitud de la pendiente: a menor separación entre curvas corresponde una mayor pendiente del terreno."
+  ),
+  tp3Single(
+    "tp3_q16",
+    "Estadimetría",
+    "En la fórmula estadimétrica de distancia D = c + C · l, ¿cuáles son los valores nominales habituales de la constante de adición (c) y de multiplicación (C)?",
+    [
+      "c ≈ 100 y C ≈ 0",
+      "c ≈ 1 y C ≈ 10",
+      "c ≈ 0 y C ≈ 100",
+      "c ≈ 0,5 y C ≈ 50"
+    ],
+    2,
+    "En los anteojos estadimétricos estándar la constante de adición es c ≈ 0 y la constante de multiplicación es C ≈ 100, permitiendo calcular la distancia de forma rápida multiplicando el corte de mira por 100."
+  ),
+  tp3Single(
+    "tp3_q17",
+    "Taquimetría con Teodolito",
+    "En un levantamiento taquimétrico con teodolito y mira, al realizar una visual inclinada con un ángulo vertical α, ¿cómo se calcula la distancia horizontal (L)?",
+    [
+      "L = G · cos²(α)",
+      "L = G · ½ sen(2α)",
+      "L = G · tg(α)",
+      "L = G / cos(α)"
+    ],
+    0,
+    "Al ser la visual inclinada, la distancia reducida al horizonte se calcula mediante la fórmula L = G · cos²(α), donde G = c + C · l es el número generador."
+  ),
+  tp3Single(
+    "tp3_q18",
+    "Levantamiento y Croquis",
+    "Durante las tareas de campo en un levantamiento taquimétrico, ¿cómo se definen las 'curvas de forma' requeridas en el croquis de campaña?",
+    [
+      "Curvas ajustadas mediante polinomios en software CAD.",
+      "Líneas representativas de las curvas de nivel trazadas a 'ojo desnudo' por el profesional.",
+      "Líneas auxiliares trazadas con escalímetro entre puntos de detalle.",
+      "Líneas de cota fija definidas por el operador del teodolito."
+    ],
+    1,
+    "Las 'curvas de forma' en el croquis de campaña son las líneas representativas de las curvas de nivel trazadas a ojo desnudo por el ingeniero para guiar el posterior dibujo del plano."
+  ),
+  tp3Single(
+    "tp3_q19",
+    "Interpolación y Confección de Planos",
+    "Al trazar las curvas de nivel manualmente en gabinete, ¿cuál es el procedimiento analítico para ubicar las cotas enteras entre dos puntos adyacentes?",
+    [
+      "Trazar arcos de circunferencia con centro en el punto de mayor cota.",
+      "Unir los puntos, determinar la diferencia de cotas e interpolar proporcionalmente la distancia con regla de tres formando una red de triángulos.",
+      "Asignar la cota media justo en la mitad del segmento sin importar la distancia.",
+      "Trazar líneas paralelas a los lados de la poligonal de apoyo."
+    ],
+    1,
+    "Para interpolar se unen pares de puntos adyacentes aptos, se calcula su diferencia de cotas y la distancia gráfica, y mediante regla de tres simple se determinan las cotas enteras formando una red de triángulos."
+  ),
+  tp3Single(
+    "tp3_q20",
+    "Precisión del Sistema de Apoyo",
+    "En el levantamiento taquimétrico, ¿cuál es el nivel de exactitud (planimétrica y altimétrica) que se exige para la medición y cálculo de los puntos del sistema de apoyo?",
+    [
+      "Exactitud al metro (m).",
+      "Exactitud al decímetro (dm).",
+      "Exactitud al centímetro (cm).",
+      "Exactitud al milímetro (mm)."
+    ],
+    2,
+    "La exactitud requerida para la determinación planimétrica (x, y) y altimétrica (cota z) de los vértices del sistema de apoyo (poligonales) es al centímetro (cm)."
+  )
+];
+
 const tps={
  tp1:{version:5,nombre:"TP Nº1",descripcion:"Trabajo Práctico Nº1 · Nivelación, Punto Inaccesible y Medición Indirecta",color:"azul",storage:"topografia_tp1",preguntas:tp1Questions},
- tp2:{version:6,nombre:"TP Nº2",descripcion:"TP Nº2 · Método de Perfiles y Perfiles Transversales",color:"bordó",storage:"topografia_tp2",preguntas:tp2Questions}
+ tp2:{version:6,nombre:"TP Nº2",descripcion:"TP Nº2 · Método de Perfiles y Perfiles Transversales",color:"bordó",storage:"topografia_tp2",preguntas:tp2Questions},
+ tp3:{version:1,nombre:"TP Nº3",descripcion:"TP Nº3 · Curvas de Nivel y Taquimetría",color:"verde topográfico",storage:"topografia_tp3",preguntas:tp3Questions}
 };
 let activeTp=localStorage.getItem("topografia_tp_activo") in tps ? localStorage.getItem("topografia_tp_activo") : "tp1";
 let currentQuestions=[],currentIndex=0,answers=[],checked=[],scoreCount=0,attemptActive=false;
@@ -570,7 +831,7 @@ function showResetConfirm(){
       <div class="reset-confirm-card" role="dialog" aria-modal="true" aria-labelledby="resetConfirmTitle">
         <div class="reset-confirm-title" id="resetConfirmTitle">¿Reiniciar todo el cuestionario?</div>
         <div class="reset-confirm-text">
-          Se borrará el progreso guardado de TP Nº1 y TP Nº2 y volverás al inicio.
+          Se borrará el progreso guardado de TP Nº1, TP Nº2 y TP Nº3 y volverás al inicio.
         </div>
         <div class="reset-confirm-actions">
           <button type="button" class="secondary" id="resetCancelBtn">Cancelar</button>
@@ -624,7 +885,8 @@ function correct(q,a){return q.tipo==="single"?a.length===1&&a[0]===q.correcta:q
 function feedback(el,q,a){const ok=correct(q,a);el.className=`feedback ${ok?"good":"bad"}`;el.innerHTML=`<strong>${ok?"✓ Correcto":"✗ Incorrecto"}</strong>${!ok?`<div><b>Tu respuesta:</b> ${esc(q.tipo==="numeric"?String(answers[currentIndex]):Array.isArray(a)?a.map(x=>q.opciones[x]).join(" · "):String(a))}</div>`:""}<div><b>Respuesta correcta:</b> ${esc(label(q))}</div><div class="explanation"><b>Explicación:</b> ${esc(q.explicacion)}</div>${q.desarrollo?`<div class="explanation"><b>Procedimiento:</b> ${esc(q.desarrollo)}</div>`:""}`}
 function stableOptionOrder(q){
   const arr=q.opciones.map((_,i)=>i);
-  let seed=(activeTp.charCodeAt(2)||1)*1009+(q.id||0)*7919;
+  const questionNumber=Number.isFinite(q.numero)?q.numero:Number(q.id)||0;
+  let seed=(activeTp.charCodeAt(2)||1)*1009+questionNumber*7919;
   for(let i=arr.length-1;i>0;i--){
     seed=(seed*1664525+1013904223)>>>0;
     const j=seed%(i+1);
@@ -632,7 +894,7 @@ function stableOptionOrder(q){
   }
   return arr;
 }
-function render(){const q=currentQuestions[currentIndex],answered=checked.filter(Boolean).length;questionCounter.textContent=`Pregunta ${currentIndex+1} de ${currentQuestions.length}`;answeredCounter.textContent=`${answered} respondidas`;const pct=Math.round(answered/currentQuestions.length*100);progressBar.style.width=`${pct}%`;progressText.textContent=`${pct}%`;const c=document.createElement("article");c.className="question-card";c.innerHTML=`<div class="badges"><span class="badge">${esc(q.tema)}</span><span class="badge type">${q.tipo==="single"?"Opción única":q.tipo==="multiple"?"Múltiples opciones":q.tipo==="angle"?"Ángulo":q.tipo==="ordering"?"Ordenamiento":"Respuesta numérica"}</span></div><h2 class="question-title">${q.id}. ${esc(q.pregunta)}</h2>${q.datos||""}`;const area=document.createElement("div");
+function render(){const q=currentQuestions[currentIndex],answered=checked.filter(Boolean).length;questionCounter.textContent=`Pregunta ${currentIndex+1} de ${currentQuestions.length}`;answeredCounter.textContent=`${answered} respondidas`;const pct=Math.round(answered/currentQuestions.length*100);progressBar.style.width=`${pct}%`;progressText.textContent=`${pct}%`;const c=document.createElement("article");c.className="question-card";c.innerHTML=`<div class="badges"><span class="badge">${esc(q.tema)}</span><span class="badge type">${q.tipo==="single"?"Opción única":q.tipo==="multiple"?"Múltiples opciones":q.tipo==="angle"?"Ángulo":q.tipo==="ordering"?"Ordenamiento":"Respuesta numérica"}</span></div><h2 class="question-title">${q.numero??q.id}. ${esc(q.pregunta)}</h2>${q.datos||""}`;const area=document.createElement("div");
 if(q.tipo==="ordering"){const opts=document.createElement("div");opts.className="options";const order=answers[currentIndex]||q.ordenInicial||q.opciones.map((_,i)=>i);order.forEach((optionIndex,position)=>{const row=document.createElement("div");row.className="option ordering-option";row.innerHTML=`<span><b>${position+1}.</b> ${esc(q.opciones[optionIndex])}</span>`;const controls=document.createElement("span");controls.className="ordering-controls";const up=document.createElement("button"),down=document.createElement("button");up.className=down.className="secondary";up.setAttribute("aria-label","Subir acción");down.setAttribute("aria-label","Bajar acción");up.textContent="↑";down.textContent="↓";up.disabled=checked[currentIndex]||position===0;down.disabled=checked[currentIndex]||position===order.length-1;up.onclick=()=>{[order[position-1],order[position]]=[order[position],order[position-1]];answers[currentIndex]=order;save();render()};down.onclick=()=>{[order[position],order[position+1]]=[order[position+1],order[position]];answers[currentIndex]=order;save();render()};controls.append(up,down);row.append(controls);opts.append(row)});area.append(opts)}else if(["single","multiple"].includes(q.tipo)){const opts=document.createElement("div");opts.className="options";stableOptionOrder(q).forEach(i=>{const text=q.opciones[i];const l=document.createElement("label"),inp=document.createElement("input");l.className="option";inp.type=q.tipo==="single"?"radio":"checkbox";inp.name=`${activeTp}-${q.id}`;inp.value=i;inp.checked=(answers[currentIndex]||[]).includes(i);inp.disabled=checked[currentIndex];inp.onchange=()=>{answers[currentIndex]=q.tipo==="single"?[i]:[...opts.querySelectorAll("input:checked")].map(x=>+x.value);save()};l.append(inp,document.createTextNode(text));if(checked[currentIndex]){const correctIndices=q.tipo==="multiple"?q.correcta:[q.correcta];if(correctIndices.includes(i))l.classList.add("correct");else if(inp.checked)l.classList.add("incorrect")}opts.append(l)});area.append(opts)}else {const w=document.createElement("div");w.className=q.tipo==="angle"?"angle-answer":"numeric-wrap";if(q.tipo==="angle"){w.innerHTML=`<div class="numeric-wrap"><input aria-label="Grados" inputmode="numeric" placeholder="Grados"><span class="unit">°</span><input aria-label="Minutos" inputmode="numeric" placeholder="Minutos"><span class="unit">'</span><input aria-label="Segundos" inputmode="decimal" placeholder="Segundos"><span class="unit">\"</span></div><div class="note">Ingresá grados, minutos y segundos. Para grados decimales, usá el primer campo y dejá los otros dos en cero.</div>`;const ins=w.querySelectorAll("input"),a=answers[currentIndex]||{};["deg","min","sec"].forEach((k,i)=>ins[i].value=a[k]??"");ins.forEach(()=>{});ins.forEach((x,i)=>x.oninput=()=>{answers[currentIndex]={mode:"dms",deg:ins[0].value,min:ins[1].value,sec:ins[2].value};save()})}else{const inp=document.createElement("input");inp.type="text";inp.inputMode="decimal";inp.placeholder="Ingrese el resultado";inp.value=answers[currentIndex]??"";inp.disabled=checked[currentIndex];inp.oninput=()=>{answers[currentIndex]=inp.value;save()};w.append(inp);if(q.unidad)w.insertAdjacentHTML("beforeend",`<span class="unit">${esc(q.unidad)}</span>`)}area.append(w)}c.append(area);const f=document.createElement("div");if(checked[currentIndex])feedback(f,q,parsed());c.append(f);const actions=document.createElement("div");actions.className="question-actions";actions.style.justifyContent="space-between";const back=document.createElement("button");back.className="secondary";back.textContent="← Anterior";back.disabled=!currentIndex;back.onclick=()=>{currentIndex--;render();save()};const next=document.createElement("button");next.className="primary";next.textContent=checked[currentIndex]?(currentIndex===currentQuestions.length-1?"Finalizar":"Siguiente"):"Comprobar respuesta";next.onclick=()=>{if(!checked[currentIndex]){const a=parsed();if((q.tipo==="numeric"||q.tipo==="angle")?a===null:!a.length){alert("Ingrese una respuesta antes de comprobar.");return}checked[currentIndex]=true;if(correct(q,a))scoreCount++;save();render()}else if(currentIndex<currentQuestions.length-1){currentIndex++;render();save()}else finish()};actions.append(back,next);c.append(actions);questionsEl.replaceChildren(c)}
 function finish(){attemptActive=false;save();quizPanel.classList.add("hidden");questionsEl.innerHTML="";finishPanel.classList.remove("hidden");const pts=Math.round(scoreCount/currentQuestions.length*100),bad=currentQuestions.length-scoreCount;finalScore.textContent=`${pts}/100`;scoreMessage.textContent=`${scoreCount} correctas · ${bad} incorrectas · ${pts}%`;reviewList.innerHTML=currentQuestions.map((q,i)=>`<div class="review-item ${correct(q,parsed(i))?"good":"bad"}"><b>${i+1}. ${esc(q.tema)}</b> — ${correct(q,parsed(i))?"Correcta":"Incorrecta"}</div>`).join("")}
 topicFilter.onchange=()=>{updateNote();save()};
